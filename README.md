@@ -4,7 +4,7 @@
 - 云彩识别项目一开始只是我在学深度学习的时候想为模型连一个前端，尝试部署到云服务器上，所以写了一个简陋的页面和接口
 - 后来在学习springboot之后，想要把各种学到的技术点融入到这个小小的项目里
 - 2023年先写了Web端的粗糙版本
-- 之后，由于在网上学习的项目一般都是手把手教着做的，感觉没有经过太多的思考，所以想自己从构想到编码来做一个网页
+- 之后，由于在网上学习的项目一般都是手把手教着做的，知识点是学会了，但是感觉没有经过太多的思考，所以想自己从构想到编码来做一个网页
 - 现在，对项目进行了大幅的增删改，微信小程序端还在开发中，Web端的功能也逐渐增多
 - 总之，这是一个用来学习，提高应用能力的项目
 ### 当前实现的功能
@@ -31,6 +31,24 @@
 4. 加入用户me页面的
 
 
-
+### 页面展示
 
 ![image](https://github.com/user-attachments/assets/9e83c83e-0e25-4a05-9cd1-3be6206e9e91)
+
+![image](https://github.com/user-attachments/assets/4361fa0e-36f6-4407-8f78-dcc8b72368e6)
+
+![image](https://github.com/user-attachments/assets/14b3be69-f1da-4c7d-a787-7649a5f3f019)
+
+
+![image](https://github.com/user-attachments/assets/e4b3af90-efad-4f0d-8d75-450e9088da43)
+
+![image](https://github.com/user-attachments/assets/f44ae434-2e3e-4672-97cd-8d0f40776055)
+
+![image](https://github.com/user-attachments/assets/74e530f7-3fbf-4951-b737-8209ba387d28)
+
+![image](https://github.com/user-attachments/assets/460003a9-d95d-4042-b3ef-76dccd587288)
+
+
+
+
+
