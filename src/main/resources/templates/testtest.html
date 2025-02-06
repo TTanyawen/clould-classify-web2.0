@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CloudForum</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+
+        :root{
+            --header-color:rgba(51,87,154,100);
+            --header-block-color: rgba(188, 215, 234, 0.51);
+            --header-block-hover-color: rgb(235, 244, 254);
+            --header-bolck-fcolor: rgb(5, 21, 74);
+
+            --main-title-color: rgb(55, 89, 155);
+            --main-title-fcolor: rgb(235, 244, 254);
+
+
+
+            --footer-color: rgb(79, 157, 151);
+            --footer-fcolor: rgb(76, 89, 94);
+        }
+        a {
+            text-decoration: none; /* 去除下划线 */
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 创建一个整体的容器，使用flex布局 */
+        .container { }
+
+        /* 头部区域 */
+        header {
+            background-color: var(--header-color);
+            height: 60px;
+            width: 100%;
+            color: white;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        header .content {
+            margin: auto;
+            width: 800px;
+            height: 100%;
+        }
+
+        header .logo {
+            float: left;
+            margin-top: 5px;
+        }
+
+        header .logo img {
+            height: 50px;
+        }
+
+        header .block {
+            float: right;
+            margin-left: 20px;
+            width: 100px;
+            background-color: var(--header-block-color);
+        }
+        header .block a{
+            font-size: 20px;
+            color: var(--header-bolck-fcolor);
+            font-weight: bolder;
+        }
+        /*hover*/
+        header .block :hover{
+            float: right;
+            margin-left: 20px;
+            width: 100px;
+            background-color: var(--header-block-hover-color);
+        }
+        /* 激活状态 */
+        .block.active {
+            background-color: var(--header-block-hover-color);
+            color: white;
+        }
+        /* 中间内容部分，指定固定的长宽并居中 */
+        main {
+            margin: auto;
+            background-color: #f8f8f8;
+            width: 800px;
+
+        }
+
+
+
+        main .mainTitle{
+            height: 100px;
+            width: 800px;
+            margin: auto;
+            display: flex;
+            justify-content: center; /* 水平居中对齐 */
+            align-items: center;     /* 垂直居中对齐 */
+            text-align: center;
+            font-size: 50px;
+            font-weight: bolder;
+            background-color: var(--main-title-color);
+            color:var(--main-title-fcolor);
+        }
+        main .postContainer{
+            height: 2500px;
+            width: 800px;
+            margin-top: 20px;
+            /*background-color: #e7edf0;*/
+            background-color: rgba(240, 231, 238, 0.59);
+        }
+
+        main .post_item
+        {
+            float: left;
+            height: 500px;
+            width: 350px;
+            margin-top: 30px;
+            margin-left: 30px;
+            border-radius: 10%;
+            overflow-y: scroll;
+            background-color: #617aa5;
+
+        }
+        main .post_item::-webkit-scrollbar
+        {
+            display: none; /* 对于 WebKit 浏览器 */
+        }
+        main .post_item .meinfo .profile_pic{
+
+            float: left;
+            height: 50px;
+            width: 50px;
+            margin-left: 20px;
+            margin-top: 20px;
+            /*background: #53e4bd url('/images/profiles/alice.jpg') no-repeat center center;*/
+            clip-path: circle(50%);
+        }
+        main .post_item .meinfo .profile_name{
+            float: left;
+            margin-left: 20px;
+            margin-top: 20px;
+            height: 50px;
+            line-height: 50px;
+            width: 150px;
+            font-size: 18px;
+            color: white;
+            /*background-color: #eee9e9;*/
+        }
+        main .post_item .post_pic{
+            float: left;
+            height: 280px;
+            width: 310px;
+            margin-left: 20px;
+            margin-top: 20px;
+            background: #53e4bd url('/images/posts/post1.jpg') no-repeat center center;
+            border-radius: 10%;
+        }
+        main .post_item .post_text{
+            float: left;
+            height: 50px;
+            width: 310px;
+            margin-left: 20px;
+            margin-top: 20px;
+            background-color: rgba(242, 251, 251, 0.56);
+        }
+        main .post_item .post_comment{
+            float: left;
+            height: 20px;
+            width: 200px;
+            margin-left: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background-color: rgba(242, 251, 251, 0.56);
+        }
+        main .post_item .post_like{
+            float: right;
+            height: 20px;
+            width: 100px;
+            margin-right: 20px;
+            margin-top: 20px;
+            /*background-color: #cce9d0;*/
+            color: white;
+        }
+
+        main .post_item .post_like .like_num_post{
+            float: right;
+            height: 20px;
+            width: 40px;
+        }
+        main .post_item .post_like .like_btn{
+            float: left;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background-color: rgba(109, 200, 227, 0.52);
+            cursor: pointer; /* 添加此属性以更改鼠标样式 */
+
+        }
+
+        /*评论部分*/
+        main .comment_section .comment-item{
+            float: left;
+            height: 140px;
+            width: 310px;
+            margin-left: 20px;
+            margin-top: 20px;
+            border-radius: 8%;
+            background-color: rgba(242, 251, 251, 0.17);
+        }
+        main .comment_section .userinfo .profile_pic{
+
+            float: left;
+            height: 30px;
+            width: 30px;
+            margin-left: 10px;
+            margin-top: 10px;
+            /*background: #53e4bd url('/images/profiles/alice.jpg') no-repeat center center;*/
+            clip-path: circle(50%);
+        }
+        main .comment_section .userinfo .profile_name{
+            float: left;
+            margin-left: 10px;
+            margin-top: 10px;
+            height: 30px;
+            line-height: 30px;
+            width: 150px;
+            font-size: 14px;
+            /*background-color: #eee9e9;*/
+            color: white;
+        }
+        main .comment_section .comment_text{
+            float: left;
+            height: 50px;
+            width: 280px;
+            margin-left: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.31);
+        }
+        main .comment_section .comment_like{
+            float: right;
+            height: 20px;
+            width: 100px;
+            margin-right: 10px;
+            margin-top: 10px;
+            /*background-color: #cce9d0;*/
+            color: white;
+        }
+        main .comment_section .comment_like .like_btn{
+            float: left;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background-color: rgba(109, 200, 227, 0.52);
+            cursor: pointer; /* 添加此属性以更改鼠标样式 */
+        }
+
+        /* 底部区域 */
+        footer {
+            background-color:  var(--footer-color);
+            height: 300px;
+            width: 100%;
+            text-align: center;
+            line-height: 60px;
+            margin-top: auto;
+            padding-top: 50px;
+        }
+        footer .creatorLogo {
+            width: 100%;
+            height: 70px;
+            /*margin-left:auto;*/
+            /*margin-top: 20px;*/
+            /*background-color: #fff;*/
+        }
+
+        footer .creatorLogo img {
+            height: 70px;
+        }
+        footer .creatorInfo{
+            height: 100px;
+            width: 100%;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 25px;
+            font-weight: lighter;
+            color: var(--footer-fcolor);
+            /*background-color: rgba(255, 255, 255, 0.51);*/
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="content">
+            <div class="logo">
+                <a href="/index">
+                    <img src="/images/logo.png" alt="Cloud Website Logo">
+                </a>
+            </div>
+            <div id="me" class="block">
+                <a href="/me">me</a>
+            </div>
+            <div id="classify" class="block">
+                <a href="/classify">classify</a>
+            </div>
+            <div id="forum" class="block">
+                <a href="/forum">forum</a>
+            </div>
+            <div id="know" class="block">
+                <a href="/know">know</a>
+            </div>
+        </div>
+    </header>
+    <main id="mainContent">
+        <div class="mainTitle">Forum</div>
+        <div class="postContainer">
+            <div class="post_item">
+                <div class="meinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/1.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Alice</div>
+                    <div class="post_pic" style="background: #53e4bd url('/images/posts/post1.jpg') no-repeat center center;"></div>
+                    <div class="post_text">Enjoying the sunny day!</div>
+                    <div class="post_comment" style="display: block;">
+                        <form action="/submitComment" method="POST">
+                            <input type="hidden" name="userId" value="6">
+                            <input type="hidden" name="postId" value="1">
+                            <input type="text" name="commentText" placeholder="Write your comment" style="border: none; background-color: transparent; outline: none;">
+                            <button type="submit">Submit Comment</button>
+                        </form>
+                    </div>
+                    <div class="post_like" data-postid="1">
+                        <div class="like_btn" onclick="likePost('1')">👍</div>
+                        <div class="like_num_post">160</div>
+                    </div>
+                </div>
+                <div class="comment_section" data-postid="1">
+                    <!-- Comments will be dynamically inserted here -->
+                    <div class="comment-item">
+                        <div class="userinfo">
+                            <div class="profile_pic" style="background: #53e4bd url('/images/profiles/1.jpg') no-repeat center center;"></div>
+                            <div class="profile_name">Alice</div>
+                            <div class="comment_text">Great post! Really enjoyed it.</div>
+                            <div class="comment_like" data-commentid="1">
+                                <div class="like_btn" onclick="likeComment('1')">👍</div>
+                                <div class="like_num_comment">48</div>
+                            </div>
+                        </div>
+                    </div><div class="comment-item">
+                    <div class="userinfo">
+                        <div class="profile_pic" style="background: #53e4bd url('/images/profiles/2.jpg') no-repeat center center;"></div>
+                        <div class="profile_name">Bob</div>
+                        <div class="comment_text">Thanks for sharing!</div>
+                        <div class="comment_like" data-commentid="2">
+                            <div class="like_btn" onclick="likeComment('2')">👍</div>
+                            <div class="like_num_comment">31</div>
+                        </div>
+                    </div>
+                </div><div class="comment-item">
+                    <div class="userinfo">
+                        <div class="profile_pic" style="background: #53e4bd url('/images/profiles/3.jpg') no-repeat center center;"></div>
+                        <div class="profile_name">Charlie</div>
+                        <div class="comment_text">Amazing picture!</div>
+                        <div class="comment_like" data-commentid="3">
+                            <div class="like_btn" onclick="likeComment('3')">👍</div>
+                            <div class="like_num_comment">60</div>
+                        </div>
+                    </div>
+                </div><div class="comment-item">
+                    <div class="userinfo">
+                        <div class="profile_pic" style="background: #53e4bd url('/images/profiles/4.jpg') no-repeat center center;"></div>
+                        <div class="profile_name">David</div>
+                        <div class="comment_text">Well said!</div>
+                        <div class="comment_like" data-commentid="4">
+                            <div class="like_btn" onclick="likeComment('4')">👍</div>
+                            <div class="like_num_comment">25</div>
+                        </div>
+                    </div>
+                </div><div class="comment-item">
+                    <div class="userinfo">
+                        <div class="profile_pic" style="background: #53e4bd url('/images/profiles/5.jpg') no-repeat center center;"></div>
+                        <div class="profile_name">Eve</div>
+                        <div class="comment_text">This is so inspiring!</div>
+                        <div class="comment_like" data-commentid="5">
+                            <div class="like_btn" onclick="likeComment('5')">👍</div>
+                            <div class="like_num_comment">70</div>
+                        </div>
+                    </div>
+                </div><div class="comment-item">
+                    <div class="userinfo">
+                        <div class="profile_pic" style="background: #53e4bd url('/images/profiles/2.jpg') no-repeat center center;"></div>
+                        <div class="profile_name">Bob</div>
+                        <div class="comment_text">Love the vibes!</div>
+                        <div class="comment_like" data-commentid="6">
+                            <div class="like_btn" onclick="likeComment('6')">👍</div>
+                            <div class="like_num_comment">35</div>
+                        </div>
+                    </div>
+                </div><div class="comment-item">
+                    <div class="userinfo">
+                        <div class="profile_pic" style="background: #53e4bd url('/images/profiles/3.jpg') no-repeat center center;"></div>
+                        <div class="profile_name">Charlie</div>
+                        <div class="comment_text">Beautiful scenery!</div>
+                        <div class="comment_like" data-commentid="7">
+                            <div class="like_btn" onclick="likeComment('7')">👍</div>
+                            <div class="like_num_comment">50</div>
+                        </div>
+                    </div>
+                </div><div class="comment-item">
+                    <div class="userinfo">
+                        <div class="profile_pic" style="background: #53e4bd url('/images/profiles/1.jpg') no-repeat center center;"></div>
+                        <div class="profile_name">Alice</div>
+                        <div class="comment_text">1</div>
+                        <div class="comment_like" data-commentid="41">
+                            <div class="like_btn" onclick="likeComment('41')">👍</div>
+                            <div class="like_num_comment">2</div>
+                        </div>
+                    </div>
+                </div><div class="comment-item">
+                    <div class="userinfo">
+                        <div class="profile_pic" style="background: #53e4bd url('/images/profiles/6.jpg') no-repeat center center;"></div>
+                        <div class="profile_name">123</div>
+                        <div class="comment_text">yes！</div>
+                        <div class="comment_like" data-commentid="42">
+                            <div class="like_btn" onclick="likeComment('42')">👍</div>
+                            <div class="like_num_comment">0</div>
+                        </div>
+                    </div>
+                </div></div>
+            </div>
+
+            <div class="post_item">
+            <div class="meinfo">
+                <div class="profile_pic" style="background: #53e4bd url('/images/profiles/2.jpg') no-repeat center center;"></div>
+                <div class="profile_name">Bob</div>
+                <div class="post_pic" style="background: #53e4bd url('/images//posts/post2.jpg') no-repeat center center;"></div>
+                <div class="post_text">Had a great time at the beach.</div>
+                <div class="post_comment" style="display: block;">
+                    <form action="/submitComment" method="POST">
+                        <input type="hidden" name="userId" value="6">
+                        <input type="hidden" name="postId" value="2">
+                        <input type="text" name="commentText" placeholder="Write your comment" style="border: none; background-color: transparent; outline: none;">
+                        <button type="submit">Submit Comment</button>
+                    </form>
+                </div>
+                <div class="post_like" data-postid="2">
+                    <div class="like_btn" onclick="likePost('2')">👍</div>
+                    <div class="like_num_post">102</div>
+                </div>
+            </div>
+            <div class="comment_section" data-postid="2">
+                <!-- Comments will be dynamically inserted here -->
+                <div class="comment-item">
+                    <div class="userinfo">
+                        <div class="profile_pic" style="background: #53e4bd url('/images/profiles/1.jpg') no-repeat center center;"></div>
+                        <div class="profile_name">Alice</div>
+                        <div class="comment_text">Looks like fun!</div>
+                        <div class="comment_like" data-commentid="9">
+                            <div class="like_btn" onclick="likeComment('9')">👍</div>
+                            <div class="like_num_comment">55</div>
+                        </div>
+                    </div>
+                </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/2.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Bob</div>
+                    <div class="comment_text">Wish I was there!</div>
+                    <div class="comment_like" data-commentid="10">
+                        <div class="like_btn" onclick="likeComment('10')">👍</div>
+                        <div class="like_num_comment">40</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/3.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Charlie</div>
+                    <div class="comment_text">Perfect beach day!</div>
+                    <div class="comment_like" data-commentid="11">
+                        <div class="like_btn" onclick="likeComment('11')">👍</div>
+                        <div class="like_num_comment">65</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/4.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">David</div>
+                    <div class="comment_text">So relaxing!</div>
+                    <div class="comment_like" data-commentid="12">
+                        <div class="like_btn" onclick="likeComment('12')">👍</div>
+                        <div class="like_num_comment">45</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/5.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Eve</div>
+                    <div class="comment_text">The ocean looks amazing!</div>
+                    <div class="comment_like" data-commentid="13">
+                        <div class="like_btn" onclick="likeComment('13')">👍</div>
+                        <div class="like_num_comment">80</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/1.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Alice</div>
+                    <div class="comment_text">Great memories!</div>
+                    <div class="comment_like" data-commentid="14">
+                        <div class="like_btn" onclick="likeComment('14')">👍</div>
+                        <div class="like_num_comment">35</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/2.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Bob</div>
+                    <div class="comment_text">Thanks for the share!</div>
+                    <div class="comment_like" data-commentid="15">
+                        <div class="like_btn" onclick="likeComment('15')">👍</div>
+                        <div class="like_num_comment">25</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/3.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Charlie</div>
+                    <div class="comment_text">Can’t wait to go there!</div>
+                    <div class="comment_like" data-commentid="16">
+                        <div class="like_btn" onclick="likeComment('16')">👍</div>
+                        <div class="like_num_comment">60</div>
+                    </div>
+                </div>
+            </div></div>
+        </div><div class="post_item">
+            <div class="meinfo">
+                <div class="profile_pic" style="background: #53e4bd url('/images/profiles/3.jpg') no-repeat center center;"></div>
+                <div class="profile_name">Charlie</div>
+                <div class="post_pic" style="background: #53e4bd url('/images//posts/post3.jpg') no-repeat center center;"></div>
+                <div class="post_text">New adventure begins!</div>
+                <div class="post_comment" style="display: block;">
+                    <form action="/submitComment" method="POST">
+                        <input type="hidden" name="userId" value="6">
+                        <input type="hidden" name="postId" value="3">
+                        <input type="text" name="commentText" placeholder="Write your comment" style="border: none; background-color: transparent; outline: none;">
+                        <button type="submit">Submit Comment</button>
+                    </form>
+                </div>
+                <div class="post_like" data-postid="3">
+                    <div class="like_btn" onclick="likePost('3')">👍</div>
+                    <div class="like_num_post">151</div>
+                </div>
+            </div>
+            <div class="comment_section" data-postid="3">
+                <!-- Comments will be dynamically inserted here -->
+                <div class="comment-item">
+                    <div class="userinfo">
+                        <div class="profile_pic" style="background: #53e4bd url('/images/profiles/1.jpg') no-repeat center center;"></div>
+                        <div class="profile_name">Alice</div>
+                        <div class="comment_text">Adventure awaits!</div>
+                        <div class="comment_like" data-commentid="17">
+                            <div class="like_btn" onclick="likeComment('17')">👍</div>
+                            <div class="like_num_comment">70</div>
+                        </div>
+                    </div>
+                </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/2.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Bob</div>
+                    <div class="comment_text">Exciting times ahead!</div>
+                    <div class="comment_like" data-commentid="18">
+                        <div class="like_btn" onclick="likeComment('18')">👍</div>
+                        <div class="like_num_comment">55</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/3.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Charlie</div>
+                    <div class="comment_text">Safe travels!</div>
+                    <div class="comment_like" data-commentid="19">
+                        <div class="like_btn" onclick="likeComment('19')">👍</div>
+                        <div class="like_num_comment">45</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/4.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">David</div>
+                    <div class="comment_text">Have fun!</div>
+                    <div class="comment_like" data-commentid="20">
+                        <div class="like_btn" onclick="likeComment('20')">👍</div>
+                        <div class="like_num_comment">50</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/5.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Eve</div>
+                    <div class="comment_text">Looking forward to the stories!</div>
+                    <div class="comment_like" data-commentid="21">
+                        <div class="like_btn" onclick="likeComment('21')">👍</div>
+                        <div class="like_num_comment">65</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/1.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Alice</div>
+                    <div class="comment_text">New beginnings!</div>
+                    <div class="comment_like" data-commentid="22">
+                        <div class="like_btn" onclick="likeComment('22')">👍</div>
+                        <div class="like_num_comment">35</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/2.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Bob</div>
+                    <div class="comment_text">This is so cool!</div>
+                    <div class="comment_like" data-commentid="23">
+                        <div class="like_btn" onclick="likeComment('23')">👍</div>
+                        <div class="like_num_comment">40</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/3.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Charlie</div>
+                    <div class="comment_text">Best of luck!</div>
+                    <div class="comment_like" data-commentid="24">
+                        <div class="like_btn" onclick="likeComment('24')">👍</div>
+                        <div class="like_num_comment">55</div>
+                    </div>
+                </div>
+            </div></div>
+        </div><div class="post_item">
+            <div class="meinfo">
+                <div class="profile_pic" style="background: #53e4bd url('/images/profiles/4.jpg') no-repeat center center;"></div>
+                <div class="profile_name">David</div>
+                <div class="post_pic" style="background: #53e4bd url('/images//posts/post4.jpg') no-repeat center center;"></div>
+                <div class="post_text">Loving this new place!</div>
+                <div class="post_comment" style="display: block;">
+                    <form action="/submitComment" method="POST">
+                        <input type="hidden" name="userId" value="6">
+                        <input type="hidden" name="postId" value="4">
+                        <input type="text" name="commentText" placeholder="Write your comment" style="border: none; background-color: transparent; outline: none;">
+                        <button type="submit">Submit Comment</button>
+                    </form>
+                </div>
+                <div class="post_like" data-postid="4">
+                    <div class="like_btn" onclick="likePost('4')">👍</div>
+                    <div class="like_num_post">200</div>
+                </div>
+            </div>
+            <div class="comment_section" data-postid="4">
+                <!-- Comments will be dynamically inserted here -->
+                <div class="comment-item">
+                    <div class="userinfo">
+                        <div class="profile_pic" style="background: #53e4bd url('/images/profiles/8.jpg') no-repeat center center;"></div>
+                        <div class="profile_name">1235</div>
+                        <div class="comment_text">Such a great shot!</div>
+                        <div class="comment_like" data-commentid="8">
+                            <div class="like_btn" onclick="likeComment('8')">👍</div>
+                            <div class="like_num_comment">40</div>
+                        </div>
+                    </div>
+                </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/1.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Alice</div>
+                    <div class="comment_text">Looks amazing!</div>
+                    <div class="comment_like" data-commentid="25">
+                        <div class="like_btn" onclick="likeComment('25')">👍</div>
+                        <div class="like_num_comment">60</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/2.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Bob</div>
+                    <div class="comment_text">Can’t wait to visit!</div>
+                    <div class="comment_like" data-commentid="26">
+                        <div class="like_btn" onclick="likeComment('26')">👍</div>
+                        <div class="like_num_comment">45</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/3.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Charlie</div>
+                    <div class="comment_text">So beautiful!</div>
+                    <div class="comment_like" data-commentid="27">
+                        <div class="like_btn" onclick="likeComment('27')">👍</div>
+                        <div class="like_num_comment">75</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/4.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">David</div>
+                    <div class="comment_text">You’re in paradise!</div>
+                    <div class="comment_like" data-commentid="28">
+                        <div class="like_btn" onclick="likeComment('28')">👍</div>
+                        <div class="like_num_comment">65</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/5.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Eve</div>
+                    <div class="comment_text">Living the dream!</div>
+                    <div class="comment_like" data-commentid="29">
+                        <div class="like_btn" onclick="likeComment('29')">👍</div>
+                        <div class="like_num_comment">85</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/1.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Alice</div>
+                    <div class="comment_text">Take me there!</div>
+                    <div class="comment_like" data-commentid="30">
+                        <div class="like_btn" onclick="likeComment('30')">👍</div>
+                        <div class="like_num_comment">55</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/2.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Bob</div>
+                    <div class="comment_text">Absolutely stunning!</div>
+                    <div class="comment_like" data-commentid="31">
+                        <div class="like_btn" onclick="likeComment('31')">👍</div>
+                        <div class="like_num_comment">50</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/3.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Charlie</div>
+                    <div class="comment_text">I’m so jealous!</div>
+                    <div class="comment_like" data-commentid="32">
+                        <div class="like_btn" onclick="likeComment('32')">👍</div>
+                        <div class="like_num_comment">40</div>
+                    </div>
+                </div>
+            </div></div>
+        </div><div class="post_item">
+            <div class="meinfo">
+                <div class="profile_pic" style="background: #53e4bd url('/images/profiles/5.jpg') no-repeat center center;"></div>
+                <div class="profile_name">Eve</div>
+                <div class="post_pic" style="background: #53e4bd url('/images//posts/post5.jpg') no-repeat center center;"></div>
+                <div class="post_text">Just finished a great book.</div>
+                <div class="post_comment" style="display: block;">
+                    <form action="/submitComment" method="POST">
+                        <input type="hidden" name="userId" value="6">
+                        <input type="hidden" name="postId" value="5">
+                        <input type="text" name="commentText" placeholder="Write your comment" style="border: none; background-color: transparent; outline: none;">
+                        <button type="submit">Submit Comment</button>
+                    </form>
+                </div>
+                <div class="post_like" data-postid="5">
+                    <div class="like_btn" onclick="likePost('5')">👍</div>
+                    <div class="like_num_post">95</div>
+                </div>
+            </div>
+            <div class="comment_section" data-postid="5">
+                <!-- Comments will be dynamically inserted here -->
+                <div class="comment-item">
+                    <div class="userinfo">
+                        <div class="profile_pic" style="background: #53e4bd url('/images/profiles/1.jpg') no-repeat center center;"></div>
+                        <div class="profile_name">Alice</div>
+                        <div class="comment_text">What’s the book?</div>
+                        <div class="comment_like" data-commentid="33">
+                            <div class="like_btn" onclick="likeComment('33')">👍</div>
+                            <div class="like_num_comment">71</div>
+                        </div>
+                    </div>
+                </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/2.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Bob</div>
+                    <div class="comment_text">Sounds interesting!</div>
+                    <div class="comment_like" data-commentid="34">
+                        <div class="like_btn" onclick="likeComment('34')">👍</div>
+                        <div class="like_num_comment">60</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/3.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Charlie</div>
+                    <div class="comment_text">I need to read it too!</div>
+                    <div class="comment_like" data-commentid="35">
+                        <div class="like_btn" onclick="likeComment('35')">👍</div>
+                        <div class="like_num_comment">55</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/4.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">David</div>
+                    <div class="comment_text">Would love to hear more!</div>
+                    <div class="comment_like" data-commentid="36">
+                        <div class="like_btn" onclick="likeComment('36')">👍</div>
+                        <div class="like_num_comment">45</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/5.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Eve</div>
+                    <div class="comment_text">Books are the best!</div>
+                    <div class="comment_like" data-commentid="37">
+                        <div class="like_btn" onclick="likeComment('37')">👍</div>
+                        <div class="like_num_comment">75</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/1.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Alice</div>
+                    <div class="comment_text">Can you recommend it?</div>
+                    <div class="comment_like" data-commentid="38">
+                        <div class="like_btn" onclick="likeComment('38')">👍</div>
+                        <div class="like_num_comment">65</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/2.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Bob</div>
+                    <div class="comment_text">Looks like a good read!</div>
+                    <div class="comment_like" data-commentid="39">
+                        <div class="like_btn" onclick="likeComment('39')">👍</div>
+                        <div class="like_num_comment">51</div>
+                    </div>
+                </div>
+            </div><div class="comment-item">
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/3.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">Charlie</div>
+                    <div class="comment_text">Adding it to my list!</div>
+                    <div class="comment_like" data-commentid="40">
+                        <div class="like_btn" onclick="likeComment('40')">👍</div>
+                        <div class="like_num_comment">60</div>
+                    </div>
+                </div>
+            </div></div>
+        </div>
+        </div>
+    </main>
+    <footer>
+        <div class="creatorLogo">
+            <img src="/images/creatorLogo.jpg">
+        </div>
+        <div class="creatorInfo">
+            <p>CREATOR:TAN</p>
+            <p>EMAIL:tanyawen2640@gmail.com</p>
+            <p>PHONE:13527800350</p>
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>

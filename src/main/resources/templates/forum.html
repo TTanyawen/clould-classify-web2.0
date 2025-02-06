@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CloudForum</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        a {
+            text-decoration: none; /* 去除下划线 */
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 创建一个整体的容器，使用flex布局 */
+        .container { }
+
+        /* 头部区域 */
+        header {
+            background-color: var(--header-color);
+            height: 60px;
+            width: 100%;
+            color: white;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        header .content {
+            margin: auto;
+            width: 800px;
+            height: 100%;
+        }
+
+        header .logo {
+            float: left;
+            margin-top: 5px;
+        }
+
+        header .logo img {
+            height: 50px;
+        }
+
+        header .block {
+            float: right;
+            margin-left: 20px;
+            width: 100px;
+            background-color: var(--header-block-color);
+        }
+        header .block a{
+            font-size: 20px;
+            color: var(--header-bolck-fcolor);
+            font-weight: bolder;
+        }
+        /*hover*/
+        header .block :hover{
+            float: right;
+            margin-left: 20px;
+            width: 100px;
+            background-color: var(--header-block-hover-color);
+        }
+        /* 激活状态 */
+        .block.active {
+            background-color: var(--header-block-hover-color);
+            color: white;
+        }
+        /* 中间内容部分，指定固定的长宽并居中 */
+        main {
+            margin: auto;
+            background-color: #f8f8f8;
+            width: 800px;
+
+        }
+
+
+
+        main .mainTitle{
+            height: 100px;
+            width: 800px;
+            margin: auto;
+            display: flex;
+            justify-content: center; /* 水平居中对齐 */
+            align-items: center;     /* 垂直居中对齐 */
+            text-align: center;
+            font-size: 50px;
+            font-weight: bolder;
+            background-color: var(--main-title-color);
+            color:var(--main-title-fcolor);
+        }
+        main .postContainer{
+            height: 2500px;
+            width: 800px;
+            margin-top: 20px;
+            /*background-color: #e7edf0;*/
+            background-color: rgba(240, 231, 238, 0.59);
+        }
+
+        main .post_item
+       {
+            float: left;
+            height: 500px;
+            width: 350px;
+            margin-top: 30px;
+            margin-left: 30px;
+            border-radius: 10%;
+            overflow-y: scroll;
+            background-color: #617aa5;
+
+        }
+        main .post_item::-webkit-scrollbar
+        {
+            display: none; /* 对于 WebKit 浏览器 */
+        }
+        main .post_item .meinfo .profile_pic{
+
+            float: left;
+            height: 50px;
+            width: 50px;
+            margin-left: 20px;
+            margin-top: 20px;
+            /*background: #53e4bd url('/images/profiles/alice.jpg') no-repeat center center;*/
+            clip-path: circle(50%);
+        }
+        main .post_item .meinfo .profile_name{
+            float: left;
+            margin-left: 20px;
+            margin-top: 20px;
+            height: 50px;
+            line-height: 50px;
+            width: 150px;
+            font-size: 18px;
+            color: white;
+            /*background-color: #eee9e9;*/
+        }
+        main .post_item .post_pic{
+            float: left;
+            height: 280px;
+            width: 310px;
+            margin-left: 20px;
+            margin-top: 20px;
+            background: #53e4bd url('/images/posts/post1.jpg') no-repeat center center;
+            border-radius: 10%;
+        }
+        main .post_item .post_text{
+            float: left;
+            height: 50px;
+            width: 310px;
+            margin-left: 20px;
+            margin-top: 20px;
+            background-color: rgba(242, 251, 251, 0.56);
+        }
+        main .post_item .post_comment{
+            float: left;
+            height: 20px;
+            width: 200px;
+            margin-left: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background-color: rgba(242, 251, 251, 0.56);
+        }
+        main .post_item .post_like{
+            float: right;
+            height: 20px;
+            width: 100px;
+            margin-right: 20px;
+            margin-top: 20px;
+            /*background-color: #cce9d0;*/
+            color: white;
+        }
+
+        main .post_item .post_like .like_num_post{
+            float: right;
+            height: 20px;
+            width: 40px;
+        }
+        main .post_item .post_like .like_btn{
+            float: left;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background-color: rgba(109, 200, 227, 0.52);
+            cursor: pointer; /* 添加此属性以更改鼠标样式 */
+
+        }
+
+        /*评论部分*/
+        main .comment_section .comment-item{
+            float: left;
+            height: 140px;
+            width: 310px;
+            margin-left: 20px;
+            margin-top: 20px;
+            border-radius: 8%;
+            background-color: rgba(242, 251, 251, 0.17);
+        }
+        main .comment_section .userinfo .profile_pic{
+
+            float: left;
+            height: 30px;
+            width: 30px;
+            margin-left: 10px;
+            margin-top: 10px;
+            /*background: #53e4bd url('/images/profiles/alice.jpg') no-repeat center center;*/
+            clip-path: circle(50%);
+        }
+        main .comment_section .userinfo .profile_name{
+            float: left;
+            margin-left: 10px;
+            margin-top: 10px;
+            height: 30px;
+            line-height: 30px;
+            width: 150px;
+            font-size: 14px;
+            /*background-color: #eee9e9;*/
+            color: white;
+        }
+        main .comment_section .comment_text{
+            float: left;
+            height: 50px;
+            width: 280px;
+            margin-left: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.31);
+        }
+        main .comment_section .comment_like{
+            float: right;
+            height: 20px;
+            width: 100px;
+            margin-right: 10px;
+            margin-top: 10px;
+            /*background-color: #cce9d0;*/
+            color: white;
+        }
+        main .comment_section .comment_like .like_btn{
+            float: left;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background-color: rgba(109, 200, 227, 0.52);
+            cursor: pointer; /* 添加此属性以更改鼠标样式 */
+        }
+
+        /* 底部区域 */
+        footer {
+            background-color:  var(--footer-color);
+            height: 300px;
+            width: 100%;
+            text-align: center;
+            line-height: 60px;
+            margin-top: auto;
+            padding-top: 50px;
+        }
+        footer .creatorLogo {
+            width: 100%;
+            height: 70px;
+            /*margin-left:auto;*/
+            /*margin-top: 20px;*/
+            /*background-color: #fff;*/
+        }
+
+        footer .creatorLogo img {
+            height: 70px;
+        }
+        footer .creatorInfo{
+            height: 100px;
+            width: 100%;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 25px;
+            font-weight: lighter;
+            color: var(--footer-fcolor);
+            /*background-color: rgba(255, 255, 255, 0.51);*/
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="content">
+            <div class="logo">
+                <a href="/index">
+                    <img src="/images/logo.png" alt="Cloud Website Logo">
+                </a>
+            </div>
+            <div id="me" class="block">
+                <a href="/me">me</a>
+            </div>
+            <div id="classify" class="block">
+                <a href="/classify">classify</a>
+            </div>
+            <div id="forum" class="block">
+                <a href="/forum">forum</a>
+            </div>
+            <div id="know" class="block">
+                <a href="/know">know</a>
+            </div>
+        </div>
+    </header>
+    <main id="mainContent">
+        <div class="mainTitle">Forum</div>
+        <div class="postContainer" id="postContainer">
+            <div class="post_item" th:each="post:${posts}">
+                <div class="meinfo">
+                    <div class="profile_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/profiles/' + ${post.userId} + '.jpg'+'\'' + ') no-repeat center center;'"></div>
+                    <div class="profile_name" th:text="${post.userName}"></div>
+                    <div class="post_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/' + ${post.postImgPath} + '\'' + ') no-repeat center center;'"></div>
+                    <div class="post_text" th:text="${post.postText}"></div>
+                    <div class="post_comment" th:if="${session.userLogin}">
+<!--                        <input type="text" style="border: none; background-color: transparent; outline: none;">-->
+<!--                        <form action="/submitComment" method="POST">-->
+<!--                            <input type="text" name="content" style="border: none; background-color: transparent; outline: none;">-->
+<!--&lt;!&ndash;                            <button type="submitComment">提交</button>&ndash;&gt;-->
+<!--                        </form>-->
+                        <form id="commentForm" >
+                            <input type="hidden" name="userId" id="userId" th:value="${session.userLogin.getUserId()}">  <!-- 用户ID -->
+                            <input type="hidden" name="postId" id="postId" th:value="${post.postId}">  <!-- 帖子ID -->
+<!--                            <input type="text" name="commenttext" placeholder="Write your comment">-->
+                            <input type="text" name="commentText" id="commentText" style="border: none; background-color: transparent; outline: none;" placeholder="Write your comment">
+
+                            <button type="submit">提交评论</button>
+                        </form>
+
+
+                    </div>
+
+
+<!--                    <div class="post_like" data-postId="${post.postId}">-->
+                    <div class="post_like" th:attr="data-postId=${post.postId}">
+
+<!--                        <div class="like_btn" th:onclick="likePost(${post.postid})"></div>-->
+
+                        <div class="like_btn" th:attr="onclick=|likePost('${post.postId}')|">👍</div>
+                        <div class="like_num_post" th:text="'   '+${post.postLike}"></div>
+                    </div>
+
+                </div>
+
+                <div class="comment_section">
+                    <div class="comment-item" th:each="comment:${comments}" th:if="${comment.postId} == ${post.postId}">
+                        <div class="userinfo">
+                            <div class="profile_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/profiles/' + ${comment.userId} + '.jpg'+'\'' + ') no-repeat center center;'"></div>
+                            <div class="profile_name" th:text="${comment.userName}"></div>
+                            <div class="comment_text" th:text="${comment.commentText}"></div>
+                            <div class="comment_like" th:attr="data-commentId=${comment.commentId}">
+                                <div class="like_btn" th:attr="onclick=|likeComment('${comment.commentId}')|">👍</div>
+                                <div class="like_num_comment" th:text="${comment.commentLike}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="creatorLogo">
+            <img src="/images/creatorLogo.jpg">
+        </div>
+        <div class="creatorInfo">
+            <p>CREATOR:TAN</p>
+            <p>EMAIL:tanyawen2640@gmail.com</p>
+            <p>PHONE:13527800350</p>
+        </div>
+    </footer>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var userLogin = /*[[${session.userLogin}]]*/ null;
+    /*]]>*/
+    // JavaScript 示例
+    window.onload = function() {
+        // 获取当前页面的文件名
+        const currentPage = window.location.pathname.split("/").pop().replace('.html', '');
+
+        // 根据文件名给对应的块添加 active 类
+        const activeBlock = document.getElementById(currentPage);
+        if (activeBlock) {
+            activeBlock.classList.add('active');
+        }
+    };
+
+    //点赞
+    function likePost(postId) {
+        console.log("likePost")
+        const token = localStorage.getItem('authToken');  // 获取本地存储中的token
+        console.log("addEventListener:token"+token)
+        fetch('/post/likePost/' + postId, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,  // 设置 Authorization 头
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code===1&& data.data) {
+                    const postLikeElement = document.querySelector(`.post_like[data-postId='${postId}'] .like_num_post`);
+                    if (postLikeElement) {
+                        console.log("更新post点赞数据")
+                        postLikeElement.textContent = data.data;
+                    }
+                } else{
+                    alert(data.msg);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
+    //点赞
+    function likeComment(commentId) {
+        console.log("likeComment")
+        const token = localStorage.getItem('authToken');  // 获取本地存储中的token
+
+        console.log("addEventListener:token"+token)
+        fetch('/post/likeComment/' + commentId, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,  // 设置 Authorization 头
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code===1&& data.data) {
+                    // 更新点赞数显示，假设 class="post_like" 是显示点赞数的元素
+                    // document.querySelector('.like_num_comment').textContent =  data.newLikeCount;
+                    const commentLikeElement = document.querySelector(`.comment_like[data-commentId='${commentId}'] .like_num_comment`);
+                    if (commentLikeElement) {
+                        commentLikeElement.textContent = data.data;
+                    }
+                } else {
+                    alert(data.msg);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
+    // 页面加载时检查是否有JWT，如果没有则重定向到登录页
+    window.onload = function() {
+        const token = localStorage.getItem('authToken');
+        console.log(token);
+        if (token==='null') {
+            alert('未登录，没有jwt');
+            window.location.href = '/toLogin';  // 未登录时跳转到登录页面
+        } else {
+            // 如果有JWT，则可以继续加载页面内容
+            loadForumdata(token);
+        }
+    };
+
+    // 调用 API 获取数据
+    function loadForumdata(token) {
+        fetch('/user/getForumData', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`  // 确保你有正确的 token
+            }
+        })
+            .then(response => response.json()) // 解析 JSON 响应
+            .then(data => {
+                if (data.code === 1 && data.data) {
+                    const { posts, comments } = data.data;  // 获取 posts 和 comments 数据
+
+                    const postContainer = document.querySelector('.postContainer'); // 获取容器元素
+                    postContainer.innerHTML = '';  // 清空容器内容
+
+                    renderPosts(posts,comments);
+                } else {
+                    console.error('Failed to load forum data');
+                }
+            })
+            .catch(error => console.error('Error loading forum data:', error));
+    }
+
+    function renderPosts(posts,comments) {
+        const postContainer = document.querySelector('.postContainer');
+        posts.forEach(post => {
+            console.log("create post");
+            const postElement = document.createElement('div');
+            postElement.classList.add('post_item');
+
+            const isUserLoggedIn = userLogin !== null;
+            // Create the post content
+            const postContent = `
+                <div class="meinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/${post.userId}.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">${post.userName}</div>
+                    <div class="post_pic" style="background: #53e4bd url('/images/${post.postImgPath}') no-repeat center center;"></div>
+                    <div class="post_text">${post.postText}</div>
+                    <div class="post_comment" style="display: ${isUserLoggedIn ? 'block' : 'none'};">
+                        <form id="commentForm_${post.postId}" class="commentForm">
+                            <input type="hidden" name="userId" id="userId" value="${userLogin ? userLogin.userId : ''}">
+                            <input type="hidden" name="postId" id="postId" value="${post.postId}">
+                            <input type="text" name="commentText" id="commentText" placeholder="Write your comment" style="border: none; background-color: transparent; outline: none;">
+                            <input type="submit" value="提交评论"/>
+                        </form>
+                    </div>
+                    <div class="post_like" data-postId="${post.postId}">
+                        <div class="like_btn" onclick="likePost('${post.postId}')">👍</div>
+                        <div class="like_num_post">${post.postLike}</div>
+                    </div>
+                </div>
+                <div class="comment_section" data-postId="${post.postId}">
+                    <!-- Comments will be dynamically inserted here -->
+                </div>
+            `;
+            postElement.innerHTML = postContent;
+            postContainer.appendChild(postElement);
+
+            // Render comments for each post
+            renderComments(post.postId, comments);
+
+
+
+        });
+
+        //为所有表单都添加监听
+
+        const commentForms = document.querySelectorAll('.commentForm');
+
+        commentForms.forEach(form => {
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault(); // 阻止默认表单提交行为
+                console.log(form.id);
+                const token = localStorage.getItem('authToken');  // 获取本地存储中的token
+
+                // const userId = document.getElementById('userId').value;
+                // const postId = document.getElementById('postId').value;
+                // const commentText = document.getElementById('commentText').value;
+                const userId = document.querySelector('#userId').value;
+                const postId = document.querySelector('#postId').value;
+                const commentText = document.querySelector('#commentText').value;
+                console.log("postId:"+postId+" userId:"+userId+" commentText:"+commentText);
+                // 创建请求体
+                const requestBody = {
+                    userId: userId,
+                    postId: postId,
+                    commentText: commentText
+                };
+
+                try {
+                    // 发送 Fetch 请求
+                    const response = await fetch('/post/submitComment', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,  // 设置 Authorization 头
+                            'Content-Type': 'application/json'  // 发送 JSON 数据
+                        },
+                        body: JSON.stringify(requestBody)  // 将数据转为 JSON 字符串
+                    });
+                    console.log()
+                    // 检查响应状态
+                    if (!response.ok) {
+                        throw new Error('网络响应失败');
+                    }
+
+                    // 解析返回的 JSON 数据
+                    const result = await response.json();
+                    console.log(result);
+                    // 根据返回的 Result 封装信息处理
+                    if (result.code === 1) {
+                        // 评论成功
+                        //重新请求数据
+                        loadForumdata(token);
+                        alert("评论已发送！");
+                    } else {
+                        alert(result.msg);
+                    }
+                } catch (error) {
+                    alert("评论失败");
+                }
+
+            });
+
+        });
+        // console.log(postContainer.innerHTML);
+
+
+    }
+
+    // Function to render comments for a post
+    function renderComments(postId, comments) {
+        const commentSection = document.querySelector(`.comment_section[data-postId='${postId}']`);
+        const postComments = comments.filter(comment => comment.postId == postId);
+
+        postComments.forEach(comment => {
+            // console.log("create comment");
+            const commentElement = document.createElement('div');
+            commentElement.classList.add('comment-item');
+
+            const commentContent = `
+                <div class="userinfo">
+                    <div class="profile_pic" style="background: #53e4bd url('/images/profiles/${comment.userId}.jpg') no-repeat center center;"></div>
+                    <div class="profile_name">${comment.userName}</div>
+                    <div class="comment_text" data-commentId="${comment.commentId}">${comment.commentText}</div>
+                    <div class="comment_like" data-commentId="${comment.commentId}">
+                        <div class="like_btn" onclick="likeComment('${comment.commentId}')">👍</div>
+                        <div class="like_num_comment">${comment.commentLike}</div>
+                    </div>
+                </div>
+            `;
+            commentElement.innerHTML = commentContent;
+            commentSection.appendChild(commentElement);
+        });
+
+
+    }
+
+
+
+
+
+</script>
+</body>
+</html>
+

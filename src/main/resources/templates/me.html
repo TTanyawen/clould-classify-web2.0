@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Me</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        a {
+            text-decoration: none; /* 去除下划线 */
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 创建一个整体的容器，使用flex布局 */
+        .container { }
+
+        /* 头部区域 */
+        header {
+            background-color: var(--header-color);
+            height: 60px;
+            width: 100%;
+            color: white;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        header .content {
+            margin: auto;
+            width: 800px;
+            height: 100%;
+        }
+
+        header .logo {
+            float: left;
+            margin-top: 5px;
+        }
+
+        header .logo img {
+            height: 50px;
+        }
+
+        header .block {
+            float: right;
+            margin-left: 20px;
+            width: 100px;
+            background-color: var(--header-block-color);
+        }
+        header .block a{
+            font-size: 20px;
+            color: var(--header-bolck-fcolor);
+            font-weight: bolder;
+        }
+        /*hover*/
+        header .block :hover{
+            float: right;
+            margin-left: 20px;
+            width: 100px;
+            background-color: var(--header-block-hover-color);
+        }
+        /* 激活状态 */
+        .block.active {
+            background-color: var(--header-block-hover-color);
+            color: white;
+        }
+
+        /* 中间内容部分，指定固定的长宽并居中 */
+        main {
+            margin: auto;
+            background-color: #f8f8f8;
+            width: 800px;
+        }
+
+
+        main .mainTitle{
+            height: 100px;
+            width: 800px;
+            margin: auto;
+            display: flex;
+            justify-content: center; /* 水平居中对齐 */
+            align-items: center;     /* 垂直居中对齐 */
+            text-align: center;
+            font-size: 50px;
+            font-weight: bolder;
+            background-color: var(--main-title-color);
+            color:var(--main-title-fcolor);
+        }
+        main .meinfo{
+            margin-top: 20px;
+            height: 200px;
+
+        }
+
+        main .meinfo .profile_pic{
+
+            float: left;
+            height: 100px;
+            width: 100px;
+            margin-left: 20px;
+            /*background: #53e4bd url('/images/creatorLogo.jpg') no-repeat center center;*/
+            /*background: #53e4bd url('/static/images/creatorLogo.jpg') no-repeat center center;*/
+
+            clip-path: circle(50%);
+        }
+
+        main .meinfo .profile_pic .pic_input{
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: rgba(76, 175, 80, 0.04);
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            padding: 0;
+            font-size: 14px;
+
+
+        }
+        #fileInput::-webkit-file-upload-button {
+            visibility: hidden;
+        }
+        #fileInput::before {
+            content: ' ';
+            display: block;
+            width: 100%;
+            height: 100%;
+            line-height: 100px;
+            text-align: center;
+            background-color: rgba(76, 175, 80, 0.04);
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+        }
+
+
+        main .meinfo .profile_name,
+        main  .meinfo .profile_collect {
+            float: left;
+            margin-bottom:10px;
+            margin-left: 20px;
+            height: 30px;
+            line-height: 30px;
+            width: 600px;
+            font-size: 20px;
+            font-weight: bolder;
+            background-color: rgba(204, 223, 233, 0.55);
+        }
+
+        main .post{
+            margin-top: 20px;
+            height: 500px;
+        }
+        main .post .title{
+            height: 50px;
+            width: 800px;
+            margin: auto;
+            display: flex;
+            justify-content: center; /* 水平居中对齐 */
+            align-items: center;     /* 垂直居中对齐 */
+            text-align: center;
+            font-size: 30px;
+            font-weight: bolder;
+            background-color: #b5d5e2;
+        }
+        /*main .post .post_item{*/
+        /*    height: 250px;*/
+        /*    width: 800px;*/
+        /*    margin-top: 20px;*/
+
+
+        /*    background-color: #b898f7;*/
+
+        /*}*/
+
+        main .post{
+            height: 2500px;
+            width: 800px;
+
+            background-color: #f8f8f8;
+        }
+
+        main .post_item
+        {
+            float: left;
+            height: 540px;
+            width: 740px;
+            margin-top: 30px;
+            margin-left: 30px;
+            /*border-radius: 10%;*/
+            overflow-y: scroll;
+            background-color: #627ba5;
+        }
+        main .post_item::-webkit-scrollbar
+        {
+            display: none; /* 对于 WebKit 浏览器 */
+        }
+        main .post_item .meinfo .profile_pic{
+
+            float: left;
+            height: 50px;
+            width: 50px;
+            margin-left: 10px;
+            margin-top: 10px;
+            /*background: #53e4bd url('/images/profiles/alice.jpg') no-repeat center center;*/
+            clip-path: circle(50%);
+        }
+
+
+        main .post_item .meinfo .profile_name{
+            float: left;
+            margin-left: 10px;
+            margin-top: 10px;
+            height: 30px;
+            line-height: 30px;
+            width: 550px;
+            font-size: 18px;
+            /*background-color: rgba(238, 233, 233, 0.41);*/
+            color: #f0f0f0;
+        }
+        main .post_item .post_pic{
+            float: left;
+            height: 320px;
+            width: 400px;
+            margin-left: 20px;
+            margin-top: 10px;
+            background: rgba(83, 228, 189, 0.01) url('/images/posts/post1.jpg') no-repeat center center;
+            border-radius: 10%;
+        }
+        main .post_item .post_text{
+            float: left;
+            height: 100px;
+            width: 500px;
+            margin-left: 80px;
+            margin-top: 10px;
+            background-color: rgba(255, 255, 255, 0.35);
+        }
+        main .post_item .post_like{
+            float: right;
+            height: 20px;
+            width: 100px;
+            margin-right: 20px;
+            margin-top: 20px;
+            background-color: rgba(204, 233, 231, 0.36);
+        }
+        /*评论部分*/
+        main .comment_section .comment-item{
+            float: left;
+            height: 140px;
+            width: 510px;
+            margin-left: 80px;
+            margin-top: 20px;
+            border-radius: 8%;
+            background-color: rgba(33, 149, 116, 0.38);
+        }
+        main .comment_section .userinfo .profile_pic{
+
+            float: left;
+            height: 30px;
+            width: 30px;
+            margin-left: 10px;
+            margin-top: 10px;
+            /*background: #53e4bd url('/images/profiles/alice.jpg') no-repeat center center;*/
+            clip-path: circle(50%);
+
+
+        }
+
+        main .comment_section .userinfo .profile_name{
+            float: left;
+            margin-left: 10px;
+            margin-top: 10px;
+            height: 30px;
+            line-height: 30px;
+            width: 150px;
+            font-size: 14px;
+            background-color: #eee9e9;
+        }
+        main .comment_section .comment_text{
+            float: left;
+            height: 50px;
+            width: 350px;
+            margin-left: 50px;
+            margin-top: 10px;
+            font-size: 16px;
+            background-color: #fff;
+        }
+        main .comment_section .comment_like{
+            float: right;
+            height: 20px;
+            width: 100px;
+            margin-right: 10px;
+            margin-top: 10px;
+            background-color: #cce9d0;
+        }
+
+        /* 底部区域 */
+        footer {
+            background-color:  var(--footer-color);
+            height: 300px;
+            width: 100%;
+            text-align: center;
+            line-height: 60px;
+            margin-top: auto;
+            padding-top: 50px;
+        }
+        footer .creatorLogo {
+            width: 100%;
+            height: 70px;
+            /*margin-left:auto;*/
+            /*margin-top: 20px;*/
+            /*background-color: #fff;*/
+        }
+
+        footer .creatorLogo img {
+            height: 70px;
+        }
+        footer .creatorInfo{
+            height: 100px;
+            width: 100%;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 25px;
+            font-weight: lighter;
+            color: var(--footer-fcolor);
+            /*background-color: rgba(255, 255, 255, 0.51);*/
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="content">
+            <div class="logo">
+                <a href="/index">
+                    <img src="/images/logo.png" alt="Cloud Website Logo">
+                </a>
+            </div>
+            <div id="me" class="block">
+                <a href="/me">me</a>
+            </div>
+            <div id="classify" class="block">
+                <a href="/classify">classify</a>
+            </div>
+            <div id="forum" class="block">
+                <a href="/forum">forum</a>
+            </div>
+            <div id="know" class="block">
+                <a href="/know">know</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="mainTitle">About Me</div>
+        <div class="meinfo">
+               <div class="profile_pic"        th:style="'background: #53e4bd url(' + '/images/profiles/' + ${session.userId} +'.jpg'+ ') no-repeat center center;'">
+               <input type="hidden" id="userid" th:value="${session.userLogin.userId}">
+               <input type="file" id="fileInput" class="pic_input"  onchange="uploadImage(event)">
+           </div>
+            <div class="profile_name" th:text="'UserName:'+${session.userLogin.getUserName()}">
+            </div>
+            <div class="profile_collect" th:text="'CloudAccount:'+${session.userLogin.getUserPoints()}">
+            </div>
+        </div>
+
+
+        <div class="post">
+            <div class="title">My Post</div>
+
+            <div class="postContents">
+                <div class="post_item" th:each="post:${posts}">
+                    <div class="meinfo">
+                        <div class="profile_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/profiles/' + ${post.userId} + '.jpg'+'\'' + ') no-repeat center center;'"></div>
+                        <div class="profile_name" th:text="${post.userName}"></div>
+                        <div class="post_pic" th:style="'background: rgba(83, 228, 189, 0.01) url(' + '\'' + '/images/' + ${post.postImgPath} + '\'' + ') no-repeat center center;'"></div>
+                        <div class="post_text" th:text="${post.postText}"></div>
+                        <div class="post_like" th:text="'👍   '+${post.postLike}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="creatorLogo">
+            <img src="/creatorLogo.jpg">
+        </div>
+        <div class="creatorInfo">
+            <p>CREATOR:TAN</p>
+            <p>EMAIL:tanyawen2640@gmail.com</p>
+            <p>PHONE:13527800350</p>
+        </div>
+
+    </footer>
+</div>
+<script>
+    // JavaScript 示例
+    window.onload = function() {
+        // 获取当前页面的文件名
+        const currentPage = window.location.pathname.split("/").pop().replace('.html', '');
+
+        // 根据文件名给对应的块添加 active 类
+        const activeBlock = document.getElementById(currentPage);
+        if (activeBlock) {
+            activeBlock.classList.add('active');
+        }
+    };
+
+    //上传头像
+    function uploadImage(event) {
+        const file = event.target.files[0];
+
+        const userId = document.getElementById('userId').value; // 从隐藏字段中获取userId
+
+        const formData = new FormData();
+
+        formData.append('file', file);
+        formData.append('userId', userId);
+
+        fetch('/upload', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.json())
+            .then(data => {
+                console.log('Image uploaded successfully:', data);
+            }).catch(error => {
+            console.error('Error uploading image:', error);
+        });
+    }
+
+    // 页面加载时检查是否有JWT，如果没有则重定向到登录页
+    window.onload = function() {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert('未登录,无jwt令牌.');
+            window.location.href = '/toLogin';  // 未登录时跳转到登录页面
+        } else {
+            // 如果有JWT，则可以继续加载页面内容
+            loadCloudInfo(token);
+        }
+    };
+    // 加载页面内容
+    function loadCloudInfo(token) {
+        fetch('/user/getMeData', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`  // 确保你有正确的 token
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 检查返回的 data 是否包含期望的结构
+                if (data.code === 1 && data.data) {
+                    const postContentsContainer = document.querySelector('.postContents');
+                    postContentsContainer.innerHTML = '';  // 清空现有内容
+
+                    // 遍历数据并渲染每一项
+                    data.data.forEach(post => {
+                        const postItem = document.createElement('div');
+                        postItem.classList.add('post_item');
+
+                        postItem.innerHTML = `
+                            <div class="meinfo">
+                                <div class="profile_pic" style="background: #53e4bd url('/images/profiles/${post.userId}.jpg') no-repeat center center;"></div>
+                                <div class="profile_name" >${post.userName}</div>
+                                <div class="post_pic" style="background: rgba(83, 228, 189, 0.01) url('/images${post.postImgPath}') no-repeat center center;"></div>
+
+<!--                                <div class="post_pic" style="'background: rgba(83, 228, 189, 0.01) url(' + '/images/' + ${post.postImgPath} + ') no-repeat center center;'"></div>-->
+                                <div class="post_text" >${post.postText}  ${post.postImgPath}</div>
+                                <div class="post_like" >👍   +${post.postLike}</div>
+                            </div>
+                         `;
+
+                        postContentsContainer.appendChild(postItem);
+
+                    });
+                    console.log(postContentsContainer.innerHTML)
+                } else {
+                    console.error('Invalid data structure:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading cloud types:', error);
+            });
+    }
+</script>
+</body>
+</html>

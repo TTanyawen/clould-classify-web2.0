@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.java7_4.mapper.PostMapper">
+
+    <resultMap id="PostResultMap" type="Post">
+        <result column="post_id" property="postId" />
+        <result column="user_id" property="userId" />
+        <result column="post_img_path" property="postImgPath" />
+        <result column="post_text" property="postText" />
+        <result column="post_like" property="postLike" />
+    </resultMap>
+    <resultMap id="PostDTOResultMap" type="PostDTO">
+        <result column="post_id" property="postId" />
+        <result column="user_id" property="userId" />
+        <result column="post_img_path" property="postImgPath" />
+        <result column="post_text" property="postText" />
+        <result column="post_like" property="postLike" />
+        <result column="user_profile_path" property="userProfilePath" />
+
+    </resultMap>
+
+    <select id="selectAll" resultMap="PostResultMap">
+        select * from tb_post;
+    </select>
+    <select id="selectById" resultMap="PostResultMap">
+        select * from tb_post
+        where post_id=#{postId};
+    </select>
+    <select id="selectMePostsWithUserAvatar" resultMap="PostDTOResultMap">
+        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name from tb_post,tb_user
+        where tb_post.user_id=tb_user.user_id AND tb_post.user_id=#{userId};
+    </select>
+    <select id="selectPostsWithUserAvatar" resultMap="PostDTOResultMap">
+        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name from tb_post,tb_user
+        where tb_post.user_id=tb_user.user_id;
+    </select>
+
+
+    <update id="updateById">
+        update tb_post
+        set post_like = #{postLike} where post_id=#{postId};
+
+    </update>
+
+
+</mapper>

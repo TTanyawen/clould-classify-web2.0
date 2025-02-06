@@ -1,0 +1,76 @@
+spring:
+  application:
+    name: java7_4
+
+  thymeleaf:
+    cache: false
+    mode: HTML
+    prefix: classpath:/templates/
+    suffix: .html
+
+  datasource:
+    url: jdbc:mysql:///clouddb2.0?useSSL=false
+    username: root
+    password: 2640
+    driver-class-name: com.mysql.jdbc.Driver
+
+  session:
+    store-type: redis
+    redis:
+      namespace: spring:session
+      flush-mode: on_save
+    timeout: 30m
+
+  security:
+    enabled: false
+
+  web:
+    resources:
+#       static-locations: file:./static/images/
+      static-locations: classpath:/static/, file:./static/
+
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.example.java7_4.controller
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+mybatis:
+  config-location: classpath:mybatis-config.xml
+
+mybatis-plus:
+  type-aliases-package: com.example.java7_4.entity
+  mapper-locations: classpath:mapper/*.xml
+
+server:
+  port: 8090
+  reactive:
+    session:
+      cookie:
+        domain: server.com
+  servlet:
+    session:
+      timeout: 30m
+
+sky:
+  jwt:
+    user-secret-key: cloudweb
+    user-ttl: 7200000
+  redis:
+    host: localhost
+    port: 6379
+#     password: 123456
+    database: 10
+

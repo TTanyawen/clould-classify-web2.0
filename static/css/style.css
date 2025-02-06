@@ -1,0 +1,14 @@
+:root{
+    --header-color:rgba(51,87,154,100);
+    --header-block-color: rgba(188, 215, 234, 0.51);
+    --header-block-hover-color: rgb(235, 244, 254);
+    --header-bolck-fcolor: rgb(5, 21, 74);
+
+    --main-title-color: rgb(55, 89, 155);
+    --main-title-fcolor: rgb(235, 244, 254);
+
+
+
+    --footer-color: rgb(79, 157, 151);
+    --footer-fcolor: rgb(76, 89, 94);
+}
