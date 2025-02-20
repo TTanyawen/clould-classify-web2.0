@@ -21,15 +21,16 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+
+
     @Autowired
     private RedisTemplate redisTemplate;
     @PostMapping("/likePost/{postId}")
     public Result<Long> likePost(@RequestHeader("Authorization") String authorization, @PathVariable("postId") Long postId) {
         System.out.println("likePost1");
         try {
-            // 增加点赞数
-            Long newLikeCount = postService.incrementPostLike(postId);
-            redisTemplate.delete("posts");
+            Long newLikeCount = postService.incrementPostLike(postId);// 增加/取消点赞
+            redisTemplate.delete("posts");//因为数据库点赞数更新了，删除Redis里头的posts缓存
             return Result.success(newLikeCount);
         } catch (Exception e) {
             return Result.error("Failed to like the post");
