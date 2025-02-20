@@ -1,4 +1,5 @@
 package com.example.java7_4.controller;
+import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.entity.*;
 import com.example.java7_4.result.Result;
 import com.example.java7_4.service.impl.CloudTypeService;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +49,7 @@ public class CloudController {
     @RequestMapping("/getKnowData")
     @Operation(summary = "getKnowData")
     public Result<List<CloudType>> getKnowData(@RequestHeader("Authorization") String authorization) {
-        String key="types";
+        String key= RedisKeyConstants.CLOUD_TYPES;
         List<CloudType> clouds=(List<CloudType>) redisTemplate.opsForValue().get(key);
         if(clouds!=null&&clouds.size()>0){
             System.out.println("get from Redis");
@@ -69,34 +71,42 @@ public class CloudController {
         return Result.success(posts);
     }
 
+
     @RequestMapping("/getForumData")
     @Operation(summary = "getForumData")
     public Result<Map<String,Object>> getForumData(@RequestHeader("Authorization") String authorization) {
         System.out.println("getForumData");
-        String key1="posts";
-        String key2="comments";
+        String key1=RedisKeyConstants.POSTS;
+        String key2=RedisKeyConstants.COMMENTS;
         List<PostDTO> posts=(List<PostDTO>)redisTemplate.opsForValue().get(key1);
         List<CommentDTO> comments=(List<CommentDTO>)redisTemplate.opsForValue().get(key2);
         Map<String,Object> response=new HashMap<>();
         if(posts!=null&&posts.size()>0){
+            System.out.println("ExistRedis-Posts-getForumData");
         }else{
             posts = postService.getPostsWithUserAvatar();
             redisTemplate.opsForValue().set(key1,posts);
         }
         if(comments!=null&&comments.size()>0){
+            System.out.println("ExistRedis-Comments-getForumData");
         }else{
             comments= commentService.getCommentsWithUsername();
             redisTemplate.opsForValue().set(key2,comments);
         }
-
+        System.out.println("Posts-getForumData:"+posts.toString());
+        System.out.println("Comments-getForumData:"+comments.toString());
         response.put("posts",posts);
         response.put("comments",comments);
+
+        System.out.println("Response-getForumData:"+response.get("posts").toString());
+        System.out.println("Response-getForumData:"+response.get("comments").toString());
+
         return Result.success(response);
     }
     @RequestMapping("/getDetailData")
     @Operation(summary = "getDetailData")
     public Result<CloudType> getDetail(@RequestHeader("Authorization") String authorization,@RequestParam("typeId") Long typeId) {
-        String key="type_"+typeId;
+        String key=RedisKeyConstants.CLOUD_TYPE+typeId;
         CloudType cloudType=(CloudType)redisTemplate.opsForValue().get(key);
         if(cloudType!=null){
             System.out.println("get type from Redis");

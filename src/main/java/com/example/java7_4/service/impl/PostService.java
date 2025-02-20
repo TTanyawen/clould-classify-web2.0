@@ -1,6 +1,7 @@
 package com.example.java7_4.service.impl;
 
 //import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.Post;
 
@@ -41,7 +42,7 @@ public class PostService {
         if (post != null) {
             // 增加/取消点赞
             Long userId=BaseContext.getCurrentId();
-            String key="like:post:"+userId+":"+postId;
+            String key= RedisKeyConstants.LIKE_POST +userId+":"+postId;
             // 1. 判断缓存是否有key
             Boolean hasLiked = redisTemplate.hasKey(key);
 

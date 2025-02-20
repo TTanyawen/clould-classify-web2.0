@@ -6,10 +6,16 @@ public final class RedisKeyConstants {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    // 数据库相关常量
-    public static final String DB_URL = "jdbc:mysql://localhost:3306/your_database";
-    public static final String DB_USER = "root";
-    public static final String DB_PASSWORD = "password";
+    // key相关常量
+    public static final String CLOUD_TYPES = "types";
+    public static final String CLOUD_POSTS = "posts";
+    public static final String POSTS = "posts";
+    public static final String COMMENTS = "comments";
+
+    public static final String CLOUD_TYPE = "type:";
+    public static final String LIKE_POST = "like:post:";
+    public static final String LIKE_COMMENT = "like:comment:";
+
 
 
 }

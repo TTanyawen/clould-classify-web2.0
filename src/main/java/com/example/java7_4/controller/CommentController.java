@@ -1,5 +1,6 @@
 package com.example.java7_4.controller;
 
+import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.entity.Comment;
 import com.example.java7_4.result.Result;
 import com.example.java7_4.service.impl.CommentService;
@@ -32,7 +33,7 @@ public class CommentController {
         try {
             // 增加点赞数
             Long newLikeCount = commentService.incrementCommentLike(commentId);
-            redisTemplate.delete("comments");
+            redisTemplate.delete(RedisKeyConstants.COMMENTS);
             return Result.success(newLikeCount);
         } catch (Exception e) {
             return Result.error("Failed to like the comment");
@@ -57,7 +58,7 @@ public class CommentController {
         // 保存到数据库
         System.out.println("SC03");
         commentService.save(newComment);
-        redisTemplate.delete("comments");
+        redisTemplate.delete(RedisKeyConstants.COMMENTS);
 
 //        return "redirect:/forum";  // 跳转页面
 
