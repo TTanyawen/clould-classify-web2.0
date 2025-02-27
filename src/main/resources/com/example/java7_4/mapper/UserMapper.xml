@@ -11,6 +11,26 @@
         <result column="user_points" property="userPoints" />
     </resultMap>
 
+    <update id="updateById">
+        UPDATE tb_user
+        <set>
+            <if test="userName != null and userName!='' ">
+                user_name = #{userName},
+            </if>
+            <if test="userPassword != null and userPassword!='' ">
+                user_password = #{userPassword},
+            </if>
+            <if test="userProfilePath != null and userProfilePath!='' ">
+                user_profile_path = #{userProfilePath},
+            </if>
+            <if test="userPoints != null">
+                user_points = #{userPoints},
+            </if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+
     <select id="selectById" resultMap="UserResultMap">
         select * from tb_user where user_id = #{userId};
     </select>

@@ -2,29 +2,23 @@ package com.example.java7_4.controller;
 
 import com.example.java7_4.constant.JwtClaimsConstant;
 import com.example.java7_4.context.BaseContext;
+import com.example.java7_4.entity.MeEditQueryRepDTO;
+import com.example.java7_4.entity.MeEditUpdateReqDTO;
 import com.example.java7_4.entity.User;
-import com.example.java7_4.entity.UserLoginVO;
-import com.example.java7_4.exception.FailLoginException;
 import com.example.java7_4.exception.FailRegisterException;
 import com.example.java7_4.properties.JwtProperties;
 import com.example.java7_4.result.Result;
+import com.example.java7_4.service.MeEditService;
 import com.example.java7_4.service.UserService;
-import com.example.java7_4.service.impl.CloudTypeService;
-import com.example.java7_4.service.impl.UserServiceImpl;
 import com.example.java7_4.util.JwtUtil;
 import com.example.java7_4.util.MD5Util;
 import com.example.java7_4.util.ValidateCode;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -36,9 +30,9 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
-    @Autowired
-    private CloudTypeService movieService;
 
+    @Autowired
+    private MeEditService meEditService;
     @Autowired
     private JwtProperties jwtProperties;
 
@@ -164,5 +158,24 @@ public class UserController {
 
         return Result.success(response);
 
+    }
+
+
+    @RequestMapping("/edit/query")
+    public Result<MeEditQueryRepDTO> editQuery() {
+        Long userId=BaseContext.getCurrentId();
+        MeEditQueryRepDTO meEditQueryRepDTO =meEditService.getMeInfoById(userId);
+        return Result.success(meEditQueryRepDTO);
+    }
+
+    @RequestMapping("/edit/update")
+    public Result<Boolean> editUpdate(@RequestBody MeEditUpdateReqDTO meEditUpdateReqDTO) {
+        Long userId=BaseContext.getCurrentId();
+        meEditUpdateReqDTO.setUserId(userId);
+        int count =meEditService.updateMeInfoById(meEditUpdateReqDTO);
+        if(count==0){
+            return Result.success(Boolean.FALSE);
+        }
+        return Result.success(Boolean.TRUE);
     }
 }

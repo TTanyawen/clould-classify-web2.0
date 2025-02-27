@@ -206,6 +206,7 @@ public class ImageUploadController {
         if (user != null) {
             user.setUserProfilePath(filePath);
             userService.updateById(user); // 更新用户对象
+            log.info("logTag::saveFilePathToDatabase,filePath={},修改成功",filePath);
         }
     }
 

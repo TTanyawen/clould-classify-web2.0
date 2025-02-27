@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.java7_4.mapper.MeEditMapper">
+
+    <resultMap id="MeEditResultMap" type="MeEditEntity">
+        <result column="user_name" property="userName" />
+        <result column="user_password" property="userPassword" />
+        <result column="user_profile_path" property="userProfilePath" />
+    </resultMap>
+    <update id="updateMeInfoById">
+        UPDATE tb_user
+        <set>
+            <if test="userName != null and userName!='' ">
+                user_name = #{userName},
+            </if>
+            <if test="userPassword != null and userPassword!='' ">
+                user_password = #{userPassword},
+            </if>
+            <if test="userProfilePath != null and userProfilePath!='' ">
+                user_profile_path = #{userProfilePath},
+            </if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+    <select id="selectById" resultMap="MeEditResultMap">
+        select user_name,user_password,user_profile_path
+        from tb_user
+        where user_id = #{userId};
+    </select>
+
+</mapper>

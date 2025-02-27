@@ -83,4 +83,9 @@ public class getPageController {
     public String getUsers(){
         return "users";
     }
+
+    @RequestMapping("/edit")
+    public String getEdit(){
+        return "edit";
+    }
 }

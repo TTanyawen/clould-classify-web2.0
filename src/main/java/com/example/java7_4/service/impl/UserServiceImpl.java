@@ -9,12 +9,14 @@ import com.example.java7_4.result.PageResult;
 import com.example.java7_4.service.UserService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
@@ -59,6 +61,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public void updateById(User user) {
+        log.info("logTag::updateById-userid:{}-username-{}-userpath-{}",user.getUserId(),user.getUserName(),user.getUserProfilePath());
+        userMapper.updateById(user);
     }
 
     public PageResult getUsersPage_pageHelper(int page, int pageSize) {

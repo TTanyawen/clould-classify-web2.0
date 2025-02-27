@@ -11,6 +11,7 @@ import java.util.List;
 public interface UserMapper {
     User selectById(Long userId);
 
+    int updateById(User user);
 
     List<User> selectAll();
 
