@@ -356,8 +356,8 @@
     <main>
         <div class="mainTitle">About Me</div>
         <div class="meinfo">
-               <div class="profile_pic"        th:style="'background: #53e4bd url(' + '/images/profiles/' + ${session.userId} +'.jpg'+ ') no-repeat center center;'">
-               <input type="hidden" id="userid" th:value="${session.userLogin.userId}">
+               <div class="profile_pic" id="me_info_profile_pic" th:style="'background: #53e4bd url(' + '/images/profiles/' + ${session.userId} +'.jpg'+ ') no-repeat center center;'">
+               <input type="hidden" id="userId" th:value="${session.userLogin.userId}">
                <input type="file" id="fileInput" class="pic_input"  onchange="uploadImage(event)">
            </div>
             <div class="profile_name" th:text="'UserName:'+${session.userLogin.getUserName()}">
@@ -373,7 +373,7 @@
             <div class="postContents">
                 <div class="post_item" th:each="post:${posts}">
                     <div class="meinfo">
-                        <div class="profile_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/profiles/' + ${post.userId} + '.jpg'+'\'' + ') no-repeat center center;'"></div>
+                        <div class="profile_pic" id="profile_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/profiles/' + ${post.userId} + '.jpg'+'\'' + ') no-repeat center center;'"></div>
                         <div class="profile_name" th:text="${post.userName}"></div>
                         <div class="post_pic" th:style="'background: rgba(83, 228, 189, 0.01) url(' + '\'' + '/images/' + ${post.postImgPath} + '\'' + ') no-repeat center center;'"></div>
                         <div class="post_text" th:text="${post.postText}"></div>
@@ -385,7 +385,7 @@
     </main>
     <footer>
         <div class="creatorLogo">
-            <img src="/creatorLogo.jpg">
+            <img src="/images/creatorLogo.jpg">
         </div>
         <div class="creatorInfo">
             <p>CREATOR:TAN</p>
@@ -410,6 +410,7 @@
 
     //上传头像
     function uploadImage(event) {
+        const token = localStorage.getItem('authToken');
         const file = event.target.files[0];
 
         const userId = document.getElementById('userId').value; // 从隐藏字段中获取userId
@@ -419,12 +420,26 @@
         formData.append('file', file);
         formData.append('userId', userId);
 
-        fetch('/upload', {
+        fetch('/upload3', {
             method: 'POST',
             body: formData
         }).then(response => response.json())
             .then(data => {
-                console.log('Image uploaded successfully:', data);
+                console.log("upload3");
+                if(data.code===1&&data.data){
+
+                    //刷新
+                    // loadCloudInfo(token);
+                    // const profilePic=document.getElementById("me_info_profile_pic");
+                    // profilePic.src=data.data
+                    console.log("profileImgPath:"+data.data)
+                    console.log('Image uploaded successfully:', data);
+                    // 强制刷新页面
+                    location.reload();
+
+                }else{
+                    console.error(data.msg);
+                }
             }).catch(error => {
             console.error('Error uploading image:', error);
         });
@@ -463,7 +478,7 @@
 
                         postItem.innerHTML = `
                             <div class="meinfo">
-                                <div class="profile_pic" style="background: #53e4bd url('/images/profiles/${post.userId}.jpg') no-repeat center center;"></div>
+                                <div class="profile_pic" id="profile_pic" style="background: #53e4bd url('/images/profiles/${post.userId}.jpg') no-repeat center center;"></div>
                                 <div class="profile_name" >${post.userName}</div>
                                 <div class="post_pic" style="background: rgba(83, 228, 189, 0.01) url('/images${post.postImgPath}') no-repeat center center;"></div>
 

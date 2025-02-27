@@ -1,8 +1,10 @@
 package com.example.java7_4.controller;
 
 import com.example.java7_4.entity.User;
+import com.example.java7_4.result.Result;
 import com.example.java7_4.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import java.io.IOException;
 
 @RestController
 @Tag(name="用户接口文档")
+@Slf4j
 public class ImageUploadController {
 
     @Autowired
@@ -203,6 +206,46 @@ public class ImageUploadController {
         if (user != null) {
             user.setUserProfilePath(filePath);
             userService.updateById(user); // 更新用户对象
+        }
+    }
+
+
+    @PostMapping("/upload3")
+    public Result<String> handleFileUpload3(@RequestParam("file") MultipartFile file, @RequestParam("userId") Long userId) {
+        // 获取项目根目录
+        String rootDirectory = System.getProperty("user.dir");
+
+        // 定义项目外部的上传路径
+        String uploadDirectory = rootDirectory + File.separator + "static" + File.separator + "images" + File.separator + "profiles";
+        // 创建文件名，使用用户ID作为前缀
+        String originalFileName = file.getOriginalFilename();
+        String fileName = userId + ".jpg";
+
+        // 定义文件的完整路径
+        String filePath = uploadDirectory + File.separator + fileName;
+        log.info("logTag::handleFileUpload:filePath={}",filePath);
+
+
+
+        try {
+            // 创建目录（如果不存在）
+            File directory = new File(uploadDirectory);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // 将文件保存到指定路径
+            File dest = new File(filePath);
+            file.transferTo(dest);
+
+            // 在数据库中保存相对路径 (fileName 或 filePath)
+            saveFilePathToDatabase(userId, "/profiles/" + fileName);
+
+            // 返回文件路径给客户端
+           return Result.success(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+           return Result.error("上传图片失败");
         }
     }
 }
