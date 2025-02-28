@@ -168,14 +168,36 @@ public class UserController {
         return Result.success(meEditQueryRepDTO);
     }
 
+    //todo 加校验逻辑：1. userName不能重复 2. 密码6位以上
     @RequestMapping("/edit/update")
-    public Result<Boolean> editUpdate(@RequestBody MeEditUpdateReqDTO meEditUpdateReqDTO) {
+    public Result<Boolean> editUpdate(@RequestBody MeEditUpdateReqDTO meEditUpdateReqDTO,HttpSession session) {
         Long userId=BaseContext.getCurrentId();
         meEditUpdateReqDTO.setUserId(userId);
+
+
+        //校验用户名唯一性
+        String userName=meEditUpdateReqDTO.getUserName();
+        User user=userService.getUserByUserName(userName);
+        if(user!=null&&user.getUserId()!=userId){
+            return Result.error("此用户名已存在，请修改");
+        }
+        //校验合法性
+        if(!ValidateCode.UserNameIsValid(userName)){
+            return Result.error("用户名为不少于3位的数字与字母的组合！");
+        }
+        if(!ValidateCode.PasswordIsValid(meEditUpdateReqDTO.getUserPassword())){
+            return Result.error("密码为不少于6位的数字与字母的组合");
+        }
+
+
+        //向数据库插入数据
+        //加密
+        meEditUpdateReqDTO.setUserPassword(new MD5Util().md5(meEditUpdateReqDTO.getUserPassword()));
         int count =meEditService.updateMeInfoById(meEditUpdateReqDTO);
         if(count==0){
-            return Result.success(Boolean.FALSE);
+            return Result.error("插入失败");
         }
+        session.setAttribute("userId", userId);
         return Result.success(Boolean.TRUE);
     }
 }

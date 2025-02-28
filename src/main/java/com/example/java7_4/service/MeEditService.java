@@ -8,4 +8,6 @@ public interface MeEditService {
     MeEditQueryRepDTO getMeInfoById(Long userId);
 
     int updateMeInfoById(MeEditUpdateReqDTO reqDto);
+
+
 }

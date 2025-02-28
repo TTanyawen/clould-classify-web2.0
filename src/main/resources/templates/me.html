@@ -328,6 +328,33 @@
             color: var(--footer-fcolor);
             /*background-color: rgba(255, 255, 255, 0.51);*/
         }
+
+
+
+
+    /*    edit*/
+        .toEditPage {
+            float: right;
+            margin-top: 20px;
+            margin-right:60px;
+        }
+
+        .edit-link {
+            display: inline-block;
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            padding: 8px 16px;
+            border: 1px solid #007BFF;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-link:hover {
+            background-color: #007BFF;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -356,13 +383,16 @@
     <main>
         <div class="mainTitle">About Me</div>
         <div class="meinfo">
-               <div class="profile_pic" id="me_info_profile_pic" th:style="'background: #53e4bd url(' + '/images/profiles/' + ${session.userId} +'.jpg'+ ') no-repeat center center;'">
+            <div class="profile_pic" id="me_info_profile_pic" th:style="'background: #53e4bd url(' + '/images/profiles/' + ${session.userId} +'.jpg'+ ') no-repeat center center;'">
                <input type="hidden" id="userId" th:value="${session.userLogin.userId}">
                <input type="file" id="fileInput" class="pic_input"  onchange="uploadImage(event)">
            </div>
             <div class="profile_name" th:text="'UserName:'+${session.userLogin.getUserName()}">
             </div>
             <div class="profile_collect" th:text="'CloudAccount:'+${session.userLogin.getUserPoints()}">
+            </div>
+            <div class="toEditPage">
+                <a href="/edit" class="edit-link">Edit</a>
             </div>
         </div>
 

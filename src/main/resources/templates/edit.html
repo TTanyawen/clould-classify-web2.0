@@ -200,8 +200,7 @@
     <main>
         <div class="mainTitle">Edit Page</div>
         <div class="meinfo">
-<!--            <div class="profile_pic" id="profile_pic" style="background: #53e4bd url('/images/profiles/${post.userId}.jpg') no-repeat center center;">-->
-            <div class="profile_pic" id="profile_pic">
+            <div class="profile_pic" id="profilePic" th:style="'background: #53e4bd url(' + '\'' + '/images/profiles/' + ${session.userId} + '.jpg'+'\'' + ') no-repeat center center;'">
                 <input type="hidden" id="userId">
                 <input type="file" id="fileInput" class="pic_input"  onchange="uploadImage(event)">
             </div>
@@ -303,11 +302,13 @@
                 // 检查返回的 data 是否包含期望的结构
                 if (data.code === 1 && data.data) {
                   //给前端赋值
+                    const profilePic = document.getElementById('profilePic');
                     const userName = document.getElementById('userName');
                     const userPassword = document.getElementById('userPassword');
                     userName.innerText=data.data.userName;
                     userPassword.innerText=data.data.userPassword;
-                    console.log(userName.textContent+"    "+userPassword.textContent);
+                    profilePic.src=data.data.userProfilePath;
+                    console.log(userName.textContent+"    "+userPassword.textContent+"     "+profilePic.src);
                 } else {
                     console.error('Invalid data structure:', data);
                 }
