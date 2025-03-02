@@ -15,6 +15,7 @@ import com.example.java7_4.util.MD5Util;
 import com.example.java7_4.util.ValidateCode;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ import java.util.Map;
 @RequestMapping("/user")
 @RestController
 @Tag(name="用户接口文档")
+@Slf4j
 public class UserController {
     @Autowired
     private UserService userService;
@@ -174,21 +176,26 @@ public class UserController {
         Long userId=BaseContext.getCurrentId();
         meEditUpdateReqDTO.setUserId(userId);
 
+        log.info("logTag::editUpdate::userId:{}",userId);
 
-        //校验用户名唯一性
+
         String userName=meEditUpdateReqDTO.getUserName();
-        User user=userService.getUserByUserName(userName);
-        if(user!=null&&user.getUserId()!=userId){
-            return Result.error("此用户名已存在，请修改");
-        }
+
         //校验合法性
         if(!ValidateCode.UserNameIsValid(userName)){
+            log.info("logTag::用户名为不少于3位的数字与字母的组合！");
             return Result.error("用户名为不少于3位的数字与字母的组合！");
         }
         if(!ValidateCode.PasswordIsValid(meEditUpdateReqDTO.getUserPassword())){
+            log.info("logTag::密码为不少于6位的数字与字母的组合");
             return Result.error("密码为不少于6位的数字与字母的组合");
         }
-
+        //校验用户名唯一性
+        User user=userService.getUserByUserName(userName);
+        if(user!=null&&user.getUserId()!=userId){
+            log.info("logTag::此用户名已存在，请修改");
+            return Result.error("此用户名已存在，请修改");
+        }
 
         //向数据库插入数据
         //加密

@@ -459,9 +459,9 @@
                 if(data.code===1&&data.data){
 
                     //刷新
-                    // loadCloudInfo(token);
-                    // const profilePic=document.getElementById("me_info_profile_pic");
-                    // profilePic.src=data.data
+                    loadCloudInfo(token);
+                    const profilePic=document.getElementById("me_info_profile_pic");
+                    profilePic.src=data.data
                     console.log("profileImgPath:"+data.data)
                     console.log('Image uploaded successfully:', data);
                     // 强制刷新页面

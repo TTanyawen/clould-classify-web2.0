@@ -87,38 +87,38 @@
             background-color: var(--main-title-color);
             color:var(--main-title-fcolor);
         }
-        main .meinfo{
-            margin-top: 20px;
-            height: 200px;
+        /*main .meinfo{*/
+        /*    margin-top: 20px;*/
+        /*    height: 200px;*/
 
-        }
+        /*}*/
 
-        main .meinfo .profile_pic{
+        /*main .meinfo .profile_pic{*/
 
-            float: left;
-            height: 100px;
-            width: 100px;
-            margin-left: 20px;
-            /*background: #53e4bd url('/images/creatorLogo.jpg') no-repeat center center;*/
-            /*background: #53e4bd url('/static/images/creatorLogo.jpg') no-repeat center center;*/
+        /*    float: left;*/
+        /*    height: 100px;*/
+        /*    width: 100px;*/
+        /*    margin-left: 20px;*/
+        /*    !*background: #53e4bd url('/images/creatorLogo.jpg') no-repeat center center;*!*/
+        /*    !*background: #53e4bd url('/static/images/creatorLogo.jpg') no-repeat center center;*!*/
 
-            clip-path: circle(50%);
-        }
+        /*    clip-path: circle(50%);*/
+        /*}*/
 
-        main .meinfo .profile_pic .pic_input{
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: rgba(76, 175, 80, 0.04);
-            color: white;
-            border: none;
-            cursor: pointer;
-            text-align: center;
-            padding: 0;
-            font-size: 14px;
+        /*main .meinfo .profile_pic .pic_input{*/
+        /*    width: 100px;*/
+        /*    height: 100px;*/
+        /*    border-radius: 50%;*/
+        /*    background-color: rgba(76, 175, 80, 0.04);*/
+        /*    color: white;*/
+        /*    border: none;*/
+        /*    cursor: pointer;*/
+        /*    text-align: center;*/
+        /*    padding: 0;*/
+        /*    font-size: 14px;*/
 
 
-        }
+        /*}*/
         #fileInput::-webkit-file-upload-button {
             visibility: hidden;
         }
@@ -135,7 +135,67 @@
             cursor: pointer;
         }
 
+        .meinfo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
+        .profile_pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-size: cover;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .pic_input {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        #editMeInfoForm {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .user_name,
+        .user_password {
+            float: left;
+            margin-left: 50px;
+
+            width: 300px;
+            height: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #editMeInfoForm input[type="submit"] {
+            margin-left: 50px;
+            margin-right: 50px;
+            width: 100px;
+            padding: 10px;
+            background-color: #53e4bd;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #editMeInfoForm input[type="submit"]:hover {
+            background-color: #41c3a1;
+        }
          /* 底部区域 */
         footer {
             background-color:  var(--footer-color);
@@ -201,11 +261,15 @@
         <div class="mainTitle">Edit Page</div>
         <div class="meinfo">
             <div class="profile_pic" id="profilePic" th:style="'background: #53e4bd url(' + '\'' + '/images/profiles/' + ${session.userId} + '.jpg'+'\'' + ') no-repeat center center;'">
-                <input type="hidden" id="userId">
+               <input type="hidden" id="userId" th:value="${session.userLogin.userId}">
                 <input type="file" id="fileInput" class="pic_input"  onchange="uploadImage(event)">
             </div>
-            <div class="user_name" id="userName"></div>
-            <div class="user_password" id="userPassword"></div>
+            <form id="editMeInfoForm">
+                <span>New UserName: </span><input type="text" name="userNameText" class="user_name" id="userName"/>
+                <span>New PassWord: </span><input type="text" name="userPwText" class="user_password" id="userPassword"/>
+                <input type="submit" value="Submit"/>
+            </form>
+
         </div>
 
     </main>
@@ -261,9 +325,9 @@
                 if(data.code===1&&data.data){
 
                     //刷新
-                    // loadCloudInfo(token);
-                    // const profilePic=document.getElementById("me_info_profile_pic");
-                    // profilePic.src=data.data
+                    loadCloudInfo(token);
+                    const profilePic=document.getElementById("profilePic");
+                    profilePic.src=data.data
                     console.log("profileImgPath:"+data.data)
                     console.log('Image uploaded successfully:', data);
                     // 强制刷新页面
@@ -305,8 +369,8 @@
                     const profilePic = document.getElementById('profilePic');
                     const userName = document.getElementById('userName');
                     const userPassword = document.getElementById('userPassword');
-                    userName.innerText=data.data.userName;
-                    userPassword.innerText=data.data.userPassword;
+                    userName.value=data.data.userName;
+                    // userPassword.value=data.data.userPassword;
                     profilePic.src=data.data.userProfilePath;
                     console.log(userName.textContent+"    "+userPassword.textContent+"     "+profilePic.src);
                 } else {
@@ -317,6 +381,58 @@
                 console.error('Error loading cloud types:', error);
             });
     }
+
+
+   //为表单添加监听
+    const form = document.getElementById('editMeInfoForm');
+
+    // 为表单添加提交事件监听器
+    form.addEventListener('submit', function (event) {
+        // 阻止表单的默认提交行为
+        event.preventDefault();
+
+        // 获取表单数据
+        const userName = document.getElementById('userName').value;
+        const userPassword = document.getElementById('userPassword').value;
+        // 构建 JSON 数据对象
+        const data = {
+            userName: userName,
+            userPassword: userPassword
+        };
+        // 目标 URL，需要根据实际情况修改
+        const url = '/user/edit/update';
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert('未登录,无jwt令牌.');
+            window.location.href = '/toLogin';  // 未登录时跳转到登录页面
+        }else{
+            // 使用 Fetch API 发送 POST 请求
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' , // 发送 JSON 数据
+                    'Authorization': `Bearer ${token}`  // 确保你有正确的 token
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("data")
+                    if (data.code === 1&&data.data) {
+                        alert("修改成功！");
+                    } else {
+                        alert(data.msg);
+                    }
+                    console.log('请求成功:', data);
+                })
+                .catch(error => {
+                    console.error('请求出错:', error);
+                });
+
+        }
+
+    });
 </script>
 </body>
 </html>
