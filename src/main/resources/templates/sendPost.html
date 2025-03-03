@@ -278,37 +278,57 @@
 
     // 监听提交按钮的点击事件
     submitButton.addEventListener('click', function () {
-        // 获取用户上传的图片文件
-        const imageFile = imageInput.files[0];
-        // 获取用户输入的文字内容
-        const textContent = textInput.value;
-
-        if (imageFile) {
-            console.log('上传的图片文件:', imageFile.name);
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert('未登录,无jwt令牌.');
+            window.location.href = '/toLogin';  // 未登录时跳转到登录页面
         } else {
-            console.log('未上传图片');
+            // 获取用户上传的图片文件
+            const imageFile = imageInput.files[0];
+            // 获取用户输入的文字内容
+            const textContent = textInput.value;
+
+            if (imageFile) {
+                console.log('上传的图片文件:', imageFile.name);
+            } else {
+                console.log('未上传图片');
+            }
+
+            if (textContent) {
+                console.log('输入的文字内容:', textContent);
+            } else {
+                console.log('未输入文字内容');
+            }
+
+            const formData = new FormData();
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+            formData.append('text', textContent);
+
+
+            fetch('/post/sendPost', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`  // 确保你有正确的 token
+                },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data =>
+                    {
+                        console.log(data);
+                        if(data.code===1&&data.data){
+                            alert('成功发送');
+                            window.location.href = '/forum';
+                        }else{
+                            console.error(data.msg);
+                        }
+                    }
+                )
+                .catch(error => console.error('Error:', error));
         }
 
-        if (textContent) {
-            console.log('输入的文字内容:', textContent);
-        } else {
-            console.log('未输入文字内容');
-        }
-
-        // 这里可以添加实际的发送帖子的逻辑，例如使用 fetch API 发送请求到服务器
-        // 示例：
-        // const formData = new FormData();
-        // if (imageFile) {
-        //   formData.append('image', imageFile);
-        // }
-        // formData.append('text', textContent);
-        // fetch('your-api-url', {
-        //   method: 'POST',
-        //   body: formData
-        // })
-        // .then(response => response.json())
-        // .then(data => console.log(data))
-        // .catch(error => console.error('Error:', error));
     });
 
 </script>

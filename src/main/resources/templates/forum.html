@@ -89,7 +89,7 @@
             color:var(--main-title-fcolor);
         }
         main .postContainer{
-            height: 2500px;
+            height: 3500px;
             width: 800px;
             margin-top: 20px;
             /*background-color: #e7edf0;*/
@@ -383,7 +383,9 @@
             </div>
         </div>
         <div class="floating-button" id="postButton">
-            <i class="fa fa-plus"></i>
+            <a href="/sendPost">
+                <i class="fa fa-plus"></i>
+            </a>
         </div>
     </main>
     <footer>
@@ -657,22 +659,7 @@
     // 模拟发送帖子的函数
     function sendPost() {
         alert('你点击了发送帖子按钮，正在发送帖子...');
-        // 这里可以添加实际的发送帖子的逻辑，例如使用 fetch API 发送请求到服务器
-        // 示例：
-        // fetch('your-api-url', {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   },
-        //   body: JSON.stringify({
-        //     // 帖子内容
-        //     title: 'New Post',
-        //     content: 'This is a new post.'
-        //   })
-        // })
-        // .then(response => response.json())
-        // .then(data => console.log(data))
-        // .catch(error => console.error('Error:', error));
+        window.location.href = '/sendPost';
     }
 
 </script>
