@@ -88,4 +88,9 @@ public class getPageController {
     public String getEdit(){
         return "edit";
     }
+
+    @RequestMapping("/sendPost")
+    public String getSendPost(){
+        return "sendPost";
+    }
 }
