@@ -274,6 +274,33 @@
             color: var(--footer-fcolor);
             /*background-color: rgba(255, 255, 255, 0.51);*/
         }
+
+
+        /* 浮动按钮样式 */
+        .floating-button {
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+            width: 100px;
+            height: 100px;
+            background-color: #007BFF;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .floating-button:hover {
+            background-color: #0056b3;
+        }
+
+        .floating-button i {
+            color: white;
+            font-size: 24px;
+        }
     </style>
 </head>
 <body>
@@ -355,6 +382,9 @@
 
             </div>
         </div>
+        <div class="floating-button" id="postButton">
+            <i class="fa fa-plus"></i>
+        </div>
     </main>
     <footer>
         <div class="creatorLogo">
@@ -367,6 +397,7 @@
         </div>
     </footer>
 </div>
+<script src="https://kit.fontawesome.com/your-font-awesome-kit-id.js" crossorigin="anonymous"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
     var userLogin = /*[[${session.userLogin}]]*/ null;
@@ -614,7 +645,35 @@
 
 
 
+    // 获取按钮元素
+    const postButton = document.getElementById('postButton');
 
+    // 添加点击事件监听器
+    postButton.addEventListener('click', function () {
+        // 模拟发送帖子的函数
+        sendPost();
+    });
+
+    // 模拟发送帖子的函数
+    function sendPost() {
+        alert('你点击了发送帖子按钮，正在发送帖子...');
+        // 这里可以添加实际的发送帖子的逻辑，例如使用 fetch API 发送请求到服务器
+        // 示例：
+        // fetch('your-api-url', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   },
+        //   body: JSON.stringify({
+        //     // 帖子内容
+        //     title: 'New Post',
+        //     content: 'This is a new post.'
+        //   })
+        // })
+        // .then(response => response.json())
+        // .then(data => console.log(data))
+        // .catch(error => console.error('Error:', error));
+    }
 
 </script>
 </body>

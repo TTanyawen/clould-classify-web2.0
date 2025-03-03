@@ -170,7 +170,7 @@ public class UserController {
         return Result.success(meEditQueryRepDTO);
     }
 
-    //todo 加校验逻辑：1. userName不能重复 2. 密码6位以上
+
     @RequestMapping("/edit/update")
     public Result<Boolean> editUpdate(@RequestBody MeEditUpdateReqDTO meEditUpdateReqDTO,HttpSession session) {
         Long userId=BaseContext.getCurrentId();
