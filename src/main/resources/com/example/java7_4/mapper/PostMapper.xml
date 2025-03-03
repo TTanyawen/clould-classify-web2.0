@@ -19,6 +19,10 @@
         <result column="user_profile_path" property="userProfilePath" />
 
     </resultMap>
+    <insert id="save" parameterType="com.example.java7_4.entity.Post" useGeneratedKeys="true" keyProperty="postId">
+        INSERT INTO tb_post (user_id, post_img_path, post_text, post_like)
+        VALUES (#{userId}, #{postImgPath}, #{postText}, #{postLike})
+    </insert>
 
     <select id="selectAll" resultMap="PostResultMap">
         select * from tb_post;

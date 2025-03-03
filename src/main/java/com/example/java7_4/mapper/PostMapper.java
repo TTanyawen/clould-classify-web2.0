@@ -23,4 +23,6 @@ public interface PostMapper {
     List<PostDTO> selectPostsWithUserAvatar();
 
     int updateById(@Param("postId") Long postId,@Param("postLike") Long postLike);
+
+    int save(Post post);
 }

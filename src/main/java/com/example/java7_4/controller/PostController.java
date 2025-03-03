@@ -1,22 +1,31 @@
 package com.example.java7_4.controller;
 
 import com.example.java7_4.constant.RedisKeyConstants;
+import com.example.java7_4.context.BaseContext;
+import com.example.java7_4.entity.Post;
+import com.example.java7_4.entity.User;
 import com.example.java7_4.result.Result;
 import com.example.java7_4.service.impl.PostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/post")
 @Tag(name="用户接口文档")
+@Slf4j
 public class PostController {
 
     @Autowired
@@ -36,5 +45,60 @@ public class PostController {
             return Result.error("Failed to like the post");
         }
     }
+
+    @PostMapping("/sendPost")
+    public Result<Boolean> sendPost(@RequestHeader("Authorization") String authorization
+            , @RequestParam("text") String text
+            , @RequestParam("image") MultipartFile file) {
+
+        Long userId= BaseContext.getCurrentId();
+        String imgPath="/posts/post"+ UUID.randomUUID()+".jpg";
+        Post post=new Post();
+        post.setUserId(userId);
+        post.setPostImgPath(imgPath);
+        post.setPostLike(0L);
+        post.setPostText(text);
+
+        //保存图片
+        // 获取项目根目录
+        String rootDirectory = System.getProperty("user.dir");
+
+        // 定义项目外部的上传路径
+        String uploadDirectory = rootDirectory + File.separator + "static" + File.separator + "images";
+        // 创建文件名，使用用户ID作为前缀
+
+
+        String filePath =  uploadDirectory+imgPath;
+        log.info("logTag::handleFileUpload:filePath={}",filePath);
+
+
+
+        try {
+            // 创建目录（如果不存在）
+            File directory = new File(uploadDirectory);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // 将文件保存到指定路径
+            File dest = new File(filePath);
+            file.transferTo(dest);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Result.error("上传图片失败");
+        }
+
+
+        int cnt=postService.save(post);
+        if(cnt==1){
+            redisTemplate.delete(RedisKeyConstants.POSTS);//删除Redis里头的posts缓存
+            return Result.success(Boolean.TRUE);
+        }else{
+            return Result.error("发送帖子失败");
+        }
+
+    }
+
 }
 

@@ -20,7 +20,9 @@ public class PostService {
 
     @Autowired
     private RedisTemplate redisTemplate;
-
+    public int save(Post post) {
+        return postMapper.save(post);
+    }
     public List<Post> getPosts() {
         return postMapper.selectAll();
     }
