@@ -141,7 +141,8 @@
       justify-content: center;
       align-items: center;
       color: #35589b;
-      font-size: 18px;
+      font-size: 30px;
+      font-weight: bolder;
     }
 
     /* 底部区域 */
@@ -298,8 +299,9 @@
       const formData = new FormData();
 
       formData.append('image', base64Image);
+      //部署服务器后需要改成服务器ip
 
-      fetch('http://192.168.10.128:5000/uploadForWeb', {
+      fetch('http://localhost:5000/uploadForWeb', {
         method: 'POST',
         body: formData
       })
