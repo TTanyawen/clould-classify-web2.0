@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.plaf.synth.SynthTextAreaUI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,7 @@ public class CloudController {
         String key2=RedisKeyConstants.COMMENTS;
         List<PostDTO> posts=(List<PostDTO>)redisTemplate.opsForValue().get(key1);
         List<CommentDTO> comments=(List<CommentDTO>)redisTemplate.opsForValue().get(key2);
+        List<PostRespDTO> postRespDTOS;
         Map<String,Object> response=new HashMap<>();
         if(posts!=null&&posts.size()>0){
             System.out.println("ExistRedis-Posts-getForumData");
@@ -95,7 +97,30 @@ public class CloudController {
         }
         System.out.println("Posts-getForumData:"+posts.toString());
         System.out.println("Comments-getForumData:"+comments.toString());
-        response.put("posts",posts);
+
+        //转：posts里面的String解析一下
+        postRespDTOS=new ArrayList<>();
+        for(PostDTO post:posts){
+            PostRespDTO postRespDTO=new PostRespDTO();
+            postRespDTO.setPostId(post.getPostId());
+            postRespDTO.setUserId(post.getUserId());
+            postRespDTO.setUserName(post.getUserName());
+            postRespDTO.setPostText(post.getPostText());
+            postRespDTO.setPostLike(post.getPostLike());
+            postRespDTO.setUserProfilePath(post.getUserProfilePath());
+
+            //解析postImgPath
+            String[] paths = post.getPostImgPath().split("@_@");
+            List<String> pathList = new ArrayList<>();
+            for (String path : paths) {
+                if (!path.isEmpty()) {
+                    pathList.add(path);
+                }
+            }
+            postRespDTO.setPostImgPaths(pathList);
+            postRespDTOS.add(postRespDTO);
+        }
+        response.put("posts",postRespDTOS);
         response.put("comments",comments);
 
         System.out.println("Response-getForumData:"+response.get("posts").toString());
