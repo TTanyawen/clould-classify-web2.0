@@ -110,7 +110,11 @@
         }
         main .post_item::-webkit-scrollbar
         {
-            display: none; /* 对于 WebKit 浏览器 */
+            display: none !important; /* 对于 WebKit 浏览器 */
+        }
+        main .post_item {
+            scrollbar-width: none !important; /* 对于 Firefox 浏览器 */
+            -ms-overflow-style: none !important;  /* 对于 IE 和 Edge 浏览器 */
         }
         main .post_item .meinfo .profile_pic{
 
