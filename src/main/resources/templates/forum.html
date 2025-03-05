@@ -295,6 +295,7 @@
             align-items: center;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            z-index: 999;
         }
 
         .floating-button:hover {
@@ -309,7 +310,7 @@
 
 
         /*帖子多图处理*/
-        .button {
+        .post_pic .button {
 
             background-color: #333;
             color: white;
@@ -326,7 +327,7 @@
         }
 
         /* 鼠标悬停在按钮上的效果 */
-        .button:hover {
+        .post_pic .button:hover {
             background-color: #555;
         }
 
@@ -430,7 +431,8 @@
         </div>
         <div class="floating-button" id="postButton">
             <a href="/sendPost">
-                <i class="fa fa-plus"></i>
+                sendPost
+<!--                <i class="fa fa-plus"></i>-->
             </a>
         </div>
     </main>
@@ -445,7 +447,7 @@
         </div>
     </footer>
 </div>
-<script src="https://kit.fontawesome.com/your-font-awesome-kit-id.js" crossorigin="anonymous"></script>
+<!--<script src="https://kit.fontawesome.com/your-font-awesome-kit-id.js" crossorigin="anonymous"></script>-->
 <script th:inline="javascript">
     //全局变量
     //一个List存n个post的currentIndex
@@ -635,7 +637,6 @@
             allButtons.forEach(button => {
                 button.addEventListener('click', function () {
                     console.log(`按钮 ${this.id} 被点击了`);
-                    // todo 这里执行图片切换的逻辑
                     changeImg(this.id,post);
 
                 });
