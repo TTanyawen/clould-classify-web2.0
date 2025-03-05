@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Slider</title>
+    <style>
+        /* 设置页面整体样式 */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        /* 图片容器样式 */
+        .image-container {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            overflow: hidden;
+        }
+
+         /*图片样式*/
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        /* 显示当前图片 */
+        .image-container img.active {
+            display: block;
+        }
+
+        /* 左右切换按钮样式 */
+        .button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        /* 左按钮位置 */
+        .left {
+            left: 10px;
+        }
+
+        /* 右按钮位置 */
+        .right {
+            right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- 图片容器 -->
+<div class="image-container">
+    <!-- 左切换按钮 -->
+    <button class="button left" id="prevButton">&lt;</button>
+    <!-- 用于显示图片的区域 -->
+    <div id="imageDisplay">
+
+    </div>
+    <!-- 右切换按钮 -->
+    <button class="button right" id="nextButton">&gt;</button>
+
+</div>
+
+<script>
+    // 假设这是从后端获取的图片路径列表
+    const imagePaths = [
+        'http://pic.weather.com.cn/images/cn/photo/2025/03/04/20250304153824DCFB24C14435E802732B22E61412804D.jpg',
+        'http://pic.weather.com.cn/images/cn/photo/2025/03/04/20250304153826E7B20E7E30FD50D892C124764BD1C2E2.jpg',
+        'http://pic.weather.com.cn/images/cn/photo/2025/03/04/20250304131440C9FECBA4165ED92B9964F610B63C268A.jpg'
+    ];
+
+    // 当前显示图片的索引
+    let currentIndex = 0;
+
+    // 获取图片显示区域和按钮元素
+    const imageDisplay = document.getElementById('imageDisplay');
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+
+    // 渲染图片
+    function renderImages() {
+        imageDisplay.innerHTML = '';
+        imagePaths.forEach((path, index) => {
+            const img = document.createElement('img');
+            img.src = path;
+            if (index === currentIndex) {
+                img.classList.add('active');
+            }
+            imageDisplay.appendChild(img);
+        });
+    }
+
+    // 显示上一张图片
+    function showPrevImage() {
+        currentIndex = (currentIndex - 1 + imagePaths.length) % imagePaths.length;
+        renderImages();
+    }
+
+    // 显示下一张图片
+    function showNextImage() {
+        currentIndex = (currentIndex + 1) % imagePaths.length;
+        renderImages();
+    }
+
+    // 初始化图片显示
+    renderImages();
+
+    // 绑定按钮点击事件
+    prevButton.addEventListener('click', showPrevImage);
+    nextButton.addEventListener('click', showNextImage);
+</script>
+</body>
+
+</html>

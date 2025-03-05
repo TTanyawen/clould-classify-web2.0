@@ -305,6 +305,43 @@
             color: white;
             font-size: 24px;
         }
+
+
+
+        /*帖子多图处理*/
+        .button {
+
+            background-color: #333;
+            color: white;
+            border: none;
+            margin-top: 140px;
+            /*padding: 10px 15px;*/
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            /*position: absolute;*/
+            /*top: 50%;*/
+            /*transform: translateY(-50%);*/
+            z-index: 1; /* 确保按钮显示在图片上方 */
+        }
+
+        /* 鼠标悬停在按钮上的效果 */
+        .button:hover {
+            background-color: #555;
+        }
+
+        /* 左按钮的位置 */
+        .left {
+            float:left;
+            margin-left: 10px;
+        }
+
+        /* 右按钮的位置 */
+        .right {
+            float:right;
+            margin-right: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -333,11 +370,16 @@
     <main id="mainContent">
         <div class="mainTitle">Forum</div>
         <div class="postContainer" id="postContainer">
-            <div class="post_item" th:each="post:${posts}">
+            <div class="post_item" th:each="post:${posts}" id="post_item">
                 <div class="meinfo">
                     <div class="profile_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/profiles/' + ${post.userId} + '.jpg'+'\'' + ') no-repeat center center;'"></div>
                     <div class="profile_name" th:text="${post.userName}"></div>
-                    <div class="post_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/' + ${post.postImgPath} + '\'' + ') no-repeat center center;'"></div>
+
+                    <div class="post_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/' + ${post.postImgPath} + '\'' + ') no-repeat center center;'">
+                        <button class="button left" id="prevButton">&lt;</button>
+                        <button class="button right" id="nextButton">&gt;</button>
+                    </div>
+
                     <div class="post_text" th:text="${post.postText}"></div>
                     <div class="post_comment" th:if="${session.userLogin}">
 <!--                        <input type="text" style="border: none; background-color: transparent; outline: none;">-->
@@ -405,6 +447,28 @@
 </div>
 <script src="https://kit.fontawesome.com/your-font-awesome-kit-id.js" crossorigin="anonymous"></script>
 <script th:inline="javascript">
+    //全局变量
+    //一个List存n个post的currentIndex
+    const postImgIndexList=[];
+    //每个post对应的图片的数量
+    const lenOfPostsImgs=[];
+    function initPostImgIndexList(len,posts){
+        postImgIndexList.length= 0;
+        const newList=Array.from({length:len},()=> 0);
+        postImgIndexList.push(...newList);
+
+        console.log("posts_json:"+posts);
+        //lenOfPostsImgs
+        for(let item of posts){
+            console.log(item);
+            console.log(item.postImgPaths);
+            lenOfPostsImgs.push(item.postImgPaths.length);
+        }
+        console.log(lenOfPostsImgs);
+        return postImgIndexList;
+    }
+
+
     /*<![CDATA[*/
     var userLogin = /*[[${session.userLogin}]]*/ null;
     /*]]>*/
@@ -507,7 +571,9 @@
                     const postContainer = document.querySelector('.postContainer'); // 获取容器元素
                     postContainer.innerHTML = '';  // 清空容器内容
 
+                    initPostImgIndexList(posts.length,posts);
                     renderPosts(posts,comments);
+                    console.log(document.getElementById('postContainer').innerHTML);
                 } else {
                     console.error('Failed to load forum data');
                 }
@@ -518,9 +584,16 @@
     function renderPosts(posts,comments) {
         const postContainer = document.querySelector('.postContainer');
         posts.forEach(post => {
+            const postId=post.postId;
+            console.log(post.postImgPaths);
+            console.log(post.postImgPaths[postImgIndexList[postId-1]]);
             console.log("create post");
             const postElement = document.createElement('div');
+            // postElement.classList.add('post_item_'+post.postId);
             postElement.classList.add('post_item');
+            postElement.id='post_item_'+postId;
+
+
 
             const isUserLoggedIn = userLogin !== null;
             // Create the post content
@@ -528,7 +601,10 @@
                 <div class="meinfo">
                     <div class="profile_pic" style="background: #53e4bd url('/images/profiles/${post.userId}.jpg') no-repeat center center;"></div>
                     <div class="profile_name">${post.userName}</div>
-                    <div class="post_pic" style="background: #53e4bd url('/images/${post.postImgPath}') no-repeat center center;"></div>
+                    <div id="post_pic_${post.postId}" class="post_pic" style="background: #53e4bd url('/images/${post.postImgPaths[postImgIndexList[postId-1]]}') no-repeat center center;">
+                        <button class="button left" id="prevButton_${post.postId}">&lt;</button>
+                        <button class="button right" id="nextButton_${post.postId}">&gt;</button>
+                    </div>
                     <div class="post_text">${post.postText}</div>
                     <div class="post_comment" style="display: ${isUserLoggedIn ? 'block' : 'none'};">
                         <form id="commentForm_${post.postId}" class="commentForm">
@@ -550,12 +626,62 @@
             postElement.innerHTML = postContent;
             postContainer.appendChild(postElement);
 
+
+            //为每一个post的按钮添加监听
+            // 选择所有按钮
+            const allButtons = postElement.querySelectorAll('button');
+
+            // 为每个按钮添加点击事件监听
+            allButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    console.log(`按钮 ${this.id} 被点击了`);
+                    // todo 这里执行图片切换的逻辑
+                    changeImg(this.id,post);
+
+                });
+            });
+
             // Render comments for each post
             renderComments(post.postId, comments);
 
 
 
         });
+
+        //切换图片
+        function changeImg(postItemId,post){
+            const str = postItemId;
+            const direction=str.trim(0,4);
+            console.log(direction);
+            const parts = str.split("_");
+            if (parts.length > 1) {
+                const postIndex = parseInt(parts[1], 10)-1;
+                console.log(postIndex);
+
+                currentIndex=postImgIndexList[postIndex];
+                var newIndex=currentIndex;
+                if (direction === 'prev') {
+                    newIndex = (currentIndex - 1 + lenOfPostsImgs[postIndex]) % lenOfPostsImgs[postIndex];
+                } else {
+                    newIndex = (currentIndex + 1) % lenOfPostsImgs[postIndex];
+                }
+                postImgIndexList[postIndex] = newIndex;
+
+                // 更新图片的背景图，这里简单假设图片路径的规律，可根据实际情况修改
+                const postPic = document.getElementById(`post_pic_${postIndex + 1}`);
+                console.log("更改前："+postPic.style);
+                if (postPic) {
+                    // <div id="post_pic_${post.postId}" class="post_pic" style="background: #53e4bd url('/images/${post.postImgPaths[postImgIndexList[postId-1]]}') no-repeat center center;">
+
+                    postPic.style = `background: #53e4bd url('/images/${post.postImgPaths[postImgIndexList[postIndex]]}') no-repeat center center;`;
+                }
+                console.log("更改后："+postPic.style);
+            }
+
+
+        }
+
+
 
         //为所有表单都添加监听
 
@@ -651,20 +777,71 @@
 
 
 
-    // 获取按钮元素
-    const postButton = document.getElementById('postButton');
+    // // 获取按钮元素
+    // const postButton = document.getElementById('postButton');
+    //
+    // // 添加点击事件监听器
+    // postButton.addEventListener('click', function () {
+    //     // 模拟发送帖子的函数
+    //     sendPost();
+    // });
+    //
+    // // 模拟发送帖子的函数
+    // function sendPost() {
+    //     alert('你点击了发送帖子按钮，正在发送帖子...');
+    //     window.location.href = '/sendPost';
+    // }
 
-    // 添加点击事件监听器
-    postButton.addEventListener('click', function () {
-        // 模拟发送帖子的函数
-        sendPost();
-    });
 
-    // 模拟发送帖子的函数
-    function sendPost() {
-        alert('你点击了发送帖子按钮，正在发送帖子...');
-        window.location.href = '/sendPost';
-    }
+
+
+
+
+
+
+    //按钮切换图片的逻辑
+    // 生成 HTML 代码
+    // const html = `
+    //         <div class="post_pic" style="background: #53e4bd url('/images/${post.postImgPaths[[postImgIndexList]]}') no-repeat center center;">
+    //             <button class="button left" id="prevButton_${post.postId}">&lt;</button>
+    //             <button class="button right" id="nextButton_${post.postId}">&gt;</button>
+    //         </div>
+    //     `;
+    //
+    // // 将 HTML 插入到页面中
+    // const postContainer = document.getElementById('post-container');
+    // postContainer.innerHTML = html;
+    //
+    // // 获取按钮和图片容器元素
+    // const prevButton = document.getElementById(`prevButton_${post.postId}`);
+    // const nextButton = document.getElementById(`nextButton_${post.postId}`);
+    // const postPic = postContainer.querySelector('.post_pic');
+    //
+    // // 当前图片索引
+    // let currentIndex = 0;
+    //
+    // // 切换图片函数
+    // function changeImage(index) {
+    //     if (index < 0) {
+    //         index = post.postImgPaths.length - 1;
+    //     } else if (index >= post.postImgPaths.length) {
+    //         index = 0;
+    //     }
+    //     currentIndex = index;
+    //     const newBackground = `background: #53e4bd url('/images/${post.postImgPaths[currentIndex]}') no-repeat center center;`;
+    //     postPic.style.cssText = newBackground;
+    // }
+    //
+    // // 为按钮添加点击事件监听器
+    // prevButton.addEventListener('click', () => {
+    //     changeImage(currentIndex - 1);
+    // });
+    //
+    // nextButton.addEventListener('click', () => {
+    //     changeImage(currentIndex + 1);
+    // });
+
+
 
 </script>
 </body>
