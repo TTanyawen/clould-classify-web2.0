@@ -102,7 +102,7 @@ public class PostController {
     @PostMapping("/sendPostWithMutiImages")
     public Result<Boolean> sendPostWithMutiImages(@RequestHeader("Authorization") String authorization
             , @RequestParam("text") String text
-            , @RequestParam("images") List<MultipartFile> files) {
+            , @RequestParam("images") List<MultipartFile> images) {
 
         Long userId= BaseContext.getCurrentId();
 
@@ -125,7 +125,7 @@ public class PostController {
 
 
         List<String> postImgPathList=new ArrayList<String>();
-        for(MultipartFile file:files){
+        for(MultipartFile file:images){
             try {
                 // 创建目录（如果不存在）
                 File directory = new File(uploadDirectory);

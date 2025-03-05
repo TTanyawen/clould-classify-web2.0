@@ -189,7 +189,7 @@
         <div class="mainTitle">Send Post</div>
         <form id="postForm">
             <label for="imageInput">上传图片:</label>
-            <input type="file" id="imageInput" accept="image/*">
+            <input type="file" id="imageInput" accept="image/*" multiple>
 
             <label for="textInput">编辑文字:</label>
             <textarea id="textInput" rows="5" placeholder="请输入你的帖子内容"></textarea>
@@ -284,12 +284,15 @@
             window.location.href = '/toLogin';  // 未登录时跳转到登录页面
         } else {
             // 获取用户上传的图片文件
-            const imageFile = imageInput.files[0];
+            const imageFiles = imageInput.files;
+
             // 获取用户输入的文字内容
             const textContent = textInput.value;
 
-            if (imageFile) {
-                console.log('上传的图片文件:', imageFile.name);
+            if (imageFiles) {
+                for(let image of imageFiles){
+                    console.log('上传的图片文件:', image.name);
+                }
             } else {
                 console.log('未上传图片');
             }
@@ -301,13 +304,14 @@
             }
 
             const formData = new FormData();
-            if (imageFile) {
-                formData.append('image', imageFile);
+
+            for(let i=0;i<imageFiles.length;i++){
+                formData.append('images',imageFiles[i]);
             }
             formData.append('text', textContent);
 
 
-            fetch('/post/sendPost', {
+            fetch('/post/sendPostWithMutiImages', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`  // 确保你有正确的 token
