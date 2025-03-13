@@ -9,7 +9,7 @@ spring:
     suffix: .html
 
   datasource:
-    url: jdbc:mysql:///clouddb2.0?useSSL=false
+    url: jdbc:mysql:///clouddb2.0?useSSL=false&characterEncoding=utf8
     username: root
     password: 2640
     driver-class-name: com.mysql.jdbc.Driver

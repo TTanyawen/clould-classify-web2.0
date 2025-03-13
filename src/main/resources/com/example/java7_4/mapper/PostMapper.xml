@@ -27,6 +27,13 @@
     <select id="selectAll" resultMap="PostResultMap">
         select * from tb_post;
     </select>
+
+
+    <select id="getSearchedPosts" resultMap="PostResultMap">
+        SELECT * FROM tb_post
+        WHERE post_text LIKE CONCAT('%', #{searchText}, '%');
+    </select>
+
     <select id="selectById" resultMap="PostResultMap">
         select * from tb_post
         where post_id=#{postId};
@@ -41,10 +48,10 @@
     </select>
 
 
+
     <update id="updateById">
         update tb_post
         set post_like = #{postLike} where post_id=#{postId};
-
     </update>
 
 

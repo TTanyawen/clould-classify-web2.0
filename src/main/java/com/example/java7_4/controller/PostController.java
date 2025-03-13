@@ -2,10 +2,10 @@ package com.example.java7_4.controller;
 
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
-import com.example.java7_4.entity.Post;
-import com.example.java7_4.entity.User;
+import com.example.java7_4.entity.*;
 import com.example.java7_4.result.Result;
 import com.example.java7_4.service.impl.PostService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,23 @@ public class PostController {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+
+
+    @RequestMapping("/getSearchedPosts")
+    @Operation(summary = "getSearchedPosts")
+    public Result<Map<String,Object>> getSearchedPosts(@RequestHeader("Authorization") String authorization,@RequestBody Map<String,String> searchRequest) {
+        System.out.println("getSearchedPosts");
+        List<Post> searchedPosts=postService.getSearchedPosts(searchRequest.get("searchText"));
+        Map<String,Object> response=new HashMap<>();
+        response.put("posts",searchedPosts);
+        return Result.success(response);
+    }
+
+
+
+
+
     @PostMapping("/likePost/{postId}")
     public Result<Long> likePost(@RequestHeader("Authorization") String authorization, @PathVariable("postId") Long postId) {
         try {

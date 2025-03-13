@@ -25,4 +25,6 @@ public interface PostMapper {
     int updateById(@Param("postId") Long postId,@Param("postLike") Long postLike);
 
     int save(Post post);
+
+    List<Post> getSearchedPosts(String searchText);
 }

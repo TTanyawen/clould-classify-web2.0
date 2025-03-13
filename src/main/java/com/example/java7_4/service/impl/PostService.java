@@ -63,5 +63,9 @@ public class PostService {
         }
         throw new RuntimeException("Post not found");
     }
+
+    public List<Post> getSearchedPosts(String searchText) {
+        return postMapper.getSearchedPosts(searchText);
+    }
 }
 
