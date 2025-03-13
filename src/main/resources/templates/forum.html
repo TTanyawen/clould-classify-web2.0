@@ -343,6 +343,60 @@
             margin-right: 10px;
         }
 
+
+
+    /*    搜索框*/
+
+        /* 为 postSearchContainer 设置样式 */
+        .postSearchContainer {
+            width: 100%;
+            max-width: 750px; /* 设置最大宽度 */
+            margin: 20px auto; /* 居中显示 */
+            padding: 20px;
+            background-color: #f9f9f9; /* 背景颜色 */
+            border-radius: 8px; /* 圆角 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+        }
+
+        /* 为 postSearchForm 设置样式 */
+        .postSearchForm {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 为搜索输入框设置样式 */
+        #postSearchText {
+            width: 70%; /* 输入框宽度 */
+            padding: 10px;
+            border: 1px solid #ccc; /* 边框 */
+            border-radius: 4px; /* 圆角 */
+            font-size: 16px; /* 字体大小 */
+            outline: none; /* 去除默认轮廓 */
+        }
+
+        /* 为提交按钮设置样式 */
+        #postSearchForm input[type="submit"] {
+            width: 25%; /* 按钮宽度 */
+            padding: 10px;
+            background-color: #007bff; /* 背景颜色 */
+            color: white; /* 文字颜色 */
+            border: none; /* 去除边框 */
+            border-radius: 4px; /* 圆角 */
+            font-size: 16px; /* 字体大小 */
+            cursor: pointer; /* 鼠标指针样式 */
+            transition: background-color 0.3s ease; /* 过渡效果 */
+        }
+
+        /* 按钮悬停效果 */
+        #postSearchForm input[type="submit"]:hover {
+            background-color: #0056b3; /* 悬停时背景颜色 */
+        }
+
+        /* 按钮点击效果 */
+        #postSearchForm input[type="submit"]:active {
+            background-color: #004080; /* 点击时背景颜色 */
+        }
     </style>
 </head>
 <body>
@@ -370,6 +424,12 @@
     </header>
     <main id="mainContent">
         <div class="mainTitle">Forum</div>
+        <div class="postSearchContainer">
+            <form id="postSearchForm" class="postSearchForm">
+                <input type="text" name="postSearchText" id="postSearchText" placeholder="Input somethiing...">
+                <input type="submit" value="提交">
+            </form>
+        </div>
         <div class="postContainer" id="postContainer">
             <div class="post_item" th:each="post:${posts}" id="post_item">
                 <div class="meinfo">
