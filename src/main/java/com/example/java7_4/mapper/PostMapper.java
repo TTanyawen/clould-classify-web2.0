@@ -26,5 +26,5 @@ public interface PostMapper {
 
     int save(Post post);
 
-    List<Post> getSearchedPosts(String searchText);
+    List<PostDTO> getSearchedPosts(String searchText);
 }
