@@ -70,7 +70,7 @@
   //     });
   //
   //     data = await tmp.json();
-  //     if (data.code===1&&data.data) {
+  //     if (data.code===1&&null!=data.data) {
   //
   //       const userInfoContainer=document.querySelector('.userInfoContainer');
   //       userInfoContainer.innerHTML='';
@@ -123,7 +123,7 @@
 
       const data = await response.json();
 
-      if (data.code === 1 && data.data) {
+      if (data.code === 1 && null!=data.data) {
         const userInfoContainer = document.querySelector('.userInfoContainer');
         userInfoContainer.innerHTML = ''; // 清空旧数据
 

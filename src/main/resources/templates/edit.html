@@ -322,7 +322,7 @@
         }).then(response => response.json())
             .then(data => {
                 console.log("upload3");
-                if(data.code===1&&data.data){
+                if(data.code===1&&null!=data.data){
 
                     //刷新
                     loadCloudInfo(token);
@@ -364,7 +364,7 @@
             .then(response => response.json())
             .then(data => {
                 // 检查返回的 data 是否包含期望的结构
-                if (data.code === 1 && data.data) {
+                if (data.code === 1 && null!=data.data) {
                   //给前端赋值
                     const profilePic = document.getElementById('profilePic');
                     const userName = document.getElementById('userName');
@@ -419,7 +419,7 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log("data")
-                    if (data.code === 1&&data.data) {
+                    if (data.code === 1&&null!=data.data) {
                         alert("修改成功！");
                     } else {
                         alert(data.msg);

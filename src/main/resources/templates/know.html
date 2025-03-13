@@ -251,7 +251,7 @@
             .then(response => response.json())
             .then(data => {
                 // 检查返回的 data 是否包含期望的结构
-                if (data.code === 1 && data.data) {
+                if (data.code === 1 && null!=data.data) {
                     const cloudInfoContainer = document.querySelector('.cloudinfo');
                     cloudInfoContainer.innerHTML = '';  // 清空现有内容
 

@@ -500,7 +500,7 @@
         })
             .then(response => response.json())
             .then(data => {
-                if (data.code===1&& data.data) {
+                if (data.code===1&& null!=data.data) {
                     const postLikeElement = document.querySelector(`.post_like[data-postId='${postId}'] .like_num_post`);
                     if (postLikeElement) {
                         console.log("更新post点赞数据")
@@ -529,7 +529,7 @@
         })
             .then(response => response.json())
             .then(data => {
-                if (data.code===1&& data.data) {
+                if (data.code===1&& null!=data.data) {
                     // 更新点赞数显示，假设 class="post_like" 是显示点赞数的元素
                     // document.querySelector('.like_num_comment').textContent =  data.newLikeCount;
                     const commentLikeElement = document.querySelector(`.comment_like[data-commentId='${commentId}'] .like_num_comment`);
@@ -567,7 +567,7 @@
         })
             .then(response => response.json()) // 解析 JSON 响应
             .then(data => {
-                if (data.code === 1 && data.data) {
+                if (data.code === 1 && null!=data.data) {
                     const { posts, comments } = data.data;  // 获取 posts 和 comments 数据
 
                     const postContainer = document.querySelector('.postContainer'); // 获取容器元素
@@ -575,6 +575,7 @@
 
                     initPostImgIndexList(posts.length,posts);
                     renderPosts(posts,comments);
+
                     console.log(document.getElementById('postContainer').innerHTML);
                 } else {
                     console.error('Failed to load forum data');
@@ -613,7 +614,7 @@
                             <input type="hidden" name="userId" id="userId" value="${userLogin ? userLogin.userId : ''}">
                             <input type="hidden" name="postId" id="postId" value="${post.postId}">
                             <input type="text" name="commentText" id="commentText" placeholder="Write your comment" style="border: none; background-color: transparent; outline: none;">
-                            <input type="submit" value="提交评论"/>
+                            <input type="submit" value="提交评论" data-postId="${post.postId}">
                         </form>
                     </div>
                     <div class="post_like" data-postId="${post.postId}">
@@ -621,7 +622,7 @@
                         <div class="like_num_post">${post.postLike}</div>
                     </div>
                 </div>
-                <div class="comment_section" data-postId="${post.postId}">
+                <div class="comment_section" data-postId="${post.postId}" >
                     <!-- Comments will be dynamically inserted here -->
                 </div>
             `;
@@ -691,15 +692,22 @@
         commentForms.forEach(form => {
             form.addEventListener('submit', async function (event) {
                 event.preventDefault(); // 阻止默认表单提交行为
-                console.log(form.id);
+                console.log("~~~~~~~~~~~formid:"+form.id);
                 const token = localStorage.getItem('authToken');  // 获取本地存储中的token
 
                 // const userId = document.getElementById('userId').value;
                 // const postId = document.getElementById('postId').value;
                 // const commentText = document.getElementById('commentText').value;
+
+                // 获取提交按钮元素
+                const submitButton = event.submitter;
+
                 const userId = document.querySelector('#userId').value;
-                const postId = document.querySelector('#postId').value;
-                const commentText = document.querySelector('#commentText').value;
+                const postId = submitButton.getAttribute('data-postid');
+                // const commentText = document.querySelector('#commentText').value;
+
+                const commentText = form.querySelector('input[name="commentText"]').value;
+
                 console.log("postId:"+postId+" userId:"+userId+" commentText:"+commentText);
                 // 创建请求体
                 const requestBody = {
@@ -707,7 +715,7 @@
                     postId: postId,
                     commentText: commentText
                 };
-
+                console.log("发送评论"+requestBody);
                 try {
                     // 发送 Fetch 请求
                     const response = await fetch('/post/submitComment', {

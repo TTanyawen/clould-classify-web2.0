@@ -240,7 +240,7 @@
         }).then(response => response.json())
             .then(data => {
                 console.log("upload3");
-                if(data.code===1&&data.data){
+                if(data.code===1&&null!=data.data){
 
                     //刷新
                     loadCloudInfo(token);
@@ -322,7 +322,7 @@
                 .then(data =>
                     {
                         console.log(data);
-                        if(data.code===1&&data.data){
+                        if(data.code===1&&null!=data.data){
                             alert('成功发送');
                             window.location.href = '/forum';
                         }else{
