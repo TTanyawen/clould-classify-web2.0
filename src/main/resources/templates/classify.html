@@ -212,7 +212,7 @@
       <button id="upload">上传</button>
       <button id="submit">提交</button>
     </div>
-    <div class="result-box" id="result"></div>
+    <div class="result-box" id="result">Prediction: ???</div>
 
 
 
@@ -257,6 +257,11 @@
     const formData = new FormData();
     formData.append('file', file);
 
+    //清除页面数据
+    resultDiv.textContent='Prediction: ???';
+    preview.src='';
+    console.log("清除页面数据");
+
     fetch('/upload2', {
       method: 'POST',
       body: formData
@@ -270,7 +275,7 @@
                 const imagePath = data.path;
 
                 // 设置预览图片的 src 属性
-                alert(imagePath)
+                alert(imagePath);
                 preview.src = imagePath;
                 preview.style.display = 'block';  // 显示上传的图片
               } else {
@@ -308,7 +313,7 @@
               .then(response => response.json())
               .then(data => {
                 if (data.prediction !== undefined) {
-                  resultDiv.textContent = 'Prediction: ' + data.prediction;
+                  resultDiv.textContent = 'Prediction: ' + data.prediction + ' ' + data.prediction_CN;
                 } else {
                   resultDiv.textContent = 'Failed to get prediction';
                 }
