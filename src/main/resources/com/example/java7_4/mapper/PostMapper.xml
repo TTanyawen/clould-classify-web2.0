@@ -29,9 +29,9 @@
     </select>
 
 
-    <select id="getSearchedPosts" resultMap="PostResultMap">
-        SELECT * FROM tb_post
-        WHERE post_text LIKE CONCAT('%', #{searchText}, '%');
+    <select id="getSearchedPosts" resultMap="PostDTOResultMap">
+        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name from tb_post,tb_user
+        where tb_post.user_id=tb_user.user_id and post_text LIKE CONCAT('%', #{searchText}, '%');
     </select>
 
     <select id="selectById" resultMap="PostResultMap">

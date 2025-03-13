@@ -516,6 +516,7 @@
     const lenOfPostsImgs=[];
     function initPostImgIndexList(len,posts){
         postImgIndexList.length= 0;
+        lenOfPostsImgs.length=0;
         const newList=Array.from({length:len},()=> 0);
         postImgIndexList.push(...newList);
 
@@ -845,71 +846,52 @@
     }
 
 
+    const postSearchForm = document.getElementById('postSearchForm');
 
-    // // 获取按钮元素
-    // const postButton = document.getElementById('postButton');
-    //
-    // // 添加点击事件监听器
-    // postButton.addEventListener('click', function () {
-    //     // 模拟发送帖子的函数
-    //     sendPost();
-    // });
-    //
-    // // 模拟发送帖子的函数
-    // function sendPost() {
-    //     alert('你点击了发送帖子按钮，正在发送帖子...');
-    //     window.location.href = '/sendPost';
-    // }
+    // 监听表单提交事件
+    postSearchForm.addEventListener('submit', function (event) {
+        // 阻止表单的默认提交行为
+        event.preventDefault();
+
+        // 获取输入框的值
+        const postSearchText = document.getElementById('postSearchText').value;
+
+        // 将输入框的值包装为 JSON 对象
+        const requestbody = {
+            searchText: postSearchText
+        };
+
+        const token = localStorage.getItem('authToken');  // 获取本地存储中的token
+        // 发送 GET 请求
+        fetch('/post/getSearchedPosts', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,  // 设置 Authorization 头
+                'Content-Type': 'application/json'  // 发送 JSON 数据
+            },
+            body:JSON.stringify(requestbody)
+        })
+            .then(response => response.json()) // 将响应解析为 JSON
+            .then(data => {
+                if(data.code===1&&null!=data.data){
+                    const { posts, comments } = data.data;
+                    const postContainer = document.querySelector('.postContainer'); // 获取容器元素
+                    postContainer.innerHTML = '';  // 清空容器内容
+
+                    initPostImgIndexList(posts.length,posts);
+                    console.log("查询到了帖子："+data.data);
+                    renderPosts(posts,comments);
+                    console.log("加载帖子完成");
+                }else{
+                    console.log(data.msg);
+                }
 
 
-
-
-
-
-
-
-    //按钮切换图片的逻辑
-    // 生成 HTML 代码
-    // const html = `
-    //         <div class="post_pic" style="background: #53e4bd url('/images/${post.postImgPaths[[postImgIndexList]]}') no-repeat center center;">
-    //             <button class="button left" id="prevButton_${post.postId}">&lt;</button>
-    //             <button class="button right" id="nextButton_${post.postId}">&gt;</button>
-    //         </div>
-    //     `;
-    //
-    // // 将 HTML 插入到页面中
-    // const postContainer = document.getElementById('post-container');
-    // postContainer.innerHTML = html;
-    //
-    // // 获取按钮和图片容器元素
-    // const prevButton = document.getElementById(`prevButton_${post.postId}`);
-    // const nextButton = document.getElementById(`nextButton_${post.postId}`);
-    // const postPic = postContainer.querySelector('.post_pic');
-    //
-    // // 当前图片索引
-    // let currentIndex = 0;
-    //
-    // // 切换图片函数
-    // function changeImage(index) {
-    //     if (index < 0) {
-    //         index = post.postImgPaths.length - 1;
-    //     } else if (index >= post.postImgPaths.length) {
-    //         index = 0;
-    //     }
-    //     currentIndex = index;
-    //     const newBackground = `background: #53e4bd url('/images/${post.postImgPaths[currentIndex]}') no-repeat center center;`;
-    //     postPic.style.cssText = newBackground;
-    // }
-    //
-    // // 为按钮添加点击事件监听器
-    // prevButton.addEventListener('click', () => {
-    //     changeImage(currentIndex - 1);
-    // });
-    //
-    // nextButton.addEventListener('click', () => {
-    //     changeImage(currentIndex + 1);
-    // });
-
+            })
+            .catch(error => {
+                console.error('Error:', error); // 处理错误
+            });
+    });
 
 
 </script>

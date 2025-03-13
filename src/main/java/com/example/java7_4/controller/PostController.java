@@ -4,6 +4,7 @@ import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.*;
 import com.example.java7_4.result.Result;
+import com.example.java7_4.service.impl.CommentService;
 import com.example.java7_4.service.impl.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +30,8 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -40,9 +42,32 @@ public class PostController {
     @Operation(summary = "getSearchedPosts")
     public Result<Map<String,Object>> getSearchedPosts(@RequestHeader("Authorization") String authorization,@RequestBody Map<String,String> searchRequest) {
         System.out.println("getSearchedPosts");
-        List<Post> searchedPosts=postService.getSearchedPosts(searchRequest.get("searchText"));
+        List<PostDTO> searchedPosts=postService.getSearchedPosts(searchRequest.get("searchText"));
+
+        List<PostRespDTO> postRespDTOS=new ArrayList<>();
+        for(PostDTO post:searchedPosts){
+            PostRespDTO postRespDTO=new PostRespDTO();
+            postRespDTO.setPostId(post.getPostId());
+            postRespDTO.setUserId(post.getUserId());
+            postRespDTO.setUserName(post.getUserName());
+            postRespDTO.setPostText(post.getPostText());
+            postRespDTO.setPostLike(post.getPostLike());
+            postRespDTO.setUserProfilePath(post.getUserProfilePath());
+
+            //解析postImgPath
+            String[] paths = post.getPostImgPath().split("@_@");
+            List<String> pathList = new ArrayList<>();
+            for (String path : paths) {
+                if (!path.isEmpty()) {
+                    pathList.add(path);
+                }
+            }
+            postRespDTO.setPostImgPaths(pathList);
+            postRespDTOS.add(postRespDTO);
+        }
         Map<String,Object> response=new HashMap<>();
-        response.put("posts",searchedPosts);
+        response.put("posts",postRespDTOS);
+        response.put("comments",commentService.getComments());
         return Result.success(response);
     }
 
