@@ -397,6 +397,28 @@
         #postSearchForm input[type="submit"]:active {
             background-color: #004080; /* 点击时背景颜色 */
         }
+
+
+
+        div[id^="currentImgNumBox_"] {
+            width: 50px;
+            height: 20px;
+            float: left;
+
+            margin-left: 300px;
+            margin-top: 10px;
+            background-color: rgb(56, 207, 103);
+            /*position: fixed;*/
+            /*top: 90%;*/
+            /*left: 90%;*/
+            color: white;
+            /*border: none;*/
+            /*padding: 10px;*/
+            z-index: 1000;
+
+            font-weight: bolder;
+            font-size: larger;
+        }
     </style>
 </head>
 <body>
@@ -692,6 +714,8 @@
                         <button class="button left" id="prevButton_${post.postId}">&lt;</button>
                         <button class="button right" id="nextButton_${post.postId}">&gt;</button>
                     </div>
+                    <div class="currentImgNumBox" id="currentImgNumBox_${post.postId}">3/9</div>
+
                     <div class="post_text">${post.postText}</div>
                     <div class="post_comment" style="display: ${isUserLoggedIn ? 'block' : 'none'};">
                         <form id="commentForm_${post.postId}" class="commentForm">
@@ -713,6 +737,7 @@
             postElement.innerHTML = postContent;
             postContainer.appendChild(postElement);
 
+            loadImgIndex(postId);
 
             //为每一个post的按钮添加监听
             // 选择所有按钮
@@ -735,10 +760,11 @@
         });
 
         //切换图片
-        function changeImg(postItemId,post){
-            const str = postItemId;
-            const direction=str.trim(0,4);
-            console.log(direction);
+        function changeImg(btnId,post){
+            console.log("~~~~~~~~~~~~~~~~~~~changeImg");
+            const str = btnId;
+            const direction=str.substring(0,4);
+            console.log("direction:"+direction);
             const parts = str.split("_");
             if (parts.length > 1) {
                 const postIndex = parseInt(parts[1], 10)-1;
@@ -746,6 +772,7 @@
 
                 currentIndex=postImgIndexList[postIndex];
                 var newIndex=currentIndex;
+                console.log(direction);
                 if (direction === 'prev') {
                     newIndex = (currentIndex - 1 + lenOfPostsImgs[postIndex]) % lenOfPostsImgs[postIndex];
                 } else {
@@ -761,6 +788,9 @@
 
                     postPic.style = `background: #53e4bd url('/images/${post.postImgPaths[postImgIndexList[postIndex]]}') no-repeat center center;`;
                 }
+
+                //更改index/total
+                loadImgIndex(postIndex+1);
                 console.log("更改后："+postPic.style);
             }
 
@@ -925,6 +955,16 @@
             .catch(error => {
                 console.error('Error:', error); // 处理错误
             });
+    }
+
+
+
+    function loadImgIndex(postId){
+        index=postImgIndexList[postId-1]+1;
+        total=lenOfPostsImgs[postId-1];
+        const currentImgNumBox = document.getElementById('currentImgNumBox_'+postId);
+        console.log('currentImgNumBox_'+postId);
+        currentImgNumBox.textContent=index+"/"+total;
     }
 </script>
 </body>
