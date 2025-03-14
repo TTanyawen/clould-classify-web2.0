@@ -154,6 +154,22 @@
     .carousel-control.next {
       right: 10px;
     }
+    .currentImgNumBox{
+      width: 50px;
+      height: 50px;
+
+      background-color: rgb(56, 207, 103);
+      position: absolute;
+      top: 90%;
+      left: 90%;
+      color: white;
+      border: none;
+      padding: 10px;
+      z-index: 1000;
+
+      font-weight: bolder;
+      font-size: larger;
+    }
 
     main .cloudinfo {
       margin-top: 40px;
@@ -264,8 +280,12 @@
         </div>
         <button class="carousel-control prev">&#10094;</button>
         <button class="carousel-control next">&#10095;</button>
+        <div class="currentImgNumBox" id="currentImgNumBox"></div>
       </div>
+
     </div>
+
+
     <div class="cloudinfo">
       <div class="cloudinfo-item" th:each="cloud:${clouds}">
         <div class="title" th:text="${cloud.typeName}"></div>
@@ -298,6 +318,10 @@
     }
   };
 
+  lenOfImages=5;
+  currentIndex=1;
+
+
   //轮播图加载
   document.addEventListener('DOMContentLoaded', function() {
     const image=document.getElementById('bannerimg');
@@ -315,11 +339,15 @@
 
     function updateCarousel() {
       image.src=imageSources[index];
+      currentIndex=index+1;
+      console.log(currentIndex+"  "+lenOfImages);
+      loadImgIndex(currentIndex,lenOfImages);
     }
 
     nextButton.addEventListener('click', function() {
       index = (index + 1) % imageSources.length;
       updateCarousel();
+
     });
 
     prevButton.addEventListener('click', function() {
@@ -332,56 +360,6 @@
       nextButton.click();
     }, 3000); // Change image every 3 seconds
   });
-
-  //跳转论坛页面
-  // document.addEventListener('DOMContentLoaded', function () {
-  //   const forumLink = document.getElementById('forumLink');  // 获取论坛链接
-  //   const token = localStorage.getItem('authToken');  // 获取本地存储中的token
-  //   console.log("addEventListener:token"+token);
-  //   console.log("forumLink:"+forumLink);
-  //   // 绑定点击事件
-  //   forumLink.addEventListener('click', function (event) {
-  //     console.log("click:addEventListener:token"+token);
-  //     event.preventDefault();  // 阻止默认链接跳转
-  //
-  //     if (token) {
-  //       console.log("发送请求");
-  //       // 发送请求到 /forum
-  //       fetch('/forum', {
-  //         method: 'GET',
-  //         headers: {
-  //           'Authorization': `Bearer ${token}`,  // 设置 Authorization 头
-  //           'Content-Type': 'application/json',
-  //           'X-Request-Type': 'document'  // 自定义标头
-  //         },
-  //       })
-  //               .then(response => {
-  //                 if (response.ok) {
-  //                   console.log("浏览器自动跳转");
-  //                   console.log("url:"+response.url);
-  //                   // window.location.href = '/test';  // 登录成功后跳转
-  //
-  //                   window.location.href = "http://localhost:8090/forum2";  // 如果返回的是一个重定向，浏览器会跳转
-  //                   // window.location.replace(response.url);
-  //                 } else {
-  //                   console.log("else");
-  //                   console.error('Failed to fetch forum page');
-  //                 }
-  //                 console.log("end?");
-  //               })
-  //               .catch(error => {
-  //                 console.log(error);
-  //                 console.error('Error:', error);
-  //               });
-  //     } else {
-  //       console.log("no token");
-  //       console.error('No token found. Please login first.');
-  //       // window.location.href = '/login';  // 如果没有 token，跳转到登录页
-  //     }
-  //     console.log("end");
-  //   });
-  // });
-
 
 
   //退出，把token清除
@@ -411,8 +389,16 @@
     } else {
       // 如果有JWT，则可以继续加载页面内容
       loadCloudTypes(token);
+      //初始化图片index显示
+      loadImgIndex(currentIndex,lenOfImages);
     }
   };
+
+  function loadImgIndex(index,total){
+    const currentImgNumBox = document.getElementById('currentImgNumBox');
+    currentImgNumBox.textContent=index+"/"+total;
+  }
+
   // 加载页面内容
   function loadCloudTypes(token) {
     fetch('/user/getCloudTypes', {
