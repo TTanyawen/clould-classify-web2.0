@@ -514,7 +514,11 @@
     const postImgIndexList=[];
     //每个post对应的图片的数量
     const lenOfPostsImgs=[];
+
+    let totalNumOfPost=0;
+    let searchText="";
     function initPostImgIndexList(len,posts){
+
         postImgIndexList.length= 0;
         lenOfPostsImgs.length=0;
         const newList=Array.from({length:len},()=> 0);
@@ -522,16 +526,30 @@
 
         console.log("posts_json:"+posts);
         //lenOfPostsImgs
-        for(let item of posts){
-            console.log(item);
-            console.log(item.postImgPaths);
-            lenOfPostsImgs.push(item.postImgPaths.length);
+        let index=0;
+        for(let i = 0; i < len; i++) {
+            let item = posts[index];
+            if(null!=item&&(item.postId-1) == i) {
+                lenOfPostsImgs.push(item.postImgPaths.length);
+                index++;
+            } else {
+                lenOfPostsImgs.push(0);
+            }
+            // console.log(item);
+            // console.log(item.postImgPaths);
         }
         console.log(lenOfPostsImgs);
+        print_List();
         return postImgIndexList;
     }
 
 
+    function print_List(){
+        console.log("~~~~~~~~~~~~~~~~~~print_List")
+        console.log(postImgIndexList);
+        console.log(lenOfPostsImgs);
+
+    }
     /*<![CDATA[*/
     var userLogin = /*[[${session.userLogin}]]*/ null;
     /*]]>*/
@@ -634,7 +652,9 @@
                     const postContainer = document.querySelector('.postContainer'); // 获取容器元素
                     postContainer.innerHTML = '';  // 清空容器内容
 
-                    initPostImgIndexList(posts.length,posts);
+                    totalNumOfPost=posts.length;
+                    initPostImgIndexList(totalNumOfPost,posts);
+                    searchText="";
                     renderPosts(posts,comments);
 
                     console.log(document.getElementById('postContainer').innerHTML);
@@ -651,6 +671,9 @@
             const postId=post.postId;
             console.log(post.postImgPaths);
             console.log(post.postImgPaths[postImgIndexList[postId-1]]);
+            console.log("postId"+postId);
+            console.log("postImgIndexList"+postImgIndexList);
+            console.log("postImgIndexList[postId-1]"+postImgIndexList[postId-1]);
             console.log("create post");
             const postElement = document.createElement('div');
             // postElement.classList.add('post_item_'+post.postId);
@@ -800,7 +823,12 @@
                     if (result.code === 1) {
                         // 评论成功
                         //重新请求数据
-                        loadForumdata(token);
+                        if(searchText==""){//全量
+                            loadForumdata(token);
+                        }else{
+                            loadSearchPost(searchText);
+                        }
+
                         alert("评论已发送！");
                     } else {
                         alert(result.msg);
@@ -852,9 +880,12 @@
     postSearchForm.addEventListener('submit', function (event) {
         // 阻止表单的默认提交行为
         event.preventDefault();
-
-        // 获取输入框的值
         const postSearchText = document.getElementById('postSearchText').value;
+        loadSearchPost(postSearchText);
+
+    });
+
+    function loadSearchPost(postSearchText){
 
         // 将输入框的值包装为 JSON 对象
         const requestbody = {
@@ -878,8 +909,11 @@
                     const postContainer = document.querySelector('.postContainer'); // 获取容器元素
                     postContainer.innerHTML = '';  // 清空容器内容
 
-                    initPostImgIndexList(posts.length,posts);
+                    initPostImgIndexList(totalNumOfPost,posts);
+                    searchText=postSearchText;
                     console.log("查询到了帖子："+data.data);
+
+
                     renderPosts(posts,comments);
                     console.log("加载帖子完成");
                 }else{
@@ -891,9 +925,7 @@
             .catch(error => {
                 console.error('Error:', error); // 处理错误
             });
-    });
-
-
+    }
 </script>
 </body>
 </html>
