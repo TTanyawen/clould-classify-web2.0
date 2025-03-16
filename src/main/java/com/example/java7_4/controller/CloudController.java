@@ -43,9 +43,9 @@ public class CloudController {
 
     //todo 帖子分页查询
 
-    @RequestMapping("/getPagedPostData")
-    @Operation(summary = "getPagedPostData")
-    public Result<PageResult> getPagedPostData(@RequestHeader("Authorization") String authorization, @RequestBody Map<String,Integer> requestBody) {
+    @RequestMapping("/getPagedForumData")
+    @Operation(summary = "getPagedForumData")
+    public Result<Map<String,Object>> getPagedForumData(@RequestHeader("Authorization") String authorization, @RequestBody Map<String,Integer> requestBody) {
         int currentPage=requestBody.get("currentPage");//第几页
         int pageSize=requestBody.get("pageSize");//每一页几条
 
@@ -75,7 +75,12 @@ public class CloudController {
         }
 
         pageResult.setRecords(postRespDTOS);
-        return Result.success(pageResult);
+        Map<String,Object> response=new HashMap<>();
+
+        List<CommentDTO> comments=commentService.getCommentsWithUsername();
+        response.put("posts",pageResult);
+        response.put("comments",comments);
+        return Result.success(response);
     }
 
     @RequestMapping({"/getCloudTypes"})
