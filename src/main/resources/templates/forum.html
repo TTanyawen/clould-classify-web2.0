@@ -659,7 +659,7 @@
     };
 
     // 调用 API 获取数据
-    function loadForumdata(token) {
+    function loadForumdata_old_version(token) {
         fetch('/user/getForumData', {
             method: 'GET',
             headers: {
@@ -678,6 +678,46 @@
                     initPostImgIndexList(totalNumOfPost,posts);
                     searchText="";
                     renderPosts(posts,comments);
+
+                    console.log(document.getElementById('postContainer').innerHTML);
+                } else {
+                    console.error('Failed to load forum data');
+                }
+            })
+            .catch(error => console.error('Error loading forum data:', error));
+    }
+
+    // 调用 API 获取数据
+    function loadForumdata(token) {
+        const requestBody={//todo
+            currentPage:1,
+            pageSize:5
+        }
+        JSON.stringify(requestBody);
+        fetch('/user/getPagedForumData', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`  ,// 确保你有正确的 token
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(requestBody)
+        })
+            .then(response => response.json()) // 解析 JSON 响应
+            .then(data => {
+                if (data.code === 1 && null!=data.data) {
+                    const { posts, comments } = data.data;  // 获取 posts 和 comments 数据
+
+                    const records=posts.records;
+                    const total=posts.total;//todo
+                    console.log(records);
+                    console.log(total);
+                    const postContainer = document.querySelector('.postContainer'); // 获取容器元素
+                    postContainer.innerHTML = '';  // 清空容器内容
+
+                    totalNumOfPost=records.length;
+                    initPostImgIndexList(totalNumOfPost,records);
+                    searchText="";
+                    renderPosts(records,comments);
 
                     console.log(document.getElementById('postContainer').innerHTML);
                 } else {
