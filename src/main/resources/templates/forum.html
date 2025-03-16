@@ -419,6 +419,24 @@
             font-weight: bolder;
             font-size: larger;
         }
+
+    /*    分页按钮*/
+        #pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #pagination button, #pagination select {
+            margin: 0 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #pagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -451,6 +469,17 @@
                 <input type="text" name="postSearchText" id="postSearchText" placeholder="Input somethiing...">
                 <input type="submit" value="提交">
             </form>
+        </div>
+        <div id="pagination">
+            <button id="prevPage">上一页</button>
+            <span id="currentPage">1</span>
+            <button id="nextPage">下一页</button>
+            <select id="pageSize">
+                <option value="5">5 条/页</option>
+                <option value="10" selected>10 条/页</option>
+                <option value="20">20 条/页</option>
+                <option value="50">50 条/页</option>
+            </select>
         </div>
         <div class="postContainer" id="postContainer">
             <div class="post_item" th:each="post:${posts}" id="post_item">
@@ -690,8 +719,8 @@
     // 调用 API 获取数据
     function loadForumdata(token) {
         const requestBody={//todo
-            currentPage:1,
-            pageSize:5
+            currentPage:currentPage,
+            pageSize:pageSize
         }
         JSON.stringify(requestBody);
         fetch('/user/getPagedForumData', {
@@ -714,7 +743,7 @@
                     const postContainer = document.querySelector('.postContainer'); // 获取容器元素
                     postContainer.innerHTML = '';  // 清空容器内容
 
-                    totalNumOfPost=records.length;
+                    totalNumOfPost=total;
                     initPostImgIndexList(totalNumOfPost,records);
                     searchText="";
                     renderPosts(records,comments);
@@ -1006,6 +1035,46 @@
         console.log('currentImgNumBox_'+postId);
         currentImgNumBox.textContent=index+"/"+total;
     }
+
+
+//     分页按钮
+    let currentPage = 1;
+    let pageSize = 10; // 默认每页显示 10 条数据
+
+    // 获取元素
+    const prevPageButton = document.getElementById('prevPage');
+    const nextPageButton = document.getElementById('nextPage');
+    const currentPageSpan = document.getElementById('currentPage');
+    const pageSizeSelect = document.getElementById('pageSize');
+
+    // 上一页按钮点击事件
+    prevPageButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            currentPageSpan.textContent = currentPage;
+            const token = localStorage.getItem('authToken');  // 获取本地存储中的token
+            loadForumdata(token); // 调用获取数据的函数
+        }
+    });
+
+    // 下一页按钮点击事件
+    nextPageButton.addEventListener('click', () => {
+        currentPage++;
+        currentPageSpan.textContent = currentPage;
+        const token = localStorage.getItem('authToken');  // 获取本地存储中的token
+        loadForumdata(token); // 调用获取数据的函数
+    });
+
+    // 每页条数选择事件
+    pageSizeSelect.addEventListener('change', (event) => {
+        pageSize = parseInt(event.target.value);
+        console.log("pageSize change to:"+pageSize);
+        currentPage = 1; // 重置当前页数为第一页
+        currentPageSpan.textContent = currentPage;
+        const token = localStorage.getItem('authToken');  // 获取本地存储中的token
+        loadForumdata(token); // 调用获取数据的函数
+    });
+
 </script>
 </body>
 </html>
