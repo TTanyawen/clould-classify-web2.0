@@ -3,6 +3,7 @@ package com.example.java7_4.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.java7_4.entity.Post;
 import com.example.java7_4.entity.PostDTO;
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -22,6 +23,8 @@ public interface PostMapper {
     //查找当前所有用户的post，并带有用户信息
     List<PostDTO> selectPostsWithUserAvatar();
 
+    //查找当前所有用户的post，并带有用户信息
+    Page<PostDTO> selectPagedPostsWithUserAvatar();
     int updateById(@Param("postId") Long postId,@Param("postLike") Long postLike);
 
     int save(Post post);

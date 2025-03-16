@@ -7,6 +7,9 @@ import com.example.java7_4.entity.Post;
 
 import com.example.java7_4.entity.PostDTO;
 import com.example.java7_4.mapper.PostMapper;
+import com.example.java7_4.result.PageResult;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,11 @@ public class PostService {
 
     public List<PostDTO> getPostsWithUserAvatar() {
         return postMapper.selectPostsWithUserAvatar();
+    }
+    public PageResult getPostsWithUserAvatar(int currentPage,int pageSize) {
+        PageHelper.startPage(currentPage,pageSize);
+        Page<PostDTO> pageInfo=postMapper.selectPagedPostsWithUserAvatar();
+        return new PageResult(pageInfo.getTotal(),pageInfo.getResult());
     }
 
     

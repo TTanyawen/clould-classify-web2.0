@@ -1,6 +1,8 @@
 package com.example.java7_4.controller;
+import com.alipay.api.domain.PageDTO;
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.entity.*;
+import com.example.java7_4.result.PageResult;
 import com.example.java7_4.result.Result;
 import com.example.java7_4.service.impl.CloudTypeService;
 
@@ -38,6 +40,43 @@ public class CloudController {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    //todo 帖子分页查询
+
+    @RequestMapping("/getPagedPostData")
+    @Operation(summary = "getPagedPostData")
+    public Result<PageResult> getPagedPostData(@RequestHeader("Authorization") String authorization, @RequestBody Map<String,Integer> requestBody) {
+        int currentPage=requestBody.get("currentPage");//第几页
+        int pageSize=requestBody.get("pageSize");//每一页几条
+
+        PageResult pageResult=postService.getPostsWithUserAvatar(currentPage,pageSize);
+
+        List<PostRespDTO> postRespDTOS=new ArrayList<>();
+        for(Object obj:pageResult.getRecords()){
+            PostDTO post=(PostDTO)obj;
+            PostRespDTO postRespDTO=new PostRespDTO();
+            postRespDTO.setPostId(post.getPostId());
+            postRespDTO.setUserId(post.getUserId());
+            postRespDTO.setUserName(post.getUserName());
+            postRespDTO.setPostText(post.getPostText());
+            postRespDTO.setPostLike(post.getPostLike());
+            postRespDTO.setUserProfilePath(post.getUserProfilePath());
+
+            //解析postImgPath
+            String[] paths = post.getPostImgPath().split("@_@");
+            List<String> pathList = new ArrayList<>();
+            for (String path : paths) {
+                if (!path.isEmpty()) {
+                    pathList.add(path);
+                }
+            }
+            postRespDTO.setPostImgPaths(pathList);
+            postRespDTOS.add(postRespDTO);
+        }
+
+        pageResult.setRecords(postRespDTOS);
+        return Result.success(pageResult);
+    }
 
     @RequestMapping({"/getCloudTypes"})
     @Operation(summary = "getAllCloudTypes")
@@ -128,6 +167,9 @@ public class CloudController {
 
         return Result.success(response);
     }
+
+
+
     @RequestMapping("/getDetailData")
     @Operation(summary = "getDetailData")
     public Result<CloudType> getDetail(@RequestHeader("Authorization") String authorization,@RequestParam("typeId") Long typeId) {
