@@ -34,6 +34,12 @@
         where tb_post.user_id=tb_user.user_id and post_text LIKE CONCAT('%', #{searchText}, '%');
     </select>
 
+
+    <select id="getPagedSearchedPosts" resultMap="PostDTOResultMap">
+        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name from tb_post,tb_user
+        where tb_post.user_id=tb_user.user_id and post_text LIKE CONCAT('%', #{searchText}, '%')
+    </select>
+
     <select id="selectById" resultMap="PostResultMap">
         select * from tb_post
         where post_id=#{postId};

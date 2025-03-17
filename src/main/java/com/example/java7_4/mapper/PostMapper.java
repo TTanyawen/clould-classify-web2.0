@@ -30,4 +30,5 @@ public interface PostMapper {
     int save(Post post);
 
     List<PostDTO> getSearchedPosts(String searchText);
+    Page<PostDTO> getPagedSearchedPosts(String searchText);
 }

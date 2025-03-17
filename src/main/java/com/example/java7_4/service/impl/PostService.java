@@ -75,5 +75,11 @@ public class PostService {
     public List<PostDTO> getSearchedPosts(String searchText) {
         return postMapper.getSearchedPosts(searchText);
     }
+
+    public PageResult getPagedSearchedPosts(String searchText,int currentPage,int pageSize) {
+        PageHelper.startPage(currentPage,pageSize);
+        Page<PostDTO> pageInfo=postMapper.getPagedSearchedPosts(searchText);
+        return new PageResult(pageInfo.getTotal(),pageInfo.getResult());
+    }
 }
 
