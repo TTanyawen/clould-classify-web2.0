@@ -194,7 +194,9 @@
       font-weight: bolder;
       color: #ebf4fe;
     }
-
+    main .cloudinfo .title a{
+      color: #f1f2f5;
+    }
     main .cloudinfo .info {
       height: 160px;
       background-color: #e6f2f2;
@@ -420,7 +422,9 @@
                   cloudItem.classList.add('cloudinfo-item');
 
                   cloudItem.innerHTML = `
-                    <div class="title">${cloud.typeName}</div>
+                    <div class="title">
+                        <a href="/detail?typeId=${cloud.typeId}">${cloud.typeName}</a>
+                    </div>
                     <div class="info">${cloud.typeInfo}</div>
                 `;
 
