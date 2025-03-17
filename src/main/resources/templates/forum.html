@@ -323,7 +323,8 @@
             /*position: absolute;*/
             /*top: 50%;*/
             /*transform: translateY(-50%);*/
-            z-index: 1; /* 确保按钮显示在图片上方 */
+            /*z-index: 1; !* 确保按钮显示在图片上方 *!*/
+            z-index: 100;
         }
 
         /* 鼠标悬停在按钮上的效果 */
@@ -437,10 +438,51 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
+
+
+    /*    大图查看*/
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 <div class="container">
+
     <header>
         <div class="content">
             <div class="logo">
@@ -480,6 +522,10 @@
                 <option value="20">20 条/页</option>
                 <option value="50">50 条/页</option>
             </select>
+        </div>
+        <div id="myModal" class="modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img class="modal-content" id="img01">
         </div>
         <div class="postContainer" id="postContainer">
             <div class="post_item" th:each="post:${posts}" id="post_item">
@@ -779,7 +825,7 @@
                 <div class="meinfo">
                     <div class="profile_pic" style="background: #53e4bd url('/images/profiles/${post.userId}.jpg') no-repeat center center;"></div>
                     <div class="profile_name">${post.userName}</div>
-                    <div id="post_pic_${post.postId}" class="post_pic" style="background: #53e4bd url('/images/${post.postImgPaths[postImgIndexList[postId-1]]}') no-repeat center center;">
+                    <div id="post_pic_${post.postId}" class="post_pic" onclick="openModal('/images/${post.postImgPaths[postImgIndexList[postId-1]]}')"  style="background: #53e4bd url('/images/${post.postImgPaths[postImgIndexList[postId-1]]}') no-repeat center center;">
                         <button class="button left" id="prevButton_${post.postId}">&lt;</button>
                         <button class="button right" id="nextButton_${post.postId}">&gt;</button>
                     </div>
@@ -814,7 +860,8 @@
 
             // 为每个按钮添加点击事件监听
             allButtons.forEach(button => {
-                button.addEventListener('click', function () {
+                button.addEventListener('click', function (event) {
+                    event.stopPropagation();//todo
                     console.log(`按钮 ${this.id} 被点击了`);
                     changeImg(this.id,post);
 
@@ -1170,6 +1217,20 @@
             loadSearchPost(searchText);
         }
 
+    }
+
+
+//     大图查看
+    function openModal(imageUrl) {
+        var modal = document.getElementById("myModal");
+        var modalImg = document.getElementById("img01");
+        modal.style.display = "block";
+        modalImg.src = imageUrl;
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
     }
 
 </script>

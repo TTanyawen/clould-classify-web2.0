@@ -93,4 +93,9 @@ public class getPageController {
     public String getSendPost(){
         return "sendPost";
     }
+
+    @RequestMapping("/testBigImg")
+    public String getTestBigImg(){
+        return "testBigImg";
+    }
 }
