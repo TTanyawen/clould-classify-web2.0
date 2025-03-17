@@ -861,7 +861,7 @@
             // 为每个按钮添加点击事件监听
             allButtons.forEach(button => {
                 button.addEventListener('click', function (event) {
-                    event.stopPropagation();//todo
+                    event.stopPropagation();
                     console.log(`按钮 ${this.id} 被点击了`);
                     changeImg(this.id,post);
 
@@ -895,18 +895,23 @@
                     newIndex = (currentIndex + 1) % lenOfPostsImgs[postIndex];
                 }
                 postImgIndexList[postIndex] = newIndex;
-
+                console.log("newIndex:"+postImgIndexList[postIndex] );
                 // 更新图片的背景图，这里简单假设图片路径的规律，可根据实际情况修改
                 const postPic = document.getElementById(`post_pic_${postIndex + 1}`);
                 console.log("更改前："+postPic.style);
                 if (postPic) {
-                    // <div id="post_pic_${post.postId}" class="post_pic" style="background: #53e4bd url('/images/${post.postImgPaths[postImgIndexList[postId-1]]}') no-repeat center center;">
+                    // <div id="post_pic_${post.postId}" class="post_pic" onclick="openModal('/images/${post.postImgPaths[postImgIndexList[postId-1]]}')"  style="background: #53e4bd url('/images/${post.postImgPaths[postImgIndexList[postId-1]]}') no-repeat center center;">
 
+                    //更改样式
                     postPic.style = `background: #53e4bd url('/images/${post.postImgPaths[postImgIndexList[postIndex]]}') no-repeat center center;`;
+                    //更改onclick
+                    postPic.onclick = () => openModal(`/images/${post.postImgPaths[postImgIndexList[postIndex]]}`);
                 }
 
                 //更改index/total
                 loadImgIndex(postIndex+1);
+
+
                 console.log("更改后："+postPic.style);
             }
 
@@ -1222,6 +1227,7 @@
 
 //     大图查看
     function openModal(imageUrl) {
+        console.log("openModal:"+imageUrl);
         var modal = document.getElementById("myModal");
         var modalImg = document.getElementById("img01");
         modal.style.display = "block";
