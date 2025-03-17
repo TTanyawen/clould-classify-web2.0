@@ -144,6 +144,45 @@
       color: var(--footer-fcolor);
       /*background-color: rgba(255, 255, 255, 0.51);*/
     }
+
+    /*查看大图*/
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      padding-top: 100px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.9);
+    }
+
+    .modal-content {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 700px;
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #bbb;
+      text-decoration: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -171,6 +210,10 @@
   </header>
   <main>
     <div class="mainTitle" ><p></p></div>
+    <div id="myModal" class="modal">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img class="modal-content" id="img01">
+    </div>
     <div class="cloudinfo">
 
 
@@ -245,7 +288,7 @@
                 const cloudType= data.data;
                 cloudInfoContainer.innerHTML = `
                   <div class="cloudImg">
-                      <img src="/images/clouds/${cloudType.typeNameEn}/1.jpg" alt="Cloud Image">
+                      <img src="/images/clouds/${cloudType.typeNameEn}/1.jpg" onclick="openModal('/images/clouds/${cloudType.typeNameEn}/1.jpg')"  alt="Cloud Image">
                   </div>
                   <div class="cloudtext">
                     <p >${cloudType.typeInfo}</p>
@@ -261,6 +304,20 @@
             .catch(error => {
               console.error('Error loading cloud types:', error);
             });
+  }
+
+  // 查看大图
+  function openModal(imageUrl) {
+    console.log("openModal:"+imageUrl);
+    var modal = document.getElementById("myModal");
+    var modalImg = document.getElementById("img01");
+    modal.style.display = "block";
+    modalImg.src = imageUrl;
+  }
+
+  function closeModal() {
+    var modal = document.getElementById("myModal");
+    modal.style.display = "none";
   }
 </script>
 </body>
