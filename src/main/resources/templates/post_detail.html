@@ -257,6 +257,42 @@
       font-size: 14px;
       color: #666666;
     }
+
+
+    /*帖子多图处理*/
+    .post_pic .button {
+
+      background-color: #333;
+      color: white;
+      border: none;
+      margin-top: 140px;
+      /*padding: 10px 15px;*/
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      /*position: absolute;*/
+      /*top: 50%;*/
+      /*transform: translateY(-50%);*/
+      /*z-index: 1; !* 确保按钮显示在图片上方 *!*/
+      z-index: 100;
+    }
+
+    /* 鼠标悬停在按钮上的效果 */
+    .post_pic .button:hover {
+      background-color: #555;
+    }
+
+    /* 左按钮的位置 */
+    .left {
+      float:left;
+      margin-left: 10px;
+    }
+
+    /* 右按钮的位置 */
+    .right {
+      float:right;
+      margin-right: 10px;
+    }
   </style>
 </head>
 <body>
@@ -335,7 +371,15 @@
     }
   };
 
+  //全局变量
+  //currentIndex
+  let currentIndex=0;
+  //post的图片的数量
+  let lenOfPostsImgs=0;
 
+  function initLenOfPostsImgs(post){
+    lenOfPostsImgs=post.postImgPaths.length;
+  }
 
 
   // 页面加载时检查是否有JWT，如果没有则重定向到登录页
@@ -350,6 +394,53 @@
       loadDetail(token);
     }
   };
+
+  function loadImgIndex(postId){
+    index=currentIndex+1;
+    total=lenOfPostsImgs;
+    const currentImgNumBox = document.getElementById('currentImgNumBox_'+postId);
+    console.log('currentImgNumBox_'+postId);
+    currentImgNumBox.textContent=index+"/"+total;
+  }
+  //切换图片
+  function changeImg(btnId,post){
+    console.log("~~~~~~~~~~~~~~~~~~~changeImg");
+    const str = btnId;
+    const direction=str.substring(0,4);
+    console.log("direction:"+direction);
+    const parts = str.split("_");
+    if (parts.length > 1) {
+      const postIndex = parseInt(parts[1], 10)-1;
+      console.log(postIndex);
+      console.log(direction);
+
+      if (direction === 'prev') {
+        newIndex = (currentIndex - 1 + lenOfPostsImgs) % lenOfPostsImgs;
+      } else {
+        newIndex = (currentIndex + 1) % lenOfPostsImgs;
+      }
+      currentIndex= newIndex;
+      console.log("newIndex:"+currentIndex);
+      // 更新图片的背景图，这里简单假设图片路径的规律，可根据实际情况修改
+      const postPic = document.getElementById(`post_pic`);
+      console.log("更改前："+postPic.style);
+      if (postPic) {
+        // <div id="post_pic_${post.postId}" class="post_pic" onclick="openModal('/images/${post.postImgPaths[postImgIndexList[postId-1]]}')"  style="background: #53e4bd url('/images/${post.postImgPaths[postImgIndexList[postId-1]]}') no-repeat center center;">
+
+        //更改样式
+        postPic.style = `background: #53e4bd url('/images/${post.postImgPaths[currentIndex]}') no-repeat center center;`;
+        //更改onclick
+        postPic.onclick = () => openModal(`/images/${post.postImgPaths[currentIndex]}`);
+      }
+
+      //更改index/total
+      loadImgIndex(postIndex+1);
+
+      console.log("更改后："+postPic.style);
+    }
+
+
+  }
   // 加载Post内容
   function loadDetail(token) {
     console.log(loadDetail);
@@ -371,10 +462,32 @@
 
                       <div class="profile_pic" style="background: #53e4bd url('/images/${post.userProfilePath}') no-repeat center center; background-size: cover;"></div>
                       <div class="profile_name">${post.userName}</div>
-                      <div class="post_pic" style="background: #53e4bd url('/images/${post.postImgPaths[0]}') no-repeat center center; background-size: cover;"></div>
+                      <div class="post_pic" id="post_pic" style="background: #53e4bd url('/images/${post.postImgPaths[0]}') no-repeat center center; background-size: cover;">
+                        <button class="button left" id="prevButton_${post.postId}">&lt;</button>
+                        <button class="button right" id="nextButton_${post.postId}">&gt;</button>
+                      </div>
+                      <div class="currentImgNumBox" id="currentImgNumBox_${post.postId}">3/9</div>
                       <div class="post_text">${post.postText}</div>
                 `;
+
+                initLenOfPostsImgs(post);
+
+                //为每一个post的按钮添加监听
+                // 选择所有按钮
+                const allButtons = meinfo.querySelectorAll('button');
+
+                // 为每个按钮添加点击事件监听
+                allButtons.forEach(button => {
+                  button.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    console.log(`按钮 ${this.id} 被点击了`);
+                    changeImg(this.id,post);
+
+                  });
+                });
+
                 loadComments(token,postId);
+
               } else {
                 console.error('Invalid data structure:', data);
               }
