@@ -350,7 +350,7 @@
       loadDetail(token);
     }
   };
-  // 加载页面内容
+  // 加载Post内容
   function loadDetail(token) {
     console.log(loadDetail);
     fetch(`/post/getPostDetail?postId=${postId}`, {
@@ -374,6 +374,7 @@
                       <div class="post_pic" style="background: #53e4bd url('/images/${post.postImgPaths[0]}') no-repeat center center; background-size: cover;"></div>
                       <div class="post_text">${post.postText}</div>
                 `;
+                loadComments(token,postId);
               } else {
                 console.error('Invalid data structure:', data);
               }
@@ -382,6 +383,51 @@
               console.error('Error loading cloud types:', error);
             });
   }
+
+  // 加载Comments内容
+  function loadComments(token,postId) {
+    console.log("loadComments");
+    fetch(`/post/getCommentsByPostId?postId=${postId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`  // 确保你有正确的 token
+      }
+    })
+            .then(response => response.json())
+            .then(data => {
+              // 检查返回的 data 是否包含期望的结构
+              if (data.code === 1 && null!=data.data) {
+                const commentSection = document.querySelector(".comment_section");
+                // 清空现有的评论内容
+                commentSection.innerHTML = "";
+
+                // 遍历评论数据并生成 HTML
+                data.data.forEach(comment => {
+                  console.log(comment.postId+"  "+postId);
+                  if (comment.postId.toString() === postId.toString()) {
+                    console.log("comment.postId === postId");
+                    const commentItem = `
+                        <div class="comment-item">
+                          <div class="userinfo">
+                            <div class="profile_pic" style="background: #53e4bd url('/images/profiles/${comment.userId}.jpg') no-repeat center center; background-size: cover;"></div>
+                            <div class="profile_name">${comment.userName}</div>
+                            <div class="comment_text">${comment.commentText}</div>
+                          </div>
+                        </div>
+                    `;
+                    commentSection.innerHTML += commentItem;
+                  }
+                });
+              } else {
+                console.error('Invalid data structure:', data);
+              }
+            })
+            .catch(error => {
+              console.error('Error loading cloud types:', error);
+            });
+  }
+
+
 
   // 查看大图
   function openModal(imageUrl) {
