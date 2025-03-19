@@ -271,7 +271,7 @@
   // 加载页面内容
   function loadDetail(token) {
     console.log(loadDetail);
-    fetch(`/user/getDetailData?typeId=${typeId}`, {
+    fetch(`/data/getDetailData?typeId=${typeId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`  // 确保你有正确的 token

@@ -1,6 +1,7 @@
 package com.example.java7_4.controller;
 import com.alipay.api.domain.PageDTO;
 import com.example.java7_4.constant.RedisKeyConstants;
+import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.*;
 import com.example.java7_4.result.PageResult;
 import com.example.java7_4.result.Result;
@@ -11,6 +12,7 @@ import com.example.java7_4.service.impl.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +26,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping("/user")
+@RequestMapping("/data")
 //@Controller
 @RestController
-@Tag(name="用户接口文档")
+@Tag(name="数据接口文档")
+@Slf4j
 public class CloudController {
 
     @Autowired
@@ -108,12 +111,36 @@ public class CloudController {
 
     @RequestMapping("/getMeData")
     @Operation(summary = "getMeData")
-    public Result<List<PostDTO>> getMeData(@RequestHeader("Authorization") String authorization,HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        System.out.println("userId:"+userId);
-        List<PostDTO> posts = postService.getMePosts(userId);
+    public Result<List<PostRespDTO>> getMeData(@RequestHeader("Authorization") String authorization) {
 
-        return Result.success(posts);
+        List<PostDTO> posts = postService.getMePosts(BaseContext.getCurrentId());
+        log.info("userid:{}",BaseContext.getCurrentId());
+        log.info("posts num:{}",posts.size());
+
+        List<PostRespDTO> postRespDTOS=new ArrayList<>();
+        for(PostDTO post:posts){
+            PostRespDTO postRespDTO=new PostRespDTO();
+            postRespDTO.setPostId(post.getPostId());
+            postRespDTO.setUserId(post.getUserId());
+            postRespDTO.setUserName(post.getUserName());
+            postRespDTO.setPostText(post.getPostText());
+            postRespDTO.setPostLike(post.getPostLike());
+            postRespDTO.setUserProfilePath(post.getUserProfilePath());
+
+            //解析postImgPath
+            String[] paths = post.getPostImgPath().split("@_@");
+            List<String> pathList = new ArrayList<>();
+            for (String path : paths) {
+                if (!path.isEmpty()) {
+                    pathList.add(path);
+                }
+            }
+            postRespDTO.setPostImgPaths(pathList);
+            postRespDTOS.add(postRespDTO);
+        }
+        log.info("postRespDTOS num:{}",postRespDTOS.size());
+
+        return Result.success(postRespDTOS);
     }
 
 
@@ -187,10 +214,6 @@ public class CloudController {
         cloudType=cloudTypeService.getCloudTypeById(typeId);
         redisTemplate.opsForValue().set(key,cloudType);
         return Result.success(cloudType);
-    }
-    @RequestMapping("/classify")
-    public String getClassify() {
-        return "classify";
     }
 
 }

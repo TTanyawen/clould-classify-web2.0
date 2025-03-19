@@ -98,4 +98,7 @@ public class getPageController {
     public String getTestBigImg(){
         return "testBigImg";
     }
+
+
+
 }

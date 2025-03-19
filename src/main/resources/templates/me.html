@@ -488,7 +488,7 @@
     };
     // 加载页面内容
     function loadCloudInfo(token) {
-        fetch('/user/getMeData', {
+        fetch('/data/getMeData', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`  // 确保你有正确的 token
