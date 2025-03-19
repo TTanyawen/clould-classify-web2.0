@@ -77,4 +77,8 @@ public class CommentService  {
             throw new FailCommentException("评论失败");
         }
     }
+
+    public List<CommentDTO> getCommentsByPostId(Long postId) {
+        return commentMapper.getCommentsByPostId(postId);
+    }
 }

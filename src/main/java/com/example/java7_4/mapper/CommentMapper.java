@@ -33,4 +33,6 @@ public interface CommentMapper {
     @AutoFill(value = OperationType.UPDATE)
     int updateByIdTest(Comment comment);
 
+    @Select("SELECT c.comment_id,c.user_id,c.post_id,c.comment_text,c.comment_like FROM tb_comment c WHERE c.post_id=#{postId};")
+    List<CommentDTO> getCommentsByPostId(Long postId);
 }

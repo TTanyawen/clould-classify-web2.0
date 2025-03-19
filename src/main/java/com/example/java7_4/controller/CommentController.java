@@ -2,6 +2,9 @@ package com.example.java7_4.controller;
 
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.entity.Comment;
+import com.example.java7_4.entity.CommentDTO;
+import com.example.java7_4.entity.PostDTO;
+import com.example.java7_4.entity.PostRespDTO;
 import com.example.java7_4.result.Result;
 import com.example.java7_4.service.impl.CommentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -60,68 +65,14 @@ public class CommentController {
         commentService.save(newComment);
         redisTemplate.delete(RedisKeyConstants.COMMENTS);
 
-//        return "redirect:/forum";  // 跳转页面
-
         return Result.success();
     }
+
+
+    @GetMapping("/getCommentsByPostId")
+    public Result<List<CommentDTO>> getCommentsByPostId(@RequestHeader("Authorization") String authorization, @RequestParam Long postId) {
+        List<CommentDTO> comment=commentService.getCommentsByPostId(postId);
+        return Result.success(comment);
+    }
 }
-
-
-//package com.example.java7_4.controller;
-//
-//        import com.example.java7_4.entity.Comment;
-//        import com.example.java7_4.service.impl.CommentService;
-//        import org.springframework.beans.factory.annotation.Autowired;
-//        import org.springframework.http.HttpStatus;
-//        import org.springframework.http.ResponseEntity;
-//        import org.springframework.web.bind.annotation.*;
-//        import org.springframework.web.servlet.view.RedirectView;
-//
-//        import java.util.HashMap;
-//        import java.util.Map;
-//
-//@RestController
-//@RequestMapping("/post")
-//public class CommentController {
-//
-//    @Autowired
-//    private CommentService commentService;
-//
-//    @PostMapping("/likeComment/{commentId}")
-//    public ResponseEntity<?> likeComment(@RequestHeader("Authorization") String authorization,@PathVariable("commentId") Long commentId) {
-//        System.out.println("likeComment");
-//        try {
-//            // 增加点赞数
-//            Long newLikeCount = commentService.incrementCommentLike(commentId);
-//            // 返回新的点赞数
-//            Map<String, Object> response = new HashMap<>();
-//            response.put("success", true);
-//            response.put("newLikeCount", newLikeCount);
-//            return ResponseEntity.ok(response);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to like the comment");
-//        }
-//    }
-//
-//
-//    @PostMapping("/submitComment")
-//    public RedirectView  submitComment(@RequestParam("userId") Long userId,
-//                                       @RequestParam("postId") Long postId,
-//                                       @RequestParam("commentText") String commentText) {
-//        // 创建新的 Comment 实体
-//        Comment newComment = new Comment();
-//        newComment.setUserId(userId);
-//        newComment.setPostId(postId);
-//        newComment.setCommentText(commentText);
-//        newComment.setCommentLike(0L);  // 初始化点赞数为0
-//
-//        // 保存到数据库
-//        System.out.println("submitComment");
-//        commentService.save(newComment);//TODO
-//
-////        return "redirect:/forum";  // 跳转页面
-//
-//        return new RedirectView("/forum");
-//    }
-//}
 
