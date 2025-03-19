@@ -60,6 +60,13 @@ public class getPageController {
         return "cloud_detail";
     }
 
+    @RequestMapping("/postDetail")
+    public String getPostDetail(@RequestParam("postId") Long postId,HttpSession session) {
+
+        session.setAttribute("postId",postId);
+        return "post_detail";
+    }
+
     @RequestMapping("/toLogin")
     public String toLogin() {
         return "login";
