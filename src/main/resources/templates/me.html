@@ -151,7 +151,7 @@
 
         main .post{
             margin-top: 20px;
-            height: 500px;
+            height: 1000px;
         }
         main .post .title{
             height: 50px;
@@ -176,7 +176,7 @@
         /*}*/
 
         main .post{
-            height: 2500px;
+            height: 4500px;
             width: 800px;
 
             background-color: #f8f8f8;
@@ -226,7 +226,7 @@
             width: 400px;
             margin-left: 20px;
             margin-top: 10px;
-            background: rgba(83, 228, 189, 0.01) url('/images/posts/post1.jpg') no-repeat center center;
+            background: #53e4bd url('/images/posts/post1.jpg') no-repeat center center;
             border-radius: 10%;
         }
         main .post_item .post_text{
@@ -405,7 +405,7 @@
                     <div class="meinfo">
                         <div class="profile_pic" id="profile_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/profiles/' + ${post.userId} + '.jpg'+'\'' + ') no-repeat center center;'"></div>
                         <div class="profile_name" th:text="${post.userName}"></div>
-                        <div class="post_pic" th:style="'background: rgba(83, 228, 189, 0.01) url(' + '\'' + '/images/' + ${post.postImgPath} + '\'' + ') no-repeat center center;'"></div>
+                        <div class="post_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/' + ${post.postImgPath} + '\'' + ') no-repeat center center;'"></div>
                         <div class="post_text" th:text="${post.postText}"></div>
                         <div class="post_like" th:text="'👍   '+${post.postLike}"></div>
                     </div>
@@ -510,11 +510,11 @@
                             <div class="meinfo">
                                 <div class="profile_pic" id="profile_pic" style="background: #53e4bd url('/images/profiles/${post.userId}.jpg') no-repeat center center;"></div>
                                 <div class="profile_name" >${post.userName}</div>
-                                <div class="post_pic" style="background: rgba(83, 228, 189, 0.01) url('/images${post.postImgPath}') no-repeat center center;"></div>
+                                <div class="post_pic" style="background: #53e4bd url('/images${post.postImgPaths[0]}') no-repeat center center; background-size: cover;" ></div>
 
-<!--                                <div class="post_pic" style="'background: rgba(83, 228, 189, 0.01) url(' + '/images/' + ${post.postImgPath} + ') no-repeat center center;'"></div>-->
-                                <div class="post_text" >${post.postText}  ${post.postImgPath}</div>
-                                <div class="post_like" >👍   +${post.postLike}</div>
+<!--                                <div class="post_pic" style="'background: #53e4bd url(' + '/images/' + ${post.postImgPath} + ') no-repeat center center;'"></div>-->
+                                <div class="post_text" >${post.postText}</div>
+                                <div class="post_like" >👍 ${post.postLike}</div>
                             </div>
                          `;
 
