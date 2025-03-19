@@ -127,9 +127,9 @@ public class PostController {
         }
     }
 
-    @PostMapping("/getPostDetail")
-    public Result<PostRespDTO> getPostDetail(@RequestHeader("Authorization") String authorization, @RequestBody Map<String,String> request) {
-        Long postId=Long.parseLong(request.get("postId"));
+    @GetMapping("/getPostDetail")
+    public Result<PostRespDTO> getPostDetail(@RequestHeader("Authorization") String authorization, @RequestParam Long postId) {
+
         PostDTO post=postService.getPostByPostId(postId);
         PostRespDTO postRespDTO=new PostRespDTO();
 
