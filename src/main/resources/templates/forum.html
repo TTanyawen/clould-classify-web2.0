@@ -478,6 +478,35 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        /*    帖子详情的按钮样式*/
+        /* 基础样式 */
+        .to_post_detail {
+            background-color: #f0f0f0; /* 浅灰色背景 */
+            margin-top: 25px;
+            margin-right: 15px;
+            padding: 8px 12px; /* 内边距 */
+            border-radius: 4px; /* 圆角边框 */
+            display: inline-block; /* 使元素宽度适应内容 */
+            transition: background-color 0.3s, color 0.3s; /* 平滑过渡效果 */
+        }
+
+        /* 链接样式 */
+        .to_post_detail a {
+            color: #007bff; /* 蓝色文本 */
+            text-decoration: none; /* 无下划线 */
+            font-weight: bold; /* 加粗字体 */
+        }
+
+        /* 鼠标悬停效果 */
+        .to_post_detail:hover {
+            background-color: #e0f7ff; /* 浅蓝色背景 */
+        }
+
+        .to_post_detail a:hover {
+            color: #ff0000; /* 红色文本 */
+            text-decoration: underline; /* 显示下划线 */
+        }
     </style>
 </head>
 <body>
@@ -509,7 +538,7 @@
         <div class="postSearchContainer">
             <form id="postSearchForm" class="postSearchForm">
                 <input type="text" name="postSearchText" id="postSearchText" placeholder="Input somethiing...">
-                <input type="submit" value="提交">
+                <input type="submit" value="查询">
             </form>
         </div>
         <div id="pagination">
@@ -539,6 +568,9 @@
                     </div>
 
                     <div class="post_text" th:text="${post.postText}"></div>
+                    <div class="to_post_detail" id="to_post_detail">
+                        <a href="/postDetail?postId=1">detail</a>
+                    </div>
                     <div class="post_comment" th:if="${session.userLogin}">
 <!--                        <input type="text" style="border: none; background-color: transparent; outline: none;">-->
 <!--                        <form action="/submitComment" method="POST">-->
@@ -832,6 +864,9 @@
                     <div class="currentImgNumBox" id="currentImgNumBox_${post.postId}">3/9</div>
 
                     <div class="post_text">${post.postText}</div>
+                    <div class="to_post_detail" id="to_post_detail">
+                            <a href="/postDetail?postId=${post.postId}">detail</a>
+                        </div>
                     <div class="post_comment" style="display: ${isUserLoggedIn ? 'block' : 'none'};">
                         <form id="commentForm_${post.postId}" class="commentForm">
                             <input type="hidden" name="userId" id="userId" value="${userLogin ? userLogin.userId : ''}">
