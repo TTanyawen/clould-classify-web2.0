@@ -81,5 +81,9 @@ public class PostService {
         Page<PostDTO> pageInfo=postMapper.getPagedSearchedPosts(searchText);
         return new PageResult(pageInfo.getTotal(),pageInfo.getResult());
     }
+
+    public PostDTO getPostByPostId(Long postId) {
+        return postMapper.getPostByPostId(postId);
+    }
 }
 

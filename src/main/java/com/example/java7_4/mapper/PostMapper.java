@@ -31,4 +31,6 @@ public interface PostMapper {
 
     List<PostDTO> getSearchedPosts(String searchText);
     Page<PostDTO> getPagedSearchedPosts(String searchText);
+
+    PostDTO getPostByPostId(Long postId);
 }

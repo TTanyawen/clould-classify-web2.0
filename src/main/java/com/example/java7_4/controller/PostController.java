@@ -127,6 +127,33 @@ public class PostController {
         }
     }
 
+    @PostMapping("/getPostDetail")
+    public Result<PostRespDTO> getPostDetail(@RequestHeader("Authorization") String authorization, @RequestBody Map<String,String> request) {
+        Long postId=Long.parseLong(request.get("postId"));
+        PostDTO post=postService.getPostByPostId(postId);
+        PostRespDTO postRespDTO=new PostRespDTO();
+
+
+        postRespDTO.setPostId(post.getPostId());
+        postRespDTO.setUserId(post.getUserId());
+        postRespDTO.setUserName(post.getUserName());
+        postRespDTO.setPostText(post.getPostText());
+        postRespDTO.setPostLike(post.getPostLike());
+        postRespDTO.setUserProfilePath(post.getUserProfilePath());
+
+       //解析postImgPath
+        String[] paths = post.getPostImgPath().split("@_@");
+        List<String> pathList = new ArrayList<>();
+        for (String path : paths) {
+            if (!path.isEmpty()) {
+                pathList.add(path);
+            }
+        }
+        postRespDTO.setPostImgPaths(pathList);
+        return Result.success(postRespDTO);
+
+    }
+
     @PostMapping("/sendPost")
     public Result<Boolean> sendPost(@RequestHeader("Authorization") String authorization
             , @RequestParam("text") String text
