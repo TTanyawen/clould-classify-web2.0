@@ -355,6 +355,35 @@
             background-color: #007BFF;
             color: white;
         }
+
+
+    /*    帖子详情的按钮样式*/
+        /* 基础样式 */
+        .to_post_detail {
+            background-color: #f0f0f0; /* 浅灰色背景 */
+            margin-left: 20px;
+            padding: 8px 12px; /* 内边距 */
+            border-radius: 4px; /* 圆角边框 */
+            display: inline-block; /* 使元素宽度适应内容 */
+            transition: background-color 0.3s, color 0.3s; /* 平滑过渡效果 */
+        }
+
+        /* 链接样式 */
+        .to_post_detail a {
+            color: #007bff; /* 蓝色文本 */
+            text-decoration: none; /* 无下划线 */
+            font-weight: bold; /* 加粗字体 */
+        }
+
+        /* 鼠标悬停效果 */
+        .to_post_detail:hover {
+            background-color: #e0f7ff; /* 浅蓝色背景 */
+        }
+
+        .to_post_detail a:hover {
+            color: #ff0000; /* 红色文本 */
+            text-decoration: underline; /* 显示下划线 */
+        }
     </style>
 </head>
 <body>
@@ -408,6 +437,9 @@
                         <div class="post_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/' + ${post.postImgPath} + '\'' + ') no-repeat center center;'"></div>
                         <div class="post_text" th:text="${post.postText}"></div>
                         <div class="post_like" th:text="'👍   '+${post.postLike}"></div>
+                        <div class="to_post_detail" id="to_post_detail">
+                            <a href="/postDetail?postId=1">detail</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -515,6 +547,9 @@
 <!--                                <div class="post_pic" style="'background: #53e4bd url(' + '/images/' + ${post.postImgPath} + ') no-repeat center center;'"></div>-->
                                 <div class="post_text" >${post.postText}</div>
                                 <div class="post_like" >👍 ${post.postLike}</div>
+                                <div class="to_post_detail" id="to_post_detail">
+                                     <a href="/postDetail?postId=${post.postId}">detail</a>
+                                </div>
                             </div>
                          `;
 
