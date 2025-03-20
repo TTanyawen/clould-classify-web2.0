@@ -237,7 +237,13 @@
       background-color: #e1e7e8;
       line-height: 1.5;
     }
-
+    .create_time{
+      float: right;
+      height: 30px;
+      width: 210px;
+      margin-top:80px;
+      background-color: rgba(255, 255, 255, 0.35);
+    }
     .comment_section {
       margin-top: 32px;
     }
@@ -655,7 +661,9 @@
                         <button class="button right" id="nextButton_${post.postId}">&gt;</button>
                       </div>
                       <div class="currentImgNumBox" id="currentImgNumBox_${post.postId}">${currentIndex+1}/${lenOfPostsImgs}</div>
-                      <div class="post_text">${post.postText}</div>
+                      <div class="post_text">${post.postText}
+                            <div class="create_time">${post.createTime}</div>
+                      </div>
 
                       <div class="post_comment" style="display: ${isUserLoggedIn ? 'block' : 'none'};">
                         <form id="commentForm_${post.postId}" class="commentForm">
