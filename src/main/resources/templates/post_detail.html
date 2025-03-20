@@ -335,6 +335,70 @@
       font-weight: bolder;
       font-size: larger;
     }
+
+
+    .post_like{
+      float: right;
+      height: 50px;
+      width: 100px;
+      margin-left: 650px;
+      margin-top: 20px;
+      /*background-color: #cce9d0;*/
+      color: white;
+    }
+
+    .post_like .like_num_post{
+      float: right;
+      height: 50px;
+      width: 50px;
+      color: #031a42;
+      font-size: 25px;
+      font-weight: bolder;
+      line-height: 50px;
+    }
+    .post_like .like_btn{
+      float: right;
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      background-color: rgba(109, 200, 227, 0.52);
+      cursor: pointer; /* 添加此属性以更改鼠标样式 */
+
+      font-size: 25px;
+      font-weight: bolder;
+      line-height: 50px;
+
+    }
+
+
+
+    main .comment_section .comment_like{
+      float: right;
+      height: 20px;
+      width: 50px;
+      margin-right: 40px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      color: white;
+    }
+    main .comment_section .comment_like .like_btn{
+      float: left;
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      background-color: rgba(109, 200, 227, 0.52);
+      cursor: pointer; /* 添加此属性以更改鼠标样式 */
+    }
+
+    main .comment_section .comment_like .like_num_comment{
+      float: right;
+      height: 20px;
+      width: 20px;
+      color: #031a42;
+      line-height: 20px;
+      font-size: 20px;
+    }
+
   </style>
 </head>
 <body>
@@ -373,6 +437,10 @@
 <!--          <div class="profile_name" th:text="${post.userName}"></div>-->
 <!--          <div class="post_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/' + ${post.postImgPath} + '\'' + ') no-repeat center center;'"></div>-->
 <!--          <div class="post_text" th:text="${post.postText}"></div>-->
+<!--          <div class="post_like" data-postId="${post.postId}">-->
+<!--            <div class="like_btn" onclick="likePost('${post.postId}')">👍</div>-->
+<!--            <div class="like_num_post">${post.postLike}</div>-->
+<!--          </div>-->
         </div>
         <div class="comment_section">
 <!--          <div class="comment-item" th:each="comment:${comments}" th:if="${comment.postId} == ${post.postId}">-->
@@ -380,6 +448,10 @@
 <!--              <div class="profile_pic" th:style="'background: #53e4bd url(' + '\'' + '/images/profiles/' + ${comment.userId} + '.jpg'+'\'' + ') no-repeat center center;'"></div>-->
 <!--              <div class="profile_name" th:text="${comment.userName}"></div>-->
 <!--              <div class="comment_text" th:text="${comment.commentText}"></div>-->
+    <!--          <div class="comment_like" th:attr="data-commentId=${comment.commentId}">-->
+    <!--            <div class="like_btn" th:attr="onclick=|likeComment('${comment.commentId}')|">👍</div>-->
+    <!--            <div class="like_num_comment" th:text="${comment.commentLike}"></div>-->
+    <!--          </div>-->
 <!--            </div>-->
 <!--          </div>-->
         </div>
@@ -514,6 +586,10 @@
                       </div>
                       <div class="currentImgNumBox" id="currentImgNumBox_${post.postId}">${currentIndex+1}/${lenOfPostsImgs}</div>
                       <div class="post_text">${post.postText}</div>
+                      <div class="post_like" data-postId="${post.postId}">
+                        <div class="like_btn" onclick="likePost('${post.postId}')">👍</div>
+                        <div class="like_num_post">${post.postLike}</div>
+                      </div>
                 `;
 
 
@@ -572,6 +648,10 @@
                             <div class="profile_pic" style="background: #53e4bd url('/images/profiles/${comment.userId}.jpg') no-repeat center center; background-size: cover;"></div>
                             <div class="profile_name">${comment.userName}</div>
                             <div class="comment_text">${comment.commentText}</div>
+                             <div class="comment_like" data-commentId="${comment.commentId}">
+                                <div class="like_btn" onclick="likeComment('${comment.commentId}')">👍</div>
+                                <div class="like_num_comment">${comment.commentLike}</div>
+                             </div>
                           </div>
                         </div>
                     `;
@@ -601,6 +681,63 @@
   function closeModal() {
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
+  }
+
+
+  //点赞
+  function likePost(postId) {
+    console.log("likePost")
+    const token = localStorage.getItem('authToken');  // 获取本地存储中的token
+    console.log("addEventListener:token"+token)
+    fetch('/post/likePost/' + postId, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,  // 设置 Authorization 头
+        'Content-Type': 'application/json'
+      }
+    })
+            .then(response => response.json())
+            .then(data => {
+              if (data.code===1&& null!=data.data) {
+                const postLikeElement = document.querySelector(`.post_like[data-postId='${postId}'] .like_num_post`);
+                if (postLikeElement) {
+                  console.log("更新post点赞数据")
+                  postLikeElement.textContent = data.data;
+                }
+              } else{
+                alert(data.msg);
+              }
+            })
+            .catch(error => console.error('Error:', error));
+  }
+
+  //点赞
+  function likeComment(commentId) {
+    console.log("likeComment")
+    const token = localStorage.getItem('authToken');  // 获取本地存储中的token
+
+    console.log("addEventListener:token"+token)
+    fetch('/post/likeComment/' + commentId, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,  // 设置 Authorization 头
+        'Content-Type': 'application/json'
+      }
+    })
+            .then(response => response.json())
+            .then(data => {
+              if (data.code===1&& null!=data.data) {
+                // 更新点赞数显示，假设 class="post_like" 是显示点赞数的元素
+                // document.querySelector('.like_num_comment').textContent =  data.newLikeCount;
+                const commentLikeElement = document.querySelector(`.comment_like[data-commentId='${commentId}'] .like_num_comment`);
+                if (commentLikeElement) {
+                  commentLikeElement.textContent = data.data;
+                }
+              } else {
+                alert(data.msg);
+              }
+            })
+            .catch(error => console.error('Error:', error));
   }
 </script>
 </body>
