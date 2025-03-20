@@ -27,6 +27,7 @@ public interface PostMapper {
 
     //查找当前所有用户的post，并带有用户信息
     Page<PostDTO> selectPagedPostsWithUserAvatar();
+
     int updateById(@Param("postId") Long postId,@Param("postLike") Long postLike);
 
     @AutoFill(value = OperationType.INSERT)

@@ -21,6 +21,7 @@
         <result column="post_text" property="postText" />
         <result column="post_like" property="postLike" />
         <result column="user_profile_path" property="userProfilePath" />
+        <result column="create_time" property="createTime" />
 
     </resultMap>
     <insert id="save" parameterType="com.example.java7_4.entity.Post" useGeneratedKeys="true" keyProperty="postId">
@@ -34,13 +35,13 @@
 
 
     <select id="getSearchedPosts" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id and post_text LIKE CONCAT('%', #{searchText}, '%');
     </select>
 
 
     <select id="getPagedSearchedPosts" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id and post_text LIKE CONCAT('%', #{searchText}, '%')
     </select>
 
@@ -49,20 +50,20 @@
         where post_id=#{postId};
     </select>
     <select id="selectMePostsWithUserAvatar" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id AND tb_post.user_id=#{userId};
     </select>
     <select id="selectPostsWithUserAvatar" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id;
     </select>
 
     <select id="selectPagedPostsWithUserAvatar" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id
     </select>
     <select id="getPostByPostId" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_text,post_like,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id AND #{postId}=tb_post.post_id
     </select>
 

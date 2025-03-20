@@ -3,6 +3,7 @@ package com.example.java7_4.entity;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -15,6 +16,8 @@ public class PostDTO implements Serializable {
     private Long postLike;
     private String userProfilePath; // 额外的字段，用于存储用户头像
     private String userName;
+
+    private LocalDateTime createTime;
     // Getters 和 Setters
 }
 
