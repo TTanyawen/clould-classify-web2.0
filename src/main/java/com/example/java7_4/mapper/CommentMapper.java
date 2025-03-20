@@ -14,7 +14,7 @@ import java.util.List;
 
 @Mapper
 public interface CommentMapper {
-    @Select("SELECT c.comment_id,c.user_id,c.post_id,c.comment_text,c.comment_like,u.user_name FROM tb_comment c,tb_user u WHERE c.user_id=u.user_id;")
+    @Select("SELECT c.comment_id,c.user_id,c.post_id,c.comment_text,c.comment_like,u.user_name FROM tb_comment c,tb_user u WHERE c.user_id=u.user_id ORDER BY c.create_time DESC;")
     List<CommentDTO> selectCommentsWithUsername();
 
     
@@ -24,7 +24,8 @@ public interface CommentMapper {
 
     @Select("SELECT * FROM tb_comment where comment_id=#{commentId}")
     Comment selectById(Long commentId);
-    @Select("SELECT * FROM tb_comment")
+
+    @Select("SELECT * FROM tb_comment ORDER BY create_time DESC;")
     List<Comment> selectAll();
 
     @AutoFill(value = OperationType.UPDATE)
@@ -33,6 +34,6 @@ public interface CommentMapper {
     @AutoFill(value = OperationType.UPDATE)
     int updateByIdTest(Comment comment);
 
-    @Select("SELECT c.comment_id,c.user_id,c.post_id,c.comment_text,c.comment_like,u.user_name FROM tb_comment c,tb_user u WHERE c.user_id=u.user_id AND c.post_id=#{postId};")
+    @Select("SELECT c.comment_id,c.user_id,c.post_id,c.comment_text,c.comment_like,u.user_name FROM tb_comment c,tb_user u WHERE c.user_id=u.user_id AND c.post_id=#{postId} ORDER BY c.create_time DESC;")
     List<CommentDTO> getCommentsByPostId(Long postId);
 }
