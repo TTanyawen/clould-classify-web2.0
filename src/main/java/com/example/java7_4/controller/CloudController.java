@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.plaf.synth.SynthTextAreaUI;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +65,7 @@ public class CloudController {
             postRespDTO.setPostText(post.getPostText());
             postRespDTO.setPostLike(post.getPostLike());
             postRespDTO.setUserProfilePath(post.getUserProfilePath());
+            postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
             //解析postImgPath
             String[] paths = post.getPostImgPath().split("@_@");
@@ -125,6 +127,7 @@ public class CloudController {
             postRespDTO.setUserName(post.getUserName());
             postRespDTO.setPostText(post.getPostText());
             postRespDTO.setPostLike(post.getPostLike());
+            postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             postRespDTO.setUserProfilePath(post.getUserProfilePath());
 
             //解析postImgPath
@@ -179,6 +182,7 @@ public class CloudController {
             postRespDTO.setPostText(post.getPostText());
             postRespDTO.setPostLike(post.getPostLike());
             postRespDTO.setUserProfilePath(post.getUserProfilePath());
+            postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
             //解析postImgPath
             String[] paths = post.getPostImgPath().split("@_@");

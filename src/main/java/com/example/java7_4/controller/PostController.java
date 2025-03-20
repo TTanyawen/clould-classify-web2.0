@@ -21,6 +21,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -57,6 +58,8 @@ public class PostController {
             postRespDTO.setPostText(post.getPostText());
             postRespDTO.setPostLike(post.getPostLike());
             postRespDTO.setUserProfilePath(post.getUserProfilePath());
+            postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
 
             //解析postImgPath
             String[] paths = post.getPostImgPath().split("@_@");
@@ -94,6 +97,8 @@ public class PostController {
             postRespDTO.setPostText(post.getPostText());
             postRespDTO.setPostLike(post.getPostLike());
             postRespDTO.setUserProfilePath(post.getUserProfilePath());
+            postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
 
             //解析postImgPath
             String[] paths = post.getPostImgPath().split("@_@");
@@ -140,8 +145,10 @@ public class PostController {
         postRespDTO.setPostText(post.getPostText());
         postRespDTO.setPostLike(post.getPostLike());
         postRespDTO.setUserProfilePath(post.getUserProfilePath());
+        postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
-       //解析postImgPath
+
+        //解析postImgPath
         String[] paths = post.getPostImgPath().split("@_@");
         List<String> pathList = new ArrayList<>();
         for (String path : paths) {

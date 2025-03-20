@@ -237,6 +237,13 @@
             margin-top: 10px;
             background-color: rgba(255, 255, 255, 0.35);
         }
+        main .post_item .create_time{
+            float: right;
+            height: 20px;
+            width: 170px;
+            margin-top:80px;
+            background-color: rgba(255, 255, 255, 0.35);
+        }
         main .post_item .post_like{
             float: right;
             height: 20px;
@@ -545,7 +552,9 @@
                                 <div class="post_pic" style="background: #53e4bd url('/images${post.postImgPaths[0]}') no-repeat center center; background-size: cover;" ></div>
 
 <!--                                <div class="post_pic" style="'background: #53e4bd url(' + '/images/' + ${post.postImgPath} + ') no-repeat center center;'"></div>-->
-                                <div class="post_text" >${post.postText}</div>
+                                <div class="post_text" >${post.postText}
+                                    <div class="create_time">${post.createTime}</div>
+                                </div>
                                 <div class="post_like" >👍 ${post.postLike}</div>
                                 <div class="to_post_detail" id="to_post_detail">
                                      <a href="/postDetail?postId=${post.postId}">detail</a>
