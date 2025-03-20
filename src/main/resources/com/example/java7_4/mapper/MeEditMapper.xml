@@ -7,6 +7,10 @@
         <result column="user_name" property="userName" />
         <result column="user_password" property="userPassword" />
         <result column="user_profile_path" property="userProfilePath" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_user" property="createUser" />
+        <result column="update_user" property="updateUser" />
     </resultMap>
     <update id="updateMeInfoById">
         UPDATE tb_user
@@ -17,8 +21,11 @@
             <if test="userPassword != null and userPassword!='' ">
                 user_password = #{userPassword},
             </if>
-            <if test="userProfilePath != null and userProfilePath!='' ">
-                user_profile_path = #{userProfilePath},
+            <if test="updateTime != null ">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser != null ">
+                update_user = #{updateUser},
             </if>
         </set>
         WHERE user_id = #{userId}

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @TableName("tb_user")
@@ -16,4 +17,9 @@ public class User implements Serializable {
     private String userPassword;
     private String userProfilePath;
     private Long userPoints;
+
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+    private Long createUser;
+    private Long updateUser;
 }
