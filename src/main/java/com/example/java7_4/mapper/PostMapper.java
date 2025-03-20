@@ -1,8 +1,10 @@
 package com.example.java7_4.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.java7_4.annotation.AutoFill;
 import com.example.java7_4.entity.Post;
 import com.example.java7_4.entity.PostDTO;
+import com.example.java7_4.enumeration.OperationType;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -27,6 +29,7 @@ public interface PostMapper {
     Page<PostDTO> selectPagedPostsWithUserAvatar();
     int updateById(@Param("postId") Long postId,@Param("postLike") Long postLike);
 
+    @AutoFill(value = OperationType.INSERT)
     int save(Post post);
 
     List<PostDTO> getSearchedPosts(String searchText);

@@ -27,7 +27,8 @@ public class AutoFillAspect {
     /**
      * 切入点
      */
-    @Pointcut("execution(* com.example.java7_4.mapper.CommentMapper.*(..)) && @annotation(com.example.java7_4.annotation.AutoFill)")
+    @Pointcut("execution(* com.example.java7_4.mapper.CommentMapper.*(..)) && @annotation(com.example.java7_4.annotation.AutoFill) " +
+            "|| execution(* com.example.java7_4.mapper.PostMapper.*(..)) && @annotation(com.example.java7_4.annotation.AutoFill) ")
     public void autoFillPointCut(){}
 
     /**
