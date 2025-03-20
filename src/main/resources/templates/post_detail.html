@@ -399,6 +399,73 @@
       font-size: 20px;
     }
 
+    .post_comment{
+      float: left;
+      height: 20px;
+      width: 720px;
+      margin-left: 20px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      background-color: rgba(242, 251, 251, 0.56);
+    }
+
+
+    /* 整体评论区域样式 */
+    .post_comment {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 评论表单样式 */
+    .commentForm {
+      height: 20px;
+      width: 720px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* 评论输入框样式 */
+    .commentForm input[type="text"] {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      background-color: #fff;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .commentForm input[type="text"]:focus {
+      border-color: #007bff;
+    }
+
+    /* 提交按钮样式 */
+    .commentForm input[type="submit"] {
+      float: right;
+      width: 100px;
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+
+    .commentForm input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    /* 隐藏的输入框样式 */
+    .commentForm input[type="hidden"] {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -473,6 +540,8 @@
 <script th:inline="javascript">
   /*<![CDATA[*/
   var postId = /*[[${session.postId}]]*/ null;  // 获取 session 中的 postId
+  /*<![CDATA[*/
+  var userLogin = /*[[${session.userLogin}]]*/ null;
   // JavaScript 示例
   window.onload = function() {
     // 获取当前页面的文件名
@@ -576,6 +645,7 @@
                 initLenOfPostsImgs(post);
                 // 生成帖子部分
                 const meinfo = document.querySelector(".meinfo");
+                const isUserLoggedIn = userLogin !== null;
                 meinfo.innerHTML = `
 
                       <div class="profile_pic" style="background: #53e4bd url('/images/${post.userProfilePath}') no-repeat center center; background-size: cover;"></div>
@@ -586,6 +656,16 @@
                       </div>
                       <div class="currentImgNumBox" id="currentImgNumBox_${post.postId}">${currentIndex+1}/${lenOfPostsImgs}</div>
                       <div class="post_text">${post.postText}</div>
+
+                      <div class="post_comment" style="display: ${isUserLoggedIn ? 'block' : 'none'};">
+                        <form id="commentForm_${post.postId}" class="commentForm">
+                            <input type="hidden" name="userId" id="userId" value="${userLogin ? userLogin.userId : ''}">
+                            <input type="hidden" name="postId" id="postId" value="${post.postId}">
+                            <input type="text" name="commentText" id="commentText" placeholder="Write your comment" style="border: none; background-color: transparent; outline: none;">
+                            <input type="submit" value="提交评论" data-postId="${post.postId}">
+                        </form>
+                      </div>
+
                       <div class="post_like" data-postId="${post.postId}">
                         <div class="like_btn" onclick="likePost('${post.postId}')">👍</div>
                         <div class="like_num_post">${post.postLike}</div>
@@ -609,7 +689,68 @@
                   });
                 });
 
+
+                //提交评论处form监听
+                const commentForms = document.querySelectorAll('.commentForm');
+                commentForms.forEach(form => {
+                  form.addEventListener('submit', async function (event) {
+                    event.preventDefault(); // 阻止默认表单提交行为
+                    console.log("~~~~~~~~~~~formid:"+form.id);
+                    const token = localStorage.getItem('authToken');  // 获取本地存储中的token
+                    // 获取提交按钮元素
+                    const submitButton = event.submitter;
+
+                    const userId = document.querySelector('#userId').value;
+                    const postId = submitButton.getAttribute('data-postid');
+                    // const commentText = document.querySelector('#commentText').value;
+
+                    const commentText = form.querySelector('input[name="commentText"]').value;
+
+                    console.log("postId:"+postId+" userId:"+userId+" commentText:"+commentText);
+                    // 创建请求体
+                    const requestBody = {
+                      userId: userId,
+                      postId: postId,
+                      commentText: commentText
+                    };
+                    console.log("发送评论"+requestBody);
+                    try {
+                      // 发送 Fetch 请求
+                      const response = await fetch('/post/submitComment', {
+                        method: 'POST',
+                        headers: {
+                          'Authorization': `Bearer ${token}`,  // 设置 Authorization 头
+                          'Content-Type': 'application/json'  // 发送 JSON 数据
+                        },
+                        body: JSON.stringify(requestBody)  // 将数据转为 JSON 字符串
+                      });
+                      console.log()
+                      // 检查响应状态
+                      if (!response.ok) {
+                        throw new Error('网络响应失败');
+                      }
+
+                      // 解析返回的 JSON 数据
+                      const result = await response.json();
+                      console.log(result);
+                      // 根据返回的 Result 封装信息处理
+                      if (result.code === 1) {
+                        // 评论成功
+                        loadDetail(token);
+                        alert("评论已发送！");
+                      } else {
+                        alert(result.msg);
+                      }
+                    } catch (error) {
+                      alert("评论失败");
+                    }
+
+                  })
+                });
+
                 loadComments(token,postId);
+
+
 
               } else {
                 console.error('Invalid data structure:', data);
@@ -739,6 +880,11 @@
             })
             .catch(error => console.error('Error:', error));
   }
+
+
+
+
+
 </script>
 </body>
 </html>
