@@ -390,6 +390,7 @@
       alert('未登录,无jwt令牌.');
       window.location.href = '/toLogin';  // 未登录时跳转到登录页面
     } else {
+
       // 如果有JWT，则可以继续加载页面内容
       loadDetail(token);
     }
@@ -404,6 +405,9 @@
   }
   //切换图片
   function changeImg(btnId,post){
+    if(lenOfPostsImgs==1){
+      return;
+    }
     console.log("~~~~~~~~~~~~~~~~~~~changeImg");
     const str = btnId;
     const direction=str.substring(0,4);
@@ -455,7 +459,7 @@
               // 检查返回的 data 是否包含期望的结构
               if (data.code === 1 && null!=data.data) {
                 const post = data.data;
-
+                initLenOfPostsImgs(post);
                 // 生成帖子部分
                 const meinfo = document.querySelector(".meinfo");
                 meinfo.innerHTML = `
@@ -466,12 +470,13 @@
                         <button class="button left" id="prevButton_${post.postId}">&lt;</button>
                         <button class="button right" id="nextButton_${post.postId}">&gt;</button>
                       </div>
-                      <div class="currentImgNumBox" id="currentImgNumBox_${post.postId}">3/9</div>
+                      <div class="currentImgNumBox" id="currentImgNumBox_${post.postId}">${currentIndex+1}/${lenOfPostsImgs}</div>
                       <div class="post_text">${post.postText}</div>
                 `;
 
-                initLenOfPostsImgs(post);
 
+                //更改index/total
+                loadImgIndex(post.postId);
                 //为每一个post的按钮添加监听
                 // 选择所有按钮
                 const allButtons = meinfo.querySelectorAll('button');
