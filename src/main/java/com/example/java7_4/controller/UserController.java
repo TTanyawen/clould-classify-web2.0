@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,7 @@ import java.util.Map;
 @RestController
 @Tag(name="用户接口文档")
 @Slf4j
+@CrossOrigin(origins = "*")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -42,7 +44,8 @@ public class UserController {
    // 1. 用户名校验(合法性+唯一性)
     //2. 密码校验
     @RequestMapping("/checkRegister")
-    public Result checkRegister(@RequestBody Map<String,String> params,HttpSession session,Model model){
+    @CrossOrigin(origins = "*")
+    public Result checkRegister(@RequestBody Map<String,String> params,Model model){
 
         System.out.println("checkRegister1");
 
@@ -138,6 +141,7 @@ public class UserController {
 
 
     @RequestMapping("/doLogin")
+    @CrossOrigin(origins = "*")
     public Result<String> doLogin(@RequestBody Map<String,String> params, HttpSession session) {
         String userName=params.get("userName");
         String userPassword=params.get("userPassword");

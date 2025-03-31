@@ -1,6 +1,7 @@
 package com.example.java7_4.controller;
 
 import com.example.java7_4.constant.RedisKeyConstants;
+import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.Comment;
 import com.example.java7_4.entity.CommentDTO;
 import com.example.java7_4.entity.PostDTO;
@@ -24,6 +25,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/post")
 @Tag(name="用户接口文档")
+@CrossOrigin(origins = "*")
 public class CommentController {
 
     @Autowired
@@ -49,7 +51,8 @@ public class CommentController {
     @PostMapping("/submitComment")
     public Result  submitComment(@RequestHeader("Authorization") String authorization, @RequestBody Map<String,String> params) {
         System.out.println("SC01");
-        Long userId=Long.parseLong(params.get("userId"));
+//        Long userId=Long.parseLong(params.get("userId"));
+        Long userId= BaseContext.getCurrentId();
         Long postId=Long.parseLong(params.get("postId")) ;
         String commentText=params.get("commentText");
         System.out.print("SC02");

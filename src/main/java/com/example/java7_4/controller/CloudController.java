@@ -32,6 +32,7 @@ import java.util.Map;
 @RestController
 @Tag(name="数据接口文档")
 @Slf4j
+@CrossOrigin(origins = "*")
 public class CloudController {
 
     @Autowired
@@ -90,6 +91,7 @@ public class CloudController {
 
     @RequestMapping({"/getCloudTypes"})
     @Operation(summary = "getAllCloudTypes")
+    @CrossOrigin(origins = "*")
     public Result<List<CloudType>> getAllCloudTypes(@RequestHeader("Authorization") String authorization) {
         System.out.println("getAllCloudTypes");
         List<CloudType> cloudTypes=cloudTypeService.getCloudTypes();
@@ -98,6 +100,7 @@ public class CloudController {
 
     @RequestMapping("/getKnowData")
     @Operation(summary = "getKnowData")
+    @CrossOrigin(origins = "*")
     public Result<List<CloudType>> getKnowData(@RequestHeader("Authorization") String authorization) {
         String key= RedisKeyConstants.CLOUD_TYPES;
         List<CloudType> clouds=(List<CloudType>) redisTemplate.opsForValue().get(key);

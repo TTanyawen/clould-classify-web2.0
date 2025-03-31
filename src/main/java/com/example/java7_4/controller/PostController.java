@@ -28,6 +28,7 @@ import java.util.*;
 @RequestMapping("/post")
 @Tag(name="用户接口文档")
 @Slf4j
+@CrossOrigin(origins = "*")
 public class PostController {
 
     @Autowired
@@ -84,6 +85,7 @@ public class PostController {
 
     @RequestMapping("/getSearchedPosts")
     @Operation(summary = "getSearchedPosts")
+    @CrossOrigin(origins = "*")
     public Result<Map<String,Object>> getSearchedPosts(@RequestHeader("Authorization") String authorization,@RequestBody Map<String,String> searchRequest) {
         System.out.println("getSearchedPosts");
         List<PostDTO> searchedPosts=postService.getSearchedPosts(searchRequest.get("searchText"));

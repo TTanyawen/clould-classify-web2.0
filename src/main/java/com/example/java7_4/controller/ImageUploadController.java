@@ -17,6 +17,7 @@ import java.io.IOException;
 @RestController
 @Tag(name="用户接口文档")
 @Slf4j
+@CrossOrigin(origins = "*")
 public class ImageUploadController {
 
     @Autowired

@@ -59,7 +59,7 @@ mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
 
 server:
-  port: 8090
+  port: 8099
   reactive:
     session:
       cookie:
