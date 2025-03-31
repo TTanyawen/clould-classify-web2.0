@@ -40,6 +40,17 @@ public class PostController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @PostMapping("/collectPost/{postId}")
+    public Result<Long> collectPost(@RequestHeader("Authorization") String authorization, @PathVariable("postId") Long postId) {
+        try {
+            Long newCollectCount = postService.incrementPostCollect(postId);// 增加/取消点赞
+            redisTemplate.delete(RedisKeyConstants.POSTS);//因为数据库点赞数更新了，删除Redis里头的posts缓存
+            return Result.success(newCollectCount);
+        } catch (Exception e) {
+            return Result.error("Failed to like the post");
+        }
+    }
+
     @RequestMapping("/getPagedSearchedPosts")
     @Operation(summary = "getPagedSearchedPosts")
     public Result<Map<String,Object>> getPagedSearchedPosts(@RequestHeader("Authorization") String authorization,@RequestBody Map<String,Object> searchRequest) {
@@ -58,6 +69,7 @@ public class PostController {
             postRespDTO.setUserName(post.getUserName());
             postRespDTO.setPostText(post.getPostText());
             postRespDTO.setPostLike(post.getPostLike());
+            postRespDTO.setPostCollect(post.getPostCollect());
             postRespDTO.setUserProfilePath(post.getUserProfilePath());
             postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
@@ -98,6 +110,7 @@ public class PostController {
             postRespDTO.setUserName(post.getUserName());
             postRespDTO.setPostText(post.getPostText());
             postRespDTO.setPostLike(post.getPostLike());
+            postRespDTO.setPostCollect(post.getPostCollect());
             postRespDTO.setUserProfilePath(post.getUserProfilePath());
             postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
@@ -146,6 +159,7 @@ public class PostController {
         postRespDTO.setUserName(post.getUserName());
         postRespDTO.setPostText(post.getPostText());
         postRespDTO.setPostLike(post.getPostLike());
+        postRespDTO.setPostCollect(post.getPostCollect());
         postRespDTO.setUserProfilePath(post.getUserProfilePath());
         postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
@@ -174,6 +188,7 @@ public class PostController {
         post.setUserId(userId);
         post.setPostImgPath(imgPath);
         post.setPostLike(0L);
+        post.setPostCollect(0L);
         post.setPostText(text);
 
         //保存图片
@@ -228,6 +243,8 @@ public class PostController {
         Post post=new Post();
         post.setUserId(userId);
         post.setPostLike(0L);
+        post.setPostCollect(0L);
+
         post.setPostText(text);
 
         //保存图片

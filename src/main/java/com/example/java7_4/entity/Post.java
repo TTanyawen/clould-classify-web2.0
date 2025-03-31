@@ -22,4 +22,6 @@ public class Post implements Serializable {
     private LocalDateTime updateTime;
     private Long createUser;
     private Long updateUser;
+
+    private Long postCollect;
 }

@@ -30,6 +30,9 @@ public interface PostMapper {
 
     int updateById(@Param("postId") Long postId,@Param("postLike") Long postLike);
 
+
+    int updatePostCollectById(@Param("postId") Long postId,@Param("postCollect") Long postCollect);
+
     @AutoFill(value = OperationType.INSERT)
     int save(Post post);
 

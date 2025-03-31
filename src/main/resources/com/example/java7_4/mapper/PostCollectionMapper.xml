@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.java7_4.mapper.PostCollectionMapper">
+
+    <resultMap id="PostCollectionMap" type="PostCollection">
+        <result column="post_id" property="postId" />
+        <result column="user_id" property="userId" />
+        <result column="collect_time" property="collectTime" />
+    </resultMap>
+
+    <resultMap id="PostCollectionRespDTOMap" type="PostCollectionRespDTO">
+        <result column="post_id" property="postId" />
+        <result column="user_id" property="userId" />
+        <result column="post_img_path" property="postImgPath" />
+        <result column="post_text" property="postText" />
+        <result column="post_like" property="postLike" />
+        <result column="post_collect" property="postCollect" />
+        <result column="user_profile_path" property="userProfilePath" />
+        <result column="user_name" property="userName" />
+        <result column="create_time" property="createTime" />
+        <result column="collect_time" property="collectTime" />
+    </resultMap>
+
+
+    <insert id="save" parameterType="com.example.java7_4.entity.PostCollection" >
+        INSERT INTO tb_post_collection (user_id, post_id, collect_time)
+        VALUES (#{userId}, #{postId}, #{collectTime})
+    </insert>
+    <delete id="delete" parameterType="com.example.java7_4.entity.PostCollection">
+        DELETE FROM tb_post_collection
+        WHERE user_id = #{userId} AND post_id = #{postId}
+    </delete>
+
+
+</mapper>

@@ -4,6 +4,7 @@ import com.example.java7_4.constant.JwtClaimsConstant;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.MeEditQueryRepDTO;
 import com.example.java7_4.entity.MeEditUpdateReqDTO;
+import com.example.java7_4.entity.PostCollectionRespDTO;
 import com.example.java7_4.entity.User;
 import com.example.java7_4.exception.FailRegisterException;
 import com.example.java7_4.properties.JwtProperties;
@@ -18,12 +19,10 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/user")
@@ -211,4 +210,13 @@ public class UserController {
         session.setAttribute("userId", userId);
         return Result.success(Boolean.TRUE);
     }
+
+
+    @RequestMapping("/getCollection")
+    public Result<List<PostCollectionRespDTO>> getCollection(@RequestHeader("Authorization") String authorization) {
+        Long userId=BaseContext.getCurrentId();
+        List<PostCollectionRespDTO> postCollectionRespDTOList =userService.getCollection(userId);
+        return Result.success(postCollectionRespDTOList);
+    }
+
 }

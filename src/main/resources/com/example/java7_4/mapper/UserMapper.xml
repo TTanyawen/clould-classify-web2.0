@@ -15,6 +15,20 @@
         <result column="update_user" property="updateUser" />
     </resultMap>
 
+    <resultMap id="PostCollectionRespDTOMap" type="PostCollectionRespDTO">
+        <result column="post_id" property="postId" />
+        <result column="user_id" property="userId" />
+        <result column="post_img_path" property="postImgPath" />
+        <result column="post_text" property="postText" />
+        <result column="post_like" property="postLike" />
+        <result column="post_collect" property="postCollect" />
+        <result column="user_profile_path" property="userProfilePath" />
+        <result column="user_name" property="userName" />
+        <result column="create_time" property="createTime" />
+        <result column="collect_time" property="collectTime" />
+    </resultMap>
+
+
     <update id="updateById">
         UPDATE tb_user
         <set>
@@ -61,6 +75,26 @@
 
     <select id="selectMyPage" resultMap="UserResultMap">
         select * from tb_user
+    </select>
+
+    <select id="getCollection" resultMap="PostCollectionRespDTOMap">
+        SELECT
+            p.post_id,
+            p.user_id,
+            p.post_img_path,
+            p.post_text,
+            p.post_like,
+            u.user_profile_path,
+            u.user_name,
+            p.create_time,
+            pc.collect_time
+        FROM
+            tb_post p
+                JOIN
+            tb_post_collection pc ON p.post_id = pc.post_id
+                JOIN
+            tb_user u ON pc.user_id = u.user_id
+        WHERE pc.user_id = #{userId}
     </select>
 
 

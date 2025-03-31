@@ -65,6 +65,7 @@ public class CloudController {
             postRespDTO.setUserName(post.getUserName());
             postRespDTO.setPostText(post.getPostText());
             postRespDTO.setPostLike(post.getPostLike());
+            postRespDTO.setPostCollect(post.getPostCollect());
             postRespDTO.setUserProfilePath(post.getUserProfilePath());
             postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
@@ -130,6 +131,7 @@ public class CloudController {
             postRespDTO.setUserName(post.getUserName());
             postRespDTO.setPostText(post.getPostText());
             postRespDTO.setPostLike(post.getPostLike());
+            postRespDTO.setPostCollect(post.getPostCollect());
             postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             postRespDTO.setUserProfilePath(post.getUserProfilePath());
 
@@ -184,6 +186,7 @@ public class CloudController {
             postRespDTO.setUserName(post.getUserName());
             postRespDTO.setPostText(post.getPostText());
             postRespDTO.setPostLike(post.getPostLike());
+            postRespDTO.setPostCollect(post.getPostCollect());
             postRespDTO.setUserProfilePath(post.getUserProfilePath());
             postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 

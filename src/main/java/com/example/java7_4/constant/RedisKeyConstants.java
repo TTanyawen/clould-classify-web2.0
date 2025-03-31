@@ -14,6 +14,7 @@ public final class RedisKeyConstants {
 
     public static final String CLOUD_TYPE = "type:";
     public static final String LIKE_POST = "like:post:";
+    public static final String COLLECT_POST = "collect:post:";
     public static final String LIKE_COMMENT = "like:comment:";
 
 

@@ -5,7 +5,9 @@ import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.Post;
 
+import com.example.java7_4.entity.PostCollection;
 import com.example.java7_4.entity.PostDTO;
+import com.example.java7_4.mapper.PostCollectionMapper;
 import com.example.java7_4.mapper.PostMapper;
 import com.example.java7_4.result.PageResult;
 import com.github.pagehelper.Page;
@@ -14,12 +16,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class PostService {
     @Autowired
     private PostMapper postMapper;
+
+    @Autowired
+    private PostCollectionMapper postCollectionMapper;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -84,6 +91,45 @@ public class PostService {
 
     public PostDTO getPostByPostId(Long postId) {
         return postMapper.getPostByPostId(postId);
+    }
+
+    public Long incrementPostCollect(Long postId) {
+        // 查询当前的post
+        Post post = postMapper.selectById(postId);
+        if (post != null) {
+            // 增加/取消点赞
+            Long userId=BaseContext.getCurrentId();
+            String key= RedisKeyConstants.COLLECT_POST +userId+":"+postId;
+            // 1. 判断缓存是否有key
+            Boolean hasCollected = redisTemplate.hasKey(key);
+
+            // 增加一条收藏记录
+            PostCollection postCollection=new PostCollection();
+            postCollection.setUserId(BaseContext.getCurrentId());
+            postCollection.setPostId(postId);
+            postCollection.setCollectTime(LocalDateTime.now());
+            if (hasCollected != null && hasCollected) {
+                // 1.1 有key->取消点赞
+                // Decrement the like count
+                post.setPostCollect(post.getPostCollect() - 1);
+                postMapper.updatePostCollectById(post.getPostId(),post.getPostCollect()); // Update the like count in the database
+                redisTemplate.delete(key); // Remove the like from Redis
+
+                postCollectionMapper.delete(postCollection);
+            } else {
+                // 1.2 没有->增加点赞
+                post.setPostCollect(post.getPostCollect() + 1);
+                postMapper.updatePostCollectById(post.getPostId(),post.getPostCollect()); // Update the like count in the database
+                redisTemplate.opsForValue().set(key, 1); // Add the like to Redis
+
+                postCollectionMapper.save(postCollection);
+            }
+
+
+
+            return post.getPostCollect();
+        }
+        throw new RuntimeException("Post not found");
     }
 }
 

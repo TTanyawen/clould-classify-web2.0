@@ -1,6 +1,9 @@
 package com.example.java7_4.service.impl;
 
 
+import com.example.java7_4.entity.PostCollectionRespDTO;
+import com.example.java7_4.entity.PostDTO;
+import com.example.java7_4.entity.PostRespDTO;
 import com.example.java7_4.entity.User;
 import com.example.java7_4.exception.FailLoginException;
 import com.example.java7_4.exception.FailRegisterException;
@@ -13,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +25,24 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+
+    @Override
+    public List<PostCollectionRespDTO> getCollection(Long userId) {
+        List<PostCollectionRespDTO> postCollectionRespDTOS=userMapper.getCollection(userId);
+//        postCollectionRespDTOS.get()
+        for(PostCollectionRespDTO postCollectionRespDTO:postCollectionRespDTOS){
+            //解析postImgPath
+            String[] paths = postCollectionRespDTO.getPostImgPath().split("@_@");
+            List<String> pathList = new ArrayList<>();
+            for (String path : paths) {
+                if (!path.isEmpty()) {
+                    pathList.add(path);
+                }
+            }
+            postCollectionRespDTO.setPostImgPaths(pathList);
+        }
+        return postCollectionRespDTOS;
+    }
 
     public User getUserById(Long userId) {
         return userMapper.selectById(userId);

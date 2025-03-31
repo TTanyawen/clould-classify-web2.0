@@ -2,10 +2,12 @@ package com.example.java7_4.mapper;
 
 
 import com.example.java7_4.annotation.AutoFill;
+import com.example.java7_4.entity.PostCollectionRespDTO;
 import com.example.java7_4.entity.User;
 import com.example.java7_4.enumeration.OperationType;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -24,4 +26,7 @@ public interface UserMapper {
     int insert(User user);
 
     Page<User> selectMyPage();
+
+
+    List<PostCollectionRespDTO> getCollection(Long userId);
 }

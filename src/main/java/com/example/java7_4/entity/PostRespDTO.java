@@ -18,5 +18,7 @@ public class PostRespDTO implements Serializable {
     private String userName;
     private String createTime;
     // Getters 和 Setters
+
+    private Long postCollect;
 }
 
