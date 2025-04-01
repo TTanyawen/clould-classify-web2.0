@@ -255,11 +255,6 @@ public class PostController {
         String uploadDirectory = rootDirectory + File.separator + "static" + File.separator + "images";
         // 创建文件名，使用用户ID作为前缀
 
-
-
-
-
-
         List<String> postImgPathList=new ArrayList<String>();
         for(MultipartFile file:images){
             try {
