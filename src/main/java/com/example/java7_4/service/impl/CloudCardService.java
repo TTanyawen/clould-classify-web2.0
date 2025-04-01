@@ -3,6 +3,7 @@ package com.example.java7_4.service.impl;
 
 import com.example.java7_4.entity.CloudCard;
 import com.example.java7_4.entity.CloudType;
+import com.example.java7_4.entity.UserCardCollect;
 import com.example.java7_4.mapper.CloudCardMapper;
 import com.example.java7_4.mapper.CloudTypeMapper;
 import com.example.java7_4.mapper.UserMapper;
@@ -16,7 +17,13 @@ public class CloudCardService {
     @Autowired
     private CloudCardMapper cloudCardMapper;
 
+
+
     public CloudCard getCloudCardByCloudName(String cloudName) {
         return cloudCardMapper.getCloudCardByCloudName(cloudName);
+    }
+
+    public List<UserCardCollect> getUserCardCollectsByUserId(Long userId) {
+        return cloudCardMapper.getUserCardCollectsByUserId(userId);
     }
 }

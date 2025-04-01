@@ -2,6 +2,7 @@ package com.example.java7_4.controller;
 
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.entity.CloudCard;
+import com.example.java7_4.entity.UserCardCollect;
 import com.example.java7_4.result.Result;
 import com.example.java7_4.service.impl.CloudCardService;
 import com.example.java7_4.service.impl.CloudTypeService;
@@ -29,5 +30,12 @@ public class CloudCardController {
     public Result<CloudCard> getCloudCardByCloudName(@RequestHeader("Authorization") String authorization, @RequestParam("cloudName") String cloudName) {
         CloudCard cloudCard=cloudCardService.getCloudCardByCloudName(cloudName);
         return Result.success(cloudCard);
+    }
+
+    @GetMapping("/getUserCardCollectsByUserId")
+    @Operation(summary = "getUserCardCollectsByUserId")
+    public Result<List<UserCardCollect>> getUserCardCollectUserId(@RequestHeader("Authorization") String authorization, @RequestParam("userId") Long userId) {
+        List<UserCardCollect> userCardCollects=cloudCardService.getUserCardCollectsByUserId(userId);
+        return Result.success(userCardCollects);
     }
 }

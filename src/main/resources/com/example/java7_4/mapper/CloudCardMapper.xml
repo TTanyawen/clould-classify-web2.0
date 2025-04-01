@@ -35,4 +35,10 @@
     </select>
 
 
+
+    <select id="getUserCardCollectsByUserId" resultMap="UserCardCollectResultMap">
+        select * from `clouddb2.0`.tb_user_card_collect where user_id = #{userId};
+    </select>
+
+
 </mapper>
