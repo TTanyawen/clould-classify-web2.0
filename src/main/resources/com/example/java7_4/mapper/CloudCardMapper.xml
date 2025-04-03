@@ -40,14 +40,14 @@
     <select id="selectById" resultMap="CloudCardResultMap">
         select * from tb_cloud_card where type_id = #{typeId};
     </select>
-    <select id="selectAll" resultMap="CloudCardResultMap">
-        select * from tb_cloud_card;
-    </select>
+
     <select id="getCloudCardByCloudName" resultMap="CloudCardResultMap">
         select * from tb_cloud_card where #{cloudName}=type_name_en;
     </select>
 
-
+    <select id="getAllCloudCards" resultMap="CloudCardResultMap">
+        select * from tb_cloud_card
+    </select>
 
     <select id="getUserCardCollectsByUserId" resultMap="UserCardCollectResultMap">
         select * from tb_user_card_collect where user_id = #{userId};
@@ -60,6 +60,7 @@
     <select id="getUserCardCollectsByUserIdAndTypeId" resultMap="UserCardCollectResultMap">
         select * from tb_user_card_collect where user_id = #{userId} and type_id = #{typeId};
     </select>
+
 
 
 </mapper>

@@ -49,4 +49,8 @@ public class CloudCardService {
         cloudCardMapper.updateUserCardCollectByUserIdAndTypeId(userCardCollect);
 
     }
+
+    public List<CloudCard> getAllCloudCards() {
+        return cloudCardMapper.getAllCloudCards();
+    }
 }

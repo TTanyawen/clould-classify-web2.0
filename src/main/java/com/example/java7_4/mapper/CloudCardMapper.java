@@ -13,7 +13,6 @@ import java.util.List;
 public interface CloudCardMapper {
     CloudType selectById(Long typeId);
 
-    List<CloudType> selectAll();
 
     CloudCard getCloudCardByCloudName(String cloudName);
 
@@ -28,4 +27,6 @@ public interface CloudCardMapper {
     void saveUserCardCollectDetail(UserCardCollectDetail userCardCollectDetail);
 
     void updateUserCardCollectByUserIdAndTypeId(UserCardCollect userCardCollect);
+
+    List<CloudCard> getAllCloudCards();
 }

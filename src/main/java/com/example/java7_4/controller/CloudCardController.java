@@ -2,10 +2,7 @@ package com.example.java7_4.controller;
 
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
-import com.example.java7_4.entity.CloudCard;
-import com.example.java7_4.entity.User;
-import com.example.java7_4.entity.UserCardCollect;
-import com.example.java7_4.entity.UserCardCollectDetail;
+import com.example.java7_4.entity.*;
 import com.example.java7_4.result.Result;
 import com.example.java7_4.service.UserService;
 import com.example.java7_4.service.impl.CloudCardService;
@@ -18,7 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/card")
 @RestController
@@ -33,6 +33,49 @@ public class CloudCardController {
 
     @Autowired
     private UserService userService;
+
+    @RequestMapping("/getAllCloudCards")
+    @Operation(summary = "getAllCloudCards")
+    public Result <List<CloudCard>> getAllCloudCards(@RequestHeader("Authorization") String authorization) {
+        List<CloudCard> cloudCards = cloudCardService.getAllCloudCards();
+        return Result.success(cloudCards);
+    }
+
+    @RequestMapping("/getUserCloudCollectionInfo")
+    @Operation(summary = "getUserCloudCollectionInfo")
+    public Result <List<UserCloudCollectionInfoResp>> getUserCloudCollectionInfo(@RequestHeader("Authorization") String authorization) {
+        Long userId = BaseContext.getCurrentId();
+        List<CloudCard> cloudCards = cloudCardService.getAllCloudCards();
+        List<UserCloudCollectionInfoResp> userCloudCollectionInfoResps=new ArrayList<>();
+        List<UserCardCollect> userCardCollects = cloudCardService.getUserCardCollectsByUserId(userId);
+        // 创建一个 Map 用于存储结果
+        Map<Long, UserCardCollect> userCardCollectMap = new HashMap<>();
+
+        // 遍历列表，将 UserCardCollect 对象按照 typeId 存储到 Map 中
+        for (UserCardCollect userCardCollect : userCardCollects) {
+            userCardCollectMap.put(userCardCollect.getTypeId(), userCardCollect);
+        }
+        for(CloudCard cloudCard:cloudCards){
+            UserCloudCollectionInfoResp userCloudCollectionInfoResp=new UserCloudCollectionInfoResp();
+            userCloudCollectionInfoResp.setTypeId(cloudCard.getTypeId());
+            userCloudCollectionInfoResp.setTypeName(cloudCard.getTypeName());
+            userCloudCollectionInfoResp.setTypeNameEn(cloudCard.getTypeNameEn());
+            userCloudCollectionInfoResp.setTypeInfo(cloudCard.getTypeInfo());
+            userCloudCollectionInfoResp.setTypePoint(cloudCard.getTypePoint());
+
+            if(userCardCollectMap.containsKey(cloudCard.getTypeId())){
+                userCloudCollectionInfoResp.setCollectNum(userCardCollectMap.get(cloudCard.getTypeId()).getCollectNum());
+                userCloudCollectionInfoResp.setIsCollected(true);
+            }else{
+                userCloudCollectionInfoResp.setCollectNum(0L);
+                userCloudCollectionInfoResp.setIsCollected(false);
+            }
+            userCloudCollectionInfoResps.add(userCloudCollectionInfoResp);
+        }
+
+        return Result.success(userCloudCollectionInfoResps);
+    }
+
 
     @RequestMapping("/getCloudCardByCloudName")
     @Operation(summary = "getCloudCardByCloudName")
