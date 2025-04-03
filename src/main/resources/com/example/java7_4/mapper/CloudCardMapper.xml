@@ -23,6 +23,19 @@
         <result column="type_info" property="typeInfo" />
         <result column="type_point" property="typePoint" />
     </resultMap>
+    <insert id="saveUserCardCollect">
+        INSERT INTO tb_user_card_collect (user_id, type_id, first_collect_time, collect_num)
+        VALUES (#{userId}, #{typeId}, #{firstCollectTime}, #{collectNum})
+    </insert>
+    <insert id="saveUserCardCollectDetail">
+        INSERT INTO tb_user_card_collect_detail (user_id, type_id, collect_time)
+        VALUES (#{userId}, #{typeId}, #{collectTime})
+    </insert>
+    <update id="updateUserCardCollectByUserIdAndTypeId">
+        UPDATE tb_user_card_collect
+        set collect_num=#{collectNum}
+        where user_id=#{userId} and type_id=#{typeId}
+    </update>
 
     <select id="selectById" resultMap="CloudCardResultMap">
         select * from tb_cloud_card where type_id = #{typeId};
@@ -37,7 +50,15 @@
 
 
     <select id="getUserCardCollectsByUserId" resultMap="UserCardCollectResultMap">
-        select * from `clouddb2.0`.tb_user_card_collect where user_id = #{userId};
+        select * from tb_user_card_collect where user_id = #{userId};
+    </select>
+
+
+    <select id="getUserCardCollectDetailsByUserId" resultMap="UserCardCollectDetailResultMap">
+        select * from tb_user_card_collect_detail where user_id = #{userId};
+    </select>
+    <select id="getUserCardCollectsByUserIdAndTypeId" resultMap="UserCardCollectResultMap">
+        select * from tb_user_card_collect where user_id = #{userId} and type_id = #{typeId};
     </select>
 
 

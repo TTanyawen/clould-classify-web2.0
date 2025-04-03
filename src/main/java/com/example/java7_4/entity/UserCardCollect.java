@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @TableName("tb_user_card_collect")
 public class UserCardCollect implements Serializable {
     private static final long serialVersionUID = 1L;
-    @TableId
     private Long userId;
     private Long typeId;
     private LocalDateTime firstCollectTime;

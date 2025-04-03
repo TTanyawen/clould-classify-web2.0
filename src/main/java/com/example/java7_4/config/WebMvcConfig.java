@@ -59,6 +59,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 .addPathPatterns("/user/**") // 需要拦截的路径
                 .addPathPatterns("/post/**") // 需要拦截的路径
                 .addPathPatterns("/data/**")// 需要拦截的路径
+                .addPathPatterns("/card/**")// 需要拦截的路径
                 .excludePathPatterns("/user/checkRegister")
                 .excludePathPatterns("/user/doLogin")
 //                .excludePathPatterns("/user/getForumData")

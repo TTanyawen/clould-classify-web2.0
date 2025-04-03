@@ -83,6 +83,8 @@ public class UserServiceImpl implements UserService {
         return count;
     }
 
+
+    @Override
     public void updateById(User user) {
         log.info("logTag::updateById-userid:{}-username-{}-userpath-{}",user.getUserId(),user.getUserName(),user.getUserProfilePath());
         userMapper.updateById(user);

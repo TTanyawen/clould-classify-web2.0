@@ -17,6 +17,6 @@ public interface UserService {
     User login(String userName, String userPassword);
     User getUserByUserName(String userName);
     int save(User user1);
-
+    void updateById(User user) ;
     PageResult getUsersPage_pageHelper(int page, int pageSize) ;
 }
