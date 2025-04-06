@@ -40,6 +40,8 @@ public class PostController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+
+
     @PostMapping("/collectPost/{postId}")
     public Result<Long> collectPost(@RequestHeader("Authorization") String authorization, @PathVariable("postId") Long postId) {
         try {

@@ -15,10 +15,11 @@ import java.time.LocalDateTime;
 @TableName("tb_user_card_collect_detail")
 public class UserCardCollectDetail implements Serializable {
     private static final long serialVersionUID = 1L;
-    @TableId
+
     private Long userId;
     private Long typeId;
     private LocalDateTime collectTime;
+    private String classifyImg;
 
     // Getters and setters by Lombok @Data
 }

@@ -103,7 +103,7 @@ public class CloudCardController {
      */
     @RequestMapping("/collectCard")
     @Operation(summary = "collectCard")
-    public Result<Boolean> collectCard(@RequestHeader("Authorization") String authorization, @RequestParam("cloudName") String cloudName, @RequestParam("userId") Long userId) {
+    public Result<Boolean> collectCard(@RequestHeader("Authorization") String authorization, @RequestParam("cloudName") String cloudName, @RequestParam("userId") Long userId,@RequestParam("classifyImg") String classifyImg) {
         log.info("cloudName:{},userId:{}",cloudName,userId);
         if(userId==0){
             log.info("userId==0");
@@ -139,6 +139,8 @@ public class CloudCardController {
         userCardCollectDetail.setUserId(userId);
         userCardCollectDetail.setTypeId(cloudCard.getTypeId());
         userCardCollectDetail.setCollectTime(currentTime);
+        userCardCollectDetail.setClassifyImg(classifyImg);
+        log.info("userCardCollectDetail:{}",userCardCollectDetail);
         cloudCardService.saveUserCardCollectDetail(userCardCollectDetail);
 
         return Result.success(Boolean.TRUE);
