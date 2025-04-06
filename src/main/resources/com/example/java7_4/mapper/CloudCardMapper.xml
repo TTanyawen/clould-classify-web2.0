@@ -61,7 +61,12 @@
     <select id="getUserCardCollectsByUserIdAndTypeId" resultMap="UserCardCollectResultMap">
         select * from tb_user_card_collect where user_id = #{userId} and type_id = #{typeId};
     </select>
+    <select id="getUserCardCollectDetailsByUserIdAndTypeId"
+            resultMap="UserCardCollectDetailResultMap">
+        select * from tb_user_card_collect_detail where user_id = #{userId} and type_id = #{typeId}
+        order by collect_time desc;
 
+    </select>
 
 
 </mapper>

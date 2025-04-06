@@ -53,4 +53,8 @@ public class CloudCardService {
     public List<CloudCard> getAllCloudCards() {
         return cloudCardMapper.getAllCloudCards();
     }
+
+    public List<UserCardCollectDetail> getUserCardCollectDetailsByUserIdAndTypeId(Long userId, Long typeId) {
+        return cloudCardMapper.getUserCardCollectDetailsByUserIdAndTypeId(userId,typeId);
+    }
 }

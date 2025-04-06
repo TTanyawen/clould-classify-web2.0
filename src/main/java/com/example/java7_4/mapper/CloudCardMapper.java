@@ -29,4 +29,6 @@ public interface CloudCardMapper {
     void updateUserCardCollectByUserIdAndTypeId(UserCardCollect userCardCollect);
 
     List<CloudCard> getAllCloudCards();
+
+    List<UserCardCollectDetail> getUserCardCollectDetailsByUserIdAndTypeId(Long userId, Long typeId);
 }

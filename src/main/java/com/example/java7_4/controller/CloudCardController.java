@@ -98,6 +98,14 @@ public class CloudCardController {
         return Result.success(userCardCollectDetails);
     }
 
+    @GetMapping("/getUserCardCollectDetailsByUserIdAndTypeId")
+    @Operation(summary = "getUserCardCollectDetailsByUserIdAndTypeId")
+    public Result<List<UserCardCollectDetail>> getUserCardCollectDetailsByUserIdAndTypeId(@RequestHeader("Authorization") String authorization, @RequestParam("userId") Long userId,@RequestParam("typeId") Long typeId) {
+        userId=BaseContext.getCurrentId();
+        List<UserCardCollectDetail> userCardCollectDetails = cloudCardService.getUserCardCollectDetailsByUserIdAndTypeId(userId,typeId);
+        return Result.success(userCardCollectDetails);
+    }
+
     /**
      * 收集卡牌
      */
