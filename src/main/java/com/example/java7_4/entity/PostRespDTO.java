@@ -20,5 +20,8 @@ public class PostRespDTO implements Serializable {
     // Getters 和 Setters
 
     private Long postCollect;
+
+    private Boolean isLiked;
+    private Boolean isCollected;
 }
 

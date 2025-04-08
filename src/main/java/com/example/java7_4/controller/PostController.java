@@ -1,5 +1,6 @@
 package com.example.java7_4.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.*;
@@ -56,6 +57,9 @@ public class PostController {
     @RequestMapping("/getPagedSearchedPosts")
     @Operation(summary = "getPagedSearchedPosts")
     public Result<Map<String,Object>> getPagedSearchedPosts(@RequestHeader("Authorization") String authorization,@RequestBody Map<String,Object> searchRequest) {
+
+
+
         System.out.println("getSearchedPosts");
         String searchText=(String)searchRequest.get("searchText");
         Integer currentPage=(Integer)searchRequest.get("currentPage");
@@ -76,6 +80,15 @@ public class PostController {
             postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
 
+            String key= RedisKeyConstants.LIKE_POST +BaseContext.getCurrentId()+":"+post.getPostId();
+            // 1. 判断缓存是否有key
+            Boolean isLiked = redisTemplate.hasKey(key);
+            postRespDTO.setIsLiked(isLiked);
+
+            String key2= RedisKeyConstants.COLLECT_POST +BaseContext.getCurrentId()+":"+post.getPostId();
+            Boolean isCollected = redisTemplate.hasKey(key2);
+            postRespDTO.setIsCollected(isCollected);
+
             //解析postImgPath
             String[] paths = post.getPostImgPath().split("@_@");
             List<String> pathList = new ArrayList<>();
@@ -90,10 +103,22 @@ public class PostController {
         }
 
         pageResult.setRecords(postRespDTOS);
+        // commentRespDTOs;
+        List<CommentRespDTO> commentRespDTOs;
 
+        commentRespDTOs=new ArrayList<>();
+        for(Comment comment:commentService.getComments()){
+            CommentRespDTO commentRespDTO=new CommentRespDTO();
+            BeanUtil.copyProperties(comment,commentRespDTO);
+            String key= RedisKeyConstants.LIKE_COMMENT +BaseContext.getCurrentId()+":"+commentRespDTO.getCommentId();
+            // 1. 判断缓存是否有key
+            Boolean isLiked = redisTemplate.hasKey(key);
+            commentRespDTO.setIsLiked(isLiked);
+            commentRespDTOs.add(commentRespDTO);
+        }
         Map<String,Object> response=new HashMap<>();
         response.put("posts",pageResult);
-        response.put("comments",commentService.getComments());
+        response.put("comments",commentRespDTOs);
         return Result.success(response);
     }
 
@@ -115,7 +140,14 @@ public class PostController {
             postRespDTO.setPostCollect(post.getPostCollect());
             postRespDTO.setUserProfilePath(post.getUserProfilePath());
             postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            String key= RedisKeyConstants.LIKE_POST +BaseContext.getCurrentId()+":"+post.getPostId();
+            // 1. 判断缓存是否有key
+            Boolean isLiked = redisTemplate.hasKey(key);
+            postRespDTO.setIsLiked(isLiked);
 
+            String key2= RedisKeyConstants.COLLECT_POST +BaseContext.getCurrentId()+":"+post.getPostId();
+            Boolean isCollected = redisTemplate.hasKey(key2);
+            postRespDTO.setIsCollected(isCollected);
 
             //解析postImgPath
             String[] paths = post.getPostImgPath().split("@_@");
@@ -128,9 +160,22 @@ public class PostController {
             postRespDTO.setPostImgPaths(pathList);
             postRespDTOS.add(postRespDTO);
         }
+
+        // commentRespDTOs;
+        List<CommentRespDTO> commentRespDTOs;
+        commentRespDTOs=new ArrayList<>();
+        for(Comment comment:commentService.getComments()){
+            CommentRespDTO commentRespDTO=new CommentRespDTO();
+            BeanUtil.copyProperties(comment,commentRespDTO);
+            String key= RedisKeyConstants.LIKE_COMMENT +BaseContext.getCurrentId()+":"+commentRespDTO.getCommentId();
+            // 1. 判断缓存是否有key
+            Boolean isLiked = redisTemplate.hasKey(key);
+            commentRespDTO.setIsLiked(isLiked);
+            commentRespDTOs.add(commentRespDTO);
+        }
         Map<String,Object> response=new HashMap<>();
         response.put("posts",postRespDTOS);
-        response.put("comments",commentService.getComments());
+        response.put("comments",commentRespDTOs);
         return Result.success(response);
     }
 
@@ -164,7 +209,10 @@ public class PostController {
         postRespDTO.setPostCollect(post.getPostCollect());
         postRespDTO.setUserProfilePath(post.getUserProfilePath());
         postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
+        String key= RedisKeyConstants.LIKE_POST +BaseContext.getCurrentId()+":"+post.getPostId();
+        // 1. 判断缓存是否有key
+        Boolean isLiked = redisTemplate.hasKey(key);
+        postRespDTO.setIsLiked(isLiked);
 
         //解析postImgPath
         String[] paths = post.getPostImgPath().split("@_@");

@@ -1,11 +1,9 @@
 package com.example.java7_4.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
-import com.example.java7_4.entity.Comment;
-import com.example.java7_4.entity.CommentDTO;
-import com.example.java7_4.entity.PostDTO;
-import com.example.java7_4.entity.PostRespDTO;
+import com.example.java7_4.entity.*;
 import com.example.java7_4.result.Result;
 import com.example.java7_4.service.impl.CommentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -73,9 +71,21 @@ public class CommentController {
 
 
     @GetMapping("/getCommentsByPostId")
-    public Result<List<CommentDTO>> getCommentsByPostId(@RequestHeader("Authorization") String authorization, @RequestParam Long postId) {
-        List<CommentDTO> comment=commentService.getCommentsByPostId(postId);
-        return Result.success(comment);
+    public Result<List<CommentRespDTO>> getCommentsByPostId(@RequestHeader("Authorization") String authorization, @RequestParam Long postId) {
+        List<CommentDTO> comments=commentService.getCommentsByPostId(postId);
+        // commentRespDTOs;
+        List<CommentRespDTO> commentRespDTOs;
+        commentRespDTOs=new ArrayList<>();
+        for(CommentDTO comment:comments){
+            CommentRespDTO commentRespDTO=new CommentRespDTO();
+            BeanUtil.copyProperties(comment,commentRespDTO);
+            String key= RedisKeyConstants.LIKE_COMMENT +BaseContext.getCurrentId()+":"+commentRespDTO.getCommentId();
+            // 1. 判断缓存是否有key
+            Boolean isLiked = redisTemplate.hasKey(key);
+            commentRespDTO.setIsLiked(isLiked);
+            commentRespDTOs.add(commentRespDTO);
+        }
+        return Result.success(commentRespDTOs);
     }
 }
 
