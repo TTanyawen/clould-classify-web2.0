@@ -89,6 +89,12 @@ public class PostService {
         return new PageResult(pageInfo.getTotal(),pageInfo.getResult());
     }
 
+    public PageResult getPagedSearchedPostsWithOrder(String searchText,String sortType,int currentPage,int pageSize) {
+        PageHelper.startPage(currentPage,pageSize);
+        Page<PostDTO> pageInfo=postMapper.getPagedSearchedPostsWithOrder(searchText,sortType);
+        return new PageResult(pageInfo.getTotal(),pageInfo.getResult());
+    }
+
     public PostDTO getPostByPostId(Long postId) {
         return postMapper.getPostByPostId(postId);
     }

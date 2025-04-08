@@ -90,6 +90,28 @@
             </otherwise>
         </choose>
     </select>
+    <select id="getPagedSearchedPostsWithOrder" resultMap="PostDTOResultMap">
+        select post_id,tb_post.user_id,post_img_path,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
+        where tb_post.user_id=tb_user.user_id and post_text LIKE CONCAT('%', #{searchText}, '%')
+        <choose>
+            <when test="sortType == 'like_desc'">
+                ORDER BY tb_post.post_like DESC
+            </when>
+            <when test="sortType == 'collect_desc'">
+                ORDER BY tb_post.post_collect DESC
+            </when>
+            <when test="sortType == 'time_asc'">
+                ORDER BY tb_post.create_time ASC
+            </when>
+            <when test="sortType == 'time_desc'">
+                ORDER BY tb_post.create_time DESC
+            </when>
+            <otherwise>
+                -- 如果 sortType 没有匹配的值，这里可以选择默认的排序规则，例如按帖子 ID 降序
+                ORDER BY tb_post.post_id DESC
+            </otherwise>
+        </choose>
+    </select>
 
     <update id="updateById">
         update tb_post

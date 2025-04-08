@@ -4,21 +4,18 @@ import cn.hutool.core.bean.BeanUtil;
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.*;
+import com.example.java7_4.entity.dao.GetPagedSearchedPostsWithOrderReqDao;
 import com.example.java7_4.result.PageResult;
 import com.example.java7_4.result.Result;
 import com.example.java7_4.service.impl.CommentService;
 import com.example.java7_4.service.impl.PostService;
-import com.github.pagehelper.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,6 +62,76 @@ public class PostController {
         Integer currentPage=(Integer)searchRequest.get("currentPage");
         Integer pageSize=(Integer)searchRequest.get("pageSize");
         PageResult pageResult=postService.getPagedSearchedPosts(searchText,currentPage,pageSize);
+
+        List<PostRespDTO> postRespDTOS=new ArrayList<>();
+        for(Object obj:pageResult.getRecords()){
+            PostDTO post=(PostDTO)obj;
+            PostRespDTO postRespDTO=new PostRespDTO();
+            postRespDTO.setPostId(post.getPostId());
+            postRespDTO.setUserId(post.getUserId());
+            postRespDTO.setUserName(post.getUserName());
+            postRespDTO.setPostText(post.getPostText());
+            postRespDTO.setPostLike(post.getPostLike());
+            postRespDTO.setPostCollect(post.getPostCollect());
+            postRespDTO.setUserProfilePath(post.getUserProfilePath());
+            postRespDTO.setCreateTime(post.getCreateTime()==null?"":post.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+
+            String key= RedisKeyConstants.LIKE_POST +BaseContext.getCurrentId()+":"+post.getPostId();
+            // 1. 判断缓存是否有key
+            Boolean isLiked = redisTemplate.hasKey(key);
+            postRespDTO.setIsLiked(isLiked);
+
+            String key2= RedisKeyConstants.COLLECT_POST +BaseContext.getCurrentId()+":"+post.getPostId();
+            Boolean isCollected = redisTemplate.hasKey(key2);
+            postRespDTO.setIsCollected(isCollected);
+
+            //解析postImgPath
+            String[] paths = post.getPostImgPath().split("@_@");
+            List<String> pathList = new ArrayList<>();
+            for (String path : paths) {
+                if (!path.isEmpty()) {
+                    pathList.add(path);
+                }
+            }
+
+            postRespDTO.setPostImgPaths(pathList);
+            postRespDTOS.add(postRespDTO);
+        }
+
+        pageResult.setRecords(postRespDTOS);
+        // commentRespDTOs;
+        List<CommentRespDTO> commentRespDTOs;
+
+        commentRespDTOs=new ArrayList<>();
+        for(Comment comment:commentService.getComments()){
+            CommentRespDTO commentRespDTO=new CommentRespDTO();
+            BeanUtil.copyProperties(comment,commentRespDTO);
+            String key= RedisKeyConstants.LIKE_COMMENT +BaseContext.getCurrentId()+":"+commentRespDTO.getCommentId();
+            // 1. 判断缓存是否有key
+            Boolean isLiked = redisTemplate.hasKey(key);
+            commentRespDTO.setIsLiked(isLiked);
+            commentRespDTOs.add(commentRespDTO);
+        }
+        Map<String,Object> response=new HashMap<>();
+        response.put("posts",pageResult);
+        response.put("comments",commentRespDTOs);
+        return Result.success(response);
+    }
+
+    @RequestMapping("/getPagedSearchedPostsWithOrder")
+    @Operation(summary = "getPagedSearchedPostsWithOrder")
+    public Result<Map<String,Object>> getPagedSearchedPostsWithOrder(@RequestHeader("Authorization") String authorization, @RequestBody GetPagedSearchedPostsWithOrderReqDao req) {
+
+        System.out.println("getPagedSearchedPostsWithOrder");
+
+        String searchText=req.getSearchText();
+        Integer currentPage=req.getCurrentPage();
+        Integer pageSize=req.getPageSize();
+        String sortType=req.getSortType();
+
+//        PageResult pageResult2=postService.getPagedSearchedPosts(searchText,currentPage,pageSize);
+        PageResult pageResult=postService.getPagedSearchedPostsWithOrder(searchText,sortType,currentPage,pageSize);
 
         List<PostRespDTO> postRespDTOS=new ArrayList<>();
         for(Object obj:pageResult.getRecords()){

@@ -43,4 +43,6 @@ public interface PostMapper {
     PostDTO getPostByPostId(Long postId);
 
     Page<PostDTO> getPostsWithUserAvatarWithOrder(String sortType);
+
+    Page<PostDTO> getPagedSearchedPostsWithOrder(String searchText, String sortType);
 }
