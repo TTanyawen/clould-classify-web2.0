@@ -282,6 +282,7 @@ public class PostController {
         Boolean isLiked = redisTemplate.hasKey(key);
         postRespDTO.setIsLiked(isLiked);
 
+
         //解析postImgPath
         String[] paths = post.getPostImgPath().split("@_@");
         List<String> pathList = new ArrayList<>();
