@@ -131,5 +131,11 @@ public class PostService {
         }
         throw new RuntimeException("Post not found");
     }
+
+    public PageResult getPostsWithUserAvatarWithOrder(int currentPage, int pageSize,String sortType) {
+        PageHelper.startPage(currentPage,pageSize);
+        Page<PostDTO> pageInfo=postMapper.getPostsWithUserAvatarWithOrder(sortType);
+        return new PageResult(pageInfo.getTotal(),pageInfo.getResult());
+    }
 }
 

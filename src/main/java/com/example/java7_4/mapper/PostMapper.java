@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -40,4 +41,6 @@ public interface PostMapper {
     Page<PostDTO> getPagedSearchedPosts(String searchText);
 
     PostDTO getPostByPostId(Long postId);
+
+    Page<PostDTO> getPostsWithUserAvatarWithOrder(String sortType);
 }
