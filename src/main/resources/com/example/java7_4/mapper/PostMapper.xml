@@ -92,7 +92,15 @@
     </select>
     <select id="getPagedSearchedPostsWithOrder" resultMap="PostDTOResultMap">
         select post_id,tb_post.user_id,post_img_path,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
-        where tb_post.user_id=tb_user.user_id and post_text LIKE CONCAT('%', #{searchText}, '%')
+        where tb_post.user_id=tb_user.user_id
+        <choose>
+            <when test="searchType == 'content'">
+                and post_text LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <when test="searchType == 'username'">
+                and user_name LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+        </choose>
         <choose>
             <when test="sortType == 'like_desc'">
                 ORDER BY tb_post.post_like DESC

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,4 +16,7 @@ public class GetPagedSearchedPostsWithOrderReqDao {
     private int pageSize;
     private String sortType;//like_desc/collect_desc/time_asc/time_desc/
     private String searchText;
+    private String searchType;//content/username
+    private LocalDateTime createBegin;
+    private LocalDateTime createEnd;
 }

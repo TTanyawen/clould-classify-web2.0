@@ -129,9 +129,10 @@ public class PostController {
         Integer currentPage=req.getCurrentPage();
         Integer pageSize=req.getPageSize();
         String sortType=req.getSortType();
+        String searchType=req.getSearchType();
 
 //        PageResult pageResult2=postService.getPagedSearchedPosts(searchText,currentPage,pageSize);
-        PageResult pageResult=postService.getPagedSearchedPostsWithOrder(searchText,sortType,currentPage,pageSize);
+        PageResult pageResult=postService.getPagedSearchedPostsWithOrder(searchText,sortType,searchType,currentPage,pageSize);
 
         List<PostRespDTO> postRespDTOS=new ArrayList<>();
         for(Object obj:pageResult.getRecords()){
