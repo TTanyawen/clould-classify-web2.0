@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.*;
-import com.example.java7_4.entity.dao.GetPagedSearchedPostsWithOrderReqDao;
+import com.example.java7_4.entity.dao.GetPagedSearchedPostsWithOrderReqDto;
 import com.example.java7_4.result.PageResult;
 import com.example.java7_4.result.Result;
 import com.example.java7_4.service.impl.CommentService;
@@ -121,7 +121,7 @@ public class PostController {
 
     @RequestMapping("/getPagedSearchedPostsWithOrder")
     @Operation(summary = "getPagedSearchedPostsWithOrder")
-    public Result<Map<String,Object>> getPagedSearchedPostsWithOrder(@RequestHeader("Authorization") String authorization, @RequestBody GetPagedSearchedPostsWithOrderReqDao req) {
+    public Result<Map<String,Object>> getPagedSearchedPostsWithOrder(@RequestHeader("Authorization") String authorization, @RequestBody GetPagedSearchedPostsWithOrderReqDto req) {
 
         System.out.println("getPagedSearchedPostsWithOrder");
 

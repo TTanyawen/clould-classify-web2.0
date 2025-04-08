@@ -3,13 +3,15 @@ import cn.hutool.core.bean.BeanUtil;
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.*;
-import com.example.java7_4.entity.dao.GetPagedForumDataWithConditionReqDao;
+import com.example.java7_4.entity.dao.GetMeDataRespDto;
+import com.example.java7_4.entity.dao.GetPagedForumDataWithConditionReqDto;
 import com.example.java7_4.result.PageResult;
 import com.example.java7_4.result.Result;
 import com.example.java7_4.service.impl.CloudTypeService;
 
 import com.example.java7_4.service.impl.CommentService;
 import com.example.java7_4.service.impl.PostService;
+import com.example.java7_4.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -41,10 +43,12 @@ public class CloudController {
 
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private UserServiceImpl userServiceImpl;
 
     @RequestMapping("/getPagedForumDataWithCondition")
     @Operation(summary = "getPagedForumDataWithCondition")
-    public Result<Map<String,Object>> getPagedForumDataWithCondition(@RequestHeader("Authorization") String authorization, @RequestBody GetPagedForumDataWithConditionReqDao req) {
+    public Result<Map<String,Object>> getPagedForumDataWithCondition(@RequestHeader("Authorization") String authorization, @RequestBody GetPagedForumDataWithConditionReqDto req) {
         int currentPage=req.getCurrentPage();//第几页
         int pageSize=req.getPageSize();//每一页几条
         String sortType=req.getSortType();//like_desc/collect_desc/time_asc/time_desc/
@@ -205,9 +209,10 @@ public class CloudController {
 
     @RequestMapping("/getMeData")
     @Operation(summary = "getMeData")
-    public Result<List<PostRespDTO>> getMeData(@RequestHeader("Authorization") String authorization) {
-
-        List<PostDTO> posts = postService.getMePosts(BaseContext.getCurrentId());
+    public Result<GetMeDataRespDto> getMeData(@RequestHeader("Authorization") String authorization) {
+        Long userId=BaseContext.getCurrentId();
+        User user=userServiceImpl.getUserById(userId);
+        List<PostDTO> posts = postService.getMePosts(userId);
         log.info("userid:{}",BaseContext.getCurrentId());
         log.info("posts num:{}",posts.size());
 
@@ -236,7 +241,13 @@ public class CloudController {
         }
         log.info("postRespDTOS num:{}",postRespDTOS.size());
 
-        return Result.success(postRespDTOS);
+        GetMeDataRespDto getMeDataRespDto=new GetMeDataRespDto();
+        getMeDataRespDto.setPostRespDTOs(postRespDTOS);
+        getMeDataRespDto.setUserId(user.getUserId());
+        getMeDataRespDto.setUserName(user.getUserName());
+        getMeDataRespDto.setUserProfilePath(user.getUserProfilePath());
+        getMeDataRespDto.setUserPoints(user.getUserPoints());
+        return Result.success(getMeDataRespDto);
     }
 
 

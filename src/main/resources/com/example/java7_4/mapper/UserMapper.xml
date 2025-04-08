@@ -96,6 +96,10 @@
             tb_user u ON pc.user_id = u.user_id
         WHERE pc.user_id = #{userId}
     </select>
+    <select id="getAllUsersOrderByPoint"  resultMap="UserResultMap">
+        select * from tb_user
+        order by user_points desc;
+    </select>
 
 
 </mapper>

@@ -29,4 +29,6 @@ public interface UserMapper {
 
 
     List<PostCollectionRespDTO> getCollection(Long userId);
+
+    List<User> getAllUsersOrderByPoint();
 }

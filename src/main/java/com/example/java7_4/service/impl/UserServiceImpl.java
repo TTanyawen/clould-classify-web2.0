@@ -96,4 +96,9 @@ public class UserServiceImpl implements UserService {
         PageResult pageResult=new PageResult(pageInfo.getTotal(),pageInfo.getResult());
         return pageResult;
     }
+
+    @Override
+    public List<User> getAllUsersOrderByPoint() {
+        return userMapper.getAllUsersOrderByPoint();
+    }
 }

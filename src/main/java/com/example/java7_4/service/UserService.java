@@ -19,4 +19,6 @@ public interface UserService {
     int save(User user1);
     void updateById(User user) ;
     PageResult getUsersPage_pageHelper(int page, int pageSize) ;
+
+    List<User> getAllUsersOrderByPoint();
 }

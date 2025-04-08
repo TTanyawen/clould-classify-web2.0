@@ -1,11 +1,13 @@
 package com.example.java7_4.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.example.java7_4.constant.JwtClaimsConstant;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.MeEditQueryRepDTO;
 import com.example.java7_4.entity.MeEditUpdateReqDTO;
 import com.example.java7_4.entity.PostCollectionRespDTO;
 import com.example.java7_4.entity.User;
+import com.example.java7_4.entity.dao.GetUserPointsListRespDto;
 import com.example.java7_4.exception.FailRegisterException;
 import com.example.java7_4.properties.JwtProperties;
 import com.example.java7_4.result.Result;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -217,6 +220,18 @@ public class UserController {
         Long userId=BaseContext.getCurrentId();
         List<PostCollectionRespDTO> postCollectionRespDTOList =userService.getCollection(userId);
         return Result.success(postCollectionRespDTOList);
+    }
+
+    @RequestMapping("/getUserPointsList")
+    public Result<List<GetUserPointsListRespDto>> getUserPointsList(@RequestHeader("Authorization") String authorization) {
+        List<User> users=userService.getAllUsersOrderByPoint();
+        List<GetUserPointsListRespDto> getUserPointsListRespDtos=new ArrayList<>();
+        for(User user:users){
+            GetUserPointsListRespDto getUserPointsListRespDto=new GetUserPointsListRespDto();
+            BeanUtil.copyProperties(user,getUserPointsListRespDto);
+            getUserPointsListRespDtos.add(getUserPointsListRespDto);
+        }
+        return Result.success(getUserPointsListRespDtos);
     }
 
 }

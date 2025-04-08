@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetPagedSearchedPostsWithOrderReqDao {
+public class GetPagedSearchedPostsWithOrderReqDto {
     private int currentPage;
     private int pageSize;
     private String sortType;//like_desc/collect_desc/time_asc/time_desc/
