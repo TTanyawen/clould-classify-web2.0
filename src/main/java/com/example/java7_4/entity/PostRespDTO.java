@@ -1,5 +1,6 @@
 package com.example.java7_4.entity;
 
+import com.example.java7_4.entity.Enum.TagEnum;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -23,5 +24,6 @@ public class PostRespDTO implements Serializable {
 
     private Boolean isLiked;
     private Boolean isCollected;
+    private List<String> postTags;
 }
 

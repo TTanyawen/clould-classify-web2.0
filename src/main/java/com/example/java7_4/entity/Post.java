@@ -24,4 +24,6 @@ public class Post implements Serializable {
     private Long updateUser;
 
     private Long postCollect;
+
+    private String postTags;
 }

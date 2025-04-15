@@ -26,6 +26,7 @@
         <result column="user_name" property="userName" />
         <result column="create_time" property="createTime" />
         <result column="collect_time" property="collectTime" />
+        <result column="post_tags" property="postTags" />
     </resultMap>
 
 
@@ -87,7 +88,8 @@
             u.user_profile_path,
             u.user_name,
             p.create_time,
-            pc.collect_time
+            pc.collect_time,
+            p.post_tags
         FROM
             tb_post p
                 JOIN

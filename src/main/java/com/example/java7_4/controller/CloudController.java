@@ -3,6 +3,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.*;
+import com.example.java7_4.entity.Enum.TagEnum;
 import com.example.java7_4.entity.dao.GetMeDataRespDto;
 import com.example.java7_4.entity.dao.GetPagedForumDataWithConditionReqDto;
 import com.example.java7_4.result.PageResult;
@@ -88,6 +89,20 @@ public class CloudController {
                 }
             }
             postRespDTO.setPostImgPaths(pathList);
+
+
+            //解析postTags
+            String[] tags = post.getPostTags().split("@_@");
+            List<String> tagLists = new ArrayList<>();
+            for (String tag : tags) {
+                if (!tag.isEmpty()) {
+                    tagLists.add(TagEnum.getByCode(tag).getValue());
+                }
+            }
+            postRespDTO.setPostTags(tagLists);
+
+
+
             postRespDTOS.add(postRespDTO);
         }
 

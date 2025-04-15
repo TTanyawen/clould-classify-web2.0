@@ -23,5 +23,6 @@ public class PostCollectionRespDTO implements Serializable {
 
     private Long postCollect;
     // Getters 和 Setters
+    private List<String> postTags;
 }
 

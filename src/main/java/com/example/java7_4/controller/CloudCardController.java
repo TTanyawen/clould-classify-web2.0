@@ -173,4 +173,19 @@ public class CloudCardController {
             return Result.success(Boolean.TRUE);//收集过
         }
     }
+
+    /**
+     * 按照时间类型返回用户收集的卡牌情况
+     * 时间类型: all,thisDay,thisWeek,thisMonth
+     * @param authorization
+     * @return
+     */
+    @GetMapping("/getUserCardCollectDetailsByUserIdWithTimeScale")
+    @Operation(summary = "getUserCardCollectDetailsByUserIdWithTimeScale")
+    public Result<List<UserCardCollectDetail>> getUserCardCollectDetailsByUserIdWithTimeScale(@RequestHeader("Authorization") String authorization, @RequestParam("timeType") String timeType) {
+        Long userId=BaseContext.getCurrentId();
+        List<UserCardCollectDetail> userCardCollectDetails = cloudCardService.getUserCardCollectDetailsByUserIdWithTimeScale(userId,timeType);
+        return Result.success(userCardCollectDetails);
+    }
+
 }

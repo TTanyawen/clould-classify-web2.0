@@ -1,5 +1,6 @@
 package com.example.java7_4.entity;
 
+import com.example.java7_4.entity.Enum.TagEnum;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -20,5 +21,6 @@ public class PostDTO implements Serializable {
     private LocalDateTime createTime;
     // Getters 和 Setters
     private Long postCollect;
+    private String postTags;
 }
 

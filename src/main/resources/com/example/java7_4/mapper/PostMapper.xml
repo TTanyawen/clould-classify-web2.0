@@ -14,6 +14,7 @@
         <result column="update_time" property="updateTime" />
         <result column="create_user" property="createUser" />
         <result column="update_user" property="updateUser" />
+        <result column="post_tags" property="postTags" />
     </resultMap>
     <resultMap id="PostDTOResultMap" type="PostDTO">
         <result column="post_id" property="postId" />
@@ -24,10 +25,10 @@
         <result column="post_collect" property="postCollect" />
         <result column="user_profile_path" property="userProfilePath" />
         <result column="create_time" property="createTime" />
-
+        <result column="post_tags" property="postTags" />
     </resultMap>
     <insert id="save" parameterType="com.example.java7_4.entity.Post" useGeneratedKeys="true" keyProperty="postId">
-        INSERT INTO tb_post (user_id, post_img_path, post_text, post_like,post_collect,create_time,update_time,create_user,update_user)
+        INSERT INTO tb_post (user_id, post_img_path, post_tags,post_text, post_like,post_collect,create_time,update_time,create_user,update_user)
         VALUES (#{userId}, #{postImgPath}, #{postText}, #{postLike},#{postCollect},#{createTime},#{updateTime},#{createUser},#{updateUser})
     </insert>
 
@@ -37,13 +38,13 @@
 
 
     <select id="getSearchedPosts" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_tags,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id and post_text LIKE CONCAT('%', #{searchText}, '%');
     </select>
 
 
     <select id="getPagedSearchedPosts" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_tags,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id and post_text LIKE CONCAT('%', #{searchText}, '%')
     </select>
 
@@ -52,24 +53,24 @@
         where post_id=#{postId};
     </select>
     <select id="selectMePostsWithUserAvatar" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_tags,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id AND tb_post.user_id=#{userId};
     </select>
     <select id="selectPostsWithUserAvatar" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_tags,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id;
     </select>
 
     <select id="selectPagedPostsWithUserAvatar" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_tags,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id
     </select>
     <select id="getPostByPostId" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_tags,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id AND #{postId}=tb_post.post_id
     </select>
     <select id="getPostsWithUserAvatarWithOrder" resultType="com.example.java7_4.entity.PostDTO">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_tags,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time,post_tags from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id
         <choose>
             <when test="sortType == 'like_desc'">
@@ -91,7 +92,7 @@
         </choose>
     </select>
     <select id="getPagedSearchedPostsWithOrder" resultMap="PostDTOResultMap">
-        select post_id,tb_post.user_id,post_img_path,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
+        select post_id,tb_post.user_id,post_img_path,post_tags,post_text,post_like,post_collect,user_profile_path,user_name,tb_post.create_time from tb_post,tb_user
         where tb_post.user_id=tb_user.user_id
         <choose>
             <when test="searchType == 'content'">

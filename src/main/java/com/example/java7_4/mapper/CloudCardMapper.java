@@ -31,4 +31,6 @@ public interface CloudCardMapper {
     List<CloudCard> getAllCloudCards();
 
     List<UserCardCollectDetail> getUserCardCollectDetailsByUserIdAndTypeId(Long userId, Long typeId);
+
+    List<UserCardCollectDetail> getUserCardCollectDetailsByUserIdWithTimeScale(Long userId, String timeType);
 }

@@ -67,6 +67,33 @@
         order by collect_time desc;
 
     </select>
+    <select id="getUserCardCollectDetailsByUserIdWithTimeScale"
+            resultMap="UserCardCollectDetailResultMap">
+        select * from tb_user_card_collect_detail where user_id = #{userId}
+        <choose>
+            <when test="timeType == 'all'">
+                -- 不添加额外的时间条件，查询所有记录
+            </when>
+            <when test="timeType == 'thisDay'">
+                -- 查询当天的记录
+                and collect_time >= CURDATE()
+            </when>
+            <when test="timeType == 'thisWeek'">
+                -- 查询本周的记录
+                and YEARWEEK(DATE_FORMAT(collect_time, '%Y-%m-%d')) = YEARWEEK(CURDATE())
+            </when>
+            <when test="timeType == 'thisMonth'">
+                -- 查询本月的记录
+                and YEAR(collect_time) = YEAR(CURDATE())
+                and MONTH(collect_time) = MONTH(CURDATE())
+            </when>
+            <otherwise>
+                -- 如果传入的 timeType 不是以上四种值，不添加额外的时间条件，查询所有记录
+            </otherwise>
+        </choose>
+        order by collect_time desc
+
+    </select>
 
 
 </mapper>

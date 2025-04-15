@@ -57,4 +57,8 @@ public class CloudCardService {
     public List<UserCardCollectDetail> getUserCardCollectDetailsByUserIdAndTypeId(Long userId, Long typeId) {
         return cloudCardMapper.getUserCardCollectDetailsByUserIdAndTypeId(userId,typeId);
     }
+
+    public List<UserCardCollectDetail> getUserCardCollectDetailsByUserIdWithTimeScale(Long userId, String timeType) {
+        return cloudCardMapper.getUserCardCollectDetailsByUserIdWithTimeScale(userId, timeType);
+    }
 }
