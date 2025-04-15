@@ -1,6 +1,7 @@
 package com.example.java7_4.service.impl;
 
 
+import com.example.java7_4.entity.Enum.TagEnum;
 import com.example.java7_4.entity.PostCollectionRespDTO;
 import com.example.java7_4.entity.PostDTO;
 import com.example.java7_4.entity.PostRespDTO;
@@ -40,6 +41,20 @@ public class UserServiceImpl implements UserService {
                 }
             }
             postCollectionRespDTO.setPostImgPaths(pathList);
+
+            //解析postTags
+            if(null!=postCollectionRespDTO.getPostTags()){
+                String[] tags = postCollectionRespDTO.getPostTags().split("@_@");
+                List<String> tagLists = new ArrayList<>();
+                for (String tag : tags) {
+                    if (!tag.isEmpty()) {
+                        log.info("tag:{}",tag);
+                        tagLists.add(TagEnum.getByCode(tag).getValue());
+                    }
+                }
+                postCollectionRespDTO.setPostTagList(tagLists);
+            }
+
         }
         return postCollectionRespDTOS;
     }

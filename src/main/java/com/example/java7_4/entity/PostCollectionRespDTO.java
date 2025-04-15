@@ -14,15 +14,17 @@ public class PostCollectionRespDTO implements Serializable {
     private String postImgPath;
     private String postText;
     private Long postLike;
+
     private String userProfilePath; // 额外的字段，用于存储用户头像
     private String userName;
+    private String postTags;
 
-    private List<String> postImgPaths;//解析后的
     private LocalDateTime collectTime;
     private LocalDateTime createTime;
 
     private Long postCollect;
     // Getters 和 Setters
-    private List<String> postTags;
+    private List<String> postImgPaths;//解析后的
+    private List<String> postTagList;//解析后的
 }
 

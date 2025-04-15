@@ -92,14 +92,18 @@ public class CloudController {
 
 
             //解析postTags
-            String[] tags = post.getPostTags().split("@_@");
-            List<String> tagLists = new ArrayList<>();
-            for (String tag : tags) {
-                if (!tag.isEmpty()) {
-                    tagLists.add(TagEnum.getByCode(tag).getValue());
+            if(null!=post.getPostTags()){
+                String[] tags = post.getPostTags().split("@_@");
+                List<String> tagLists = new ArrayList<>();
+                for (String tag : tags) {
+                    if (!tag.isEmpty()) {
+                        log.info("tag:{}",tag);
+                        tagLists.add(TagEnum.getByCode(tag).getValue());
+                    }
                 }
+                postRespDTO.setPostTags(tagLists);
             }
-            postRespDTO.setPostTags(tagLists);
+
 
 
 
@@ -171,6 +175,19 @@ public class CloudController {
                 }
             }
             postRespDTO.setPostImgPaths(pathList);
+            //解析postTags
+            if(null!=post.getPostTags()){
+                String[] tags = post.getPostTags().split("@_@");
+                List<String> tagLists = new ArrayList<>();
+                for (String tag : tags) {
+                    if (!tag.isEmpty()) {
+                        log.info("tag:{}",tag);
+                        tagLists.add(TagEnum.getByCode(tag).getValue());
+                    }
+                }
+                postRespDTO.setPostTags(tagLists);
+            }
+
             postRespDTOS.add(postRespDTO);
         }
 
@@ -252,6 +269,21 @@ public class CloudController {
                 }
             }
             postRespDTO.setPostImgPaths(pathList);
+
+            //解析postTags
+            if(null!=post.getPostTags()){
+                String[] tags = post.getPostTags().split("@_@");
+                List<String> tagLists = new ArrayList<>();
+                for (String tag : tags) {
+                    if (!tag.isEmpty()) {
+                        log.info("tag:{}",tag);
+                        tagLists.add(TagEnum.getByCode(tag).getValue());
+                    }
+                }
+                postRespDTO.setPostTags(tagLists);
+            }
+
+
             postRespDTOS.add(postRespDTO);
         }
         log.info("postRespDTOS num:{}",postRespDTOS.size());
@@ -323,6 +355,20 @@ public class CloudController {
                 }
             }
             postRespDTO.setPostImgPaths(pathList);
+
+            //解析postTags
+            if(null!=post.getPostTags()){
+                String[] tags = post.getPostTags().split("@_@");
+                List<String> tagLists = new ArrayList<>();
+                for (String tag : tags) {
+                    if (!tag.isEmpty()) {
+                        log.info("tag:{}",tag);
+                        tagLists.add(TagEnum.getByCode(tag).getValue());
+                    }
+                }
+                postRespDTO.setPostTags(tagLists);
+            }
+
             postRespDTOS.add(postRespDTO);
         }
 

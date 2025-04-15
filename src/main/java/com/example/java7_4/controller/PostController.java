@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.*;
+import com.example.java7_4.entity.Enum.TagEnum;
 import com.example.java7_4.entity.dao.GetPagedSearchedPostsWithOrderReqDto;
 import com.example.java7_4.result.PageResult;
 import com.example.java7_4.result.Result;
@@ -55,8 +56,6 @@ public class PostController {
     @Operation(summary = "getPagedSearchedPosts")
     public Result<Map<String,Object>> getPagedSearchedPosts(@RequestHeader("Authorization") String authorization,@RequestBody Map<String,Object> searchRequest) {
 
-
-
         System.out.println("getSearchedPosts");
         String searchText=(String)searchRequest.get("searchText");
         Integer currentPage=(Integer)searchRequest.get("currentPage");
@@ -94,6 +93,20 @@ public class PostController {
                     pathList.add(path);
                 }
             }
+
+            //解析postTags
+            if(null!=post.getPostTags()){
+                String[] tags = post.getPostTags().split("@_@");
+                List<String> tagLists = new ArrayList<>();
+                for (String tag : tags) {
+                    if (!tag.isEmpty()) {
+                        log.info("tag:{}",tag);
+                        tagLists.add(TagEnum.getByCode(tag).getValue());
+                    }
+                }
+                postRespDTO.setPostTags(tagLists);
+            }
+
 
             postRespDTO.setPostImgPaths(pathList);
             postRespDTOS.add(postRespDTO);
@@ -167,6 +180,21 @@ public class PostController {
             }
 
             postRespDTO.setPostImgPaths(pathList);
+
+            //解析postTags
+            if(null!=post.getPostTags()){
+                String[] tags = post.getPostTags().split("@_@");
+                List<String> tagLists = new ArrayList<>();
+                for (String tag : tags) {
+                    if (!tag.isEmpty()) {
+                        log.info("tag:{}",tag);
+                        tagLists.add(TagEnum.getByCode(tag).getValue());
+                    }
+                }
+                postRespDTO.setPostTags(tagLists);
+            }
+
+
             postRespDTOS.add(postRespDTO);
         }
 
@@ -226,6 +254,21 @@ public class PostController {
                 }
             }
             postRespDTO.setPostImgPaths(pathList);
+
+            //解析postTags
+            if(null!=post.getPostTags()){
+                String[] tags = post.getPostTags().split("@_@");
+                List<String> tagLists = new ArrayList<>();
+                for (String tag : tags) {
+                    if (!tag.isEmpty()) {
+                        log.info("tag:{}",tag);
+                        tagLists.add(TagEnum.getByCode(tag).getValue());
+                    }
+                }
+                postRespDTO.setPostTags(tagLists);
+            }
+
+
             postRespDTOS.add(postRespDTO);
         }
 
@@ -292,6 +335,21 @@ public class PostController {
             }
         }
         postRespDTO.setPostImgPaths(pathList);
+
+        //解析postTags
+        if(null!=post.getPostTags()){
+            String[] tags = post.getPostTags().split("@_@");
+            List<String> tagLists = new ArrayList<>();
+            for (String tag : tags) {
+                if (!tag.isEmpty()) {
+                    log.info("tag:{}",tag);
+                    tagLists.add(TagEnum.getByCode(tag).getValue());
+                }
+            }
+            postRespDTO.setPostTags(tagLists);
+        }
+
+
         return Result.success(postRespDTO);
 
     }

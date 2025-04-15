@@ -41,7 +41,7 @@ public enum TagEnum {
     // 根据 code 获取对应的枚举实例
     public static TagEnum getByCode(String code) {
         for (TagEnum tagEnum2 : values()) {
-            if (tagEnum2.getCode() == code) {
+            if (code.equals(tagEnum2.getCode())) {
                 return tagEnum2;
             }
         }
@@ -50,15 +50,16 @@ public enum TagEnum {
 
     public static void main(String[] args) {
         // 示例：获取并打印某种云类型的 code 和 value
-        TagEnum tagEnum = TagEnum.CUMULONIMBUS;
-        System.out.println("Code: " + tagEnum.getCode() + ", Value: " + tagEnum.getValue());
-
-        // 根据 code 获取枚举实例
-        TagEnum tagEnum2 = getByCode("FUN");
-        if (tagEnum2 != null) {
-            System.out.println("Found tag: " + tagEnum2.getValue());
-        } else {
-            System.out.println("Tag not found for the given code.");
-        }
+//        TagEnum tagEnum = TagEnum.CUMULONIMBUS;
+//        System.out.println("Code: " + tagEnum.getCode() + ", Value: " + tagEnum.getValue());
+//
+//        // 根据 code 获取枚举实例
+//        TagEnum tagEnum2 = getByCode("FUN");
+//        if (tagEnum2 != null) {
+//            System.out.println("Found tag: " + tagEnum2.getValue());
+//        } else {
+//            System.out.println("Tag not found for the given code.");
+        String tag="FUN";
+        System.out.println(TagEnum.getByCode(tag).getValue());
     }
 }
