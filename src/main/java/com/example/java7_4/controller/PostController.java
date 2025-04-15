@@ -1,6 +1,7 @@
 package com.example.java7_4.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.*;
@@ -413,7 +414,7 @@ public class PostController {
     @PostMapping("/sendPostWithMutiImages")
     public Result<Boolean> sendPostWithMutiImages(@RequestHeader("Authorization") String authorization
             , @RequestParam("text") String text
-            , @RequestParam("images") List<MultipartFile> images) {
+            , @RequestParam("images") List<MultipartFile> images,@RequestParam("postTags") List<String> postTags) {
 
         Long userId= BaseContext.getCurrentId();
 
@@ -423,6 +424,11 @@ public class PostController {
         post.setPostCollect(0L);
 
         post.setPostText(text);
+
+        if(CollectionUtil.isNotEmpty(postTags)){
+            String postTagsStr=String.join("@_@",postTags);
+            post.setPostTags(postTagsStr);
+        }
 
         //保存图片
         // 获取项目根目录
