@@ -1,9 +1,14 @@
 package com.example.java7_4.controller;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.excel.EasyExcel;
 import com.example.java7_4.constant.RedisKeyConstants;
 import com.example.java7_4.context.BaseContext;
 import com.example.java7_4.entity.*;
 import com.example.java7_4.entity.Enum.TagEnum;
+import com.example.java7_4.entity.bo.CloudTypeBO;
 import com.example.java7_4.entity.dao.GetMeDataRespDto;
 import com.example.java7_4.entity.dao.GetPagedForumDataWithConditionReqDto;
 import com.example.java7_4.result.PageResult;
@@ -15,16 +20,17 @@ import com.example.java7_4.service.impl.PostService;
 import com.example.java7_4.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequestMapping("/data")
 //@Controller
@@ -47,6 +53,29 @@ public class CloudController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+    @RequestMapping({"/cloudType/export"})
+    public void exportCloudType(@RequestHeader("Authorization") String authorization,HttpServletResponse response) throws IOException {
+        // 准备数据
+        List<CloudType> cloudTypes = cloudTypeService.getCloudTypes();
+        List<CloudTypeBO> cloudTypesBOs = new ArrayList<>();
+        for (CloudType cloudType : cloudTypes) {
+            CloudTypeBO cloudTypeBO = new CloudTypeBO();
+            // 这里应该是 BeanUtil.copyProperties(cloudType, cloudTypeBO);
+            BeanUtil.copyProperties(cloudType, cloudTypeBO);
+            cloudTypesBOs.add(cloudTypeBO);
+        }
+
+        // 设置响应头
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        // 这里设置文件名，可根据实际情况修改
+        String fileName = URLEncoder.encode("cloud_types.xlsx", "UTF-8").replaceAll("\\+", "%20");
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName);
+
+        // 使用 EasyExcel 进行导出到响应流
+        EasyExcel.write(response.getOutputStream(), CloudTypeBO.class).sheet("云类型信息").doWrite(cloudTypesBOs);
+
+    }
     @RequestMapping("/getPagedForumDataWithCondition")
     @Operation(summary = "getPagedForumDataWithCondition")
     public Result<Map<String,Object>> getPagedForumDataWithCondition(@RequestHeader("Authorization") String authorization, @RequestBody GetPagedForumDataWithConditionReqDto req) {
