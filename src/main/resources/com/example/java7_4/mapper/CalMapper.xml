@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.java7_4.mapper.CalMapper">
+
+    <resultMap id="CalEntityMap" type="CalEntity">
+        <result column="cal_time" property="calTime" />
+        <result column="post_num" property="postNum" />
+    </resultMap>
+    <insert id="save" parameterType="com.example.java7_4.entity.CalEntity" >
+        INSERT INTO tb_cal (cal_time, post_num)
+        VALUES (#{calTime},#{postNum})
+    </insert>
+    <delete id="deleteById">
+        DELETE FROM tb_cal WHERE id = #{id}
+    </delete>
+    <select id="selectAllByCalTime" resultMap="CalEntityMap">
+        SELECT * FROM tb_cal WHERE DATE(cal_time) = DATE(#{calTime})
+    </select>
+</mapper>

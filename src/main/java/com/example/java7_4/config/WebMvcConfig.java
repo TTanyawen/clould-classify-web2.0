@@ -66,6 +66,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 .excludePathPatterns("/user/getMeData")
                 .excludePathPatterns("/user/getDetailData")
                 .excludePathPatterns("/user/logOut")
+                .excludePathPatterns("/data/cal/today")
 //                .excludePathPatterns("/swagger-resources/**")
                 .excludePathPatterns(
                         "/js/**",        // 排除静态资源路径

@@ -2,6 +2,7 @@ package com.example.java7_4.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.java7_4.annotation.AutoFill;
+import com.example.java7_4.entity.CalEntity;
 import com.example.java7_4.entity.Post;
 import com.example.java7_4.entity.PostDTO;
 import com.example.java7_4.enumeration.OperationType;
@@ -45,4 +46,7 @@ public interface PostMapper {
     Page<PostDTO> getPostsWithUserAvatarWithOrder(String sortType);
 
     Page<PostDTO> getPagedSearchedPostsWithOrder(String searchText, String sortType,String searchType);
+
+    @Select("SELECT CURDATE() as cal_time,COUNT(*) as post_num  FROM  tb_post WHERE DATE(create_time) = CURDATE()")
+    CalEntity calTodayData();
 }

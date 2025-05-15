@@ -13,11 +13,8 @@ import com.example.java7_4.entity.dao.GetMeDataRespDto;
 import com.example.java7_4.entity.dao.GetPagedForumDataWithConditionReqDto;
 import com.example.java7_4.result.PageResult;
 import com.example.java7_4.result.Result;
-import com.example.java7_4.service.impl.CloudTypeService;
+import com.example.java7_4.service.impl.*;
 
-import com.example.java7_4.service.impl.CommentService;
-import com.example.java7_4.service.impl.PostService;
-import com.example.java7_4.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -49,10 +46,17 @@ public class CloudController {
     private CommentService commentService;
 
     @Autowired
+    private CalService calService;
+
+    @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+    @RequestMapping({"/cal/today"})
+    public void calTodayData() {
+        calService.calTodayData();
+    }
     @RequestMapping({"/cloudType/export"})
     public void exportCloudType(@RequestHeader("Authorization") String authorization,HttpServletResponse response) throws IOException {
         // 准备数据
